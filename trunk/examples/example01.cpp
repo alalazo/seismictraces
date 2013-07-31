@@ -29,7 +29,6 @@ int main() {
     for(int ii = 0; ii < 100; ii++) {
         trace.push_back(ii*2.5f);
     }
-    
-    
+        
     return 0;
 }

@@ -5,6 +5,25 @@ PROJECT( SeismicTraces C CXX )
 SET( SeismicTraces_VERSION_MAJOR 1 )
 SET( SeismicTraces_VERSION_MINOR 0 )
 
+###################
+## Build options ##
+###################
+
+OPTION(BUILD_SHARED_LIBS "Create shared libraries instead of static ones (default OFF)" OFF)
+OPTION(BUILD_UTILITIES "Enable the build of the utilities bundled with the library. Require Boost" ON)
+OPTION(LARGE_FILE_SUPPORT "Enable support for large files on 32-bit platforms" ON)
+IF( LARGE_FILE_SUPPORT )
+  SET(LARGE_FILE_MACROS "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64")
+ENDIF()
+
+OPTION(ENABLE_TESTING "Enable the build of unit tests, add 'test' target to Makefile" ON)
+IF( ENABLE_TESTING )
+  enable_testing()
+  ## The Google testing framework is used for unit tests
+  FIND_PACKAGE( Threads )
+  FIND_PACKAGE( GTest )
+ENDIF()
+
 ##################################
 ## Common project configuration ##
 ##################################
@@ -37,8 +56,8 @@ SET( C_WARNING_LEVEL "-Wall -Werror ${PEDANTIC_FLAG}")
 
 #### GNU / Intel
 IF( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_INTEL )
-  SET(CMAKE_C_FLAGS_DEBUG "-O0 -g ${C_WARNING_LEVEL} -std=c99")
-  SET(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG ${C_WARNING_LEVEL} -std=c99")
+  SET(CMAKE_C_FLAGS_DEBUG "-O0 -g ${LARGE_FILE_MACROS} ${C_WARNING_LEVEL} -std=c99")
+  SET(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG ${LARGE_FILE_MACROS} ${C_WARNING_LEVEL} -std=c99")
   SET(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELEASE} -g")
 ENDIF()
 
@@ -48,8 +67,8 @@ ENDIF()
 
 #### GNU / Intel
 IF( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_INTEL )
-  SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -g ${C_WARNING_LEVEL}")
-  SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG ${C_WARNING_LEVEL}")
+  SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -g ${LARGE_FILE_MACROS} ${C_WARNING_LEVEL}")
+  SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG ${LARGE_FILE_MACROS} ${C_WARNING_LEVEL}")
   SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELEASE} -g")
 ENDIF()
 
@@ -70,13 +89,6 @@ string(
   COMPILER_VERSION_MINOR ${COMPILER_VERSION}
 )
 
-###################
-## Build options ##
-###################
-
-OPTION(BUILD_SHARED_LIBS "Create shared libraries instead of static ones (default OFF)" OFF)
-OPTION(BUILD_UTILITIES "Enable the build of the utilities bundled with the library. Require Boost" ON)
-
 ##################
 ## Dependencies ##
 ##################
@@ -88,4 +100,8 @@ OPTION(BUILD_UTILITIES "Enable the build of the utilities bundled with the libra
 INCLUDE_DIRECTORIES( include )
 
 ADD_SUBDIRECTORY( include  )
+
+IF( ENABLE_TESTING )
+  ADD_SUBDIRECTORY( test )
+ENDIF()
 ADD_SUBDIRECTORY( examples )
