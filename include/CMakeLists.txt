@@ -1,5 +1,7 @@
 SET( 
   SeismicTraces_includes
-  SeismicTrace.h
+  SeismicTrace-inl.h
+  SegyFile.h
+  impl/SegyFile-constants.h
 )
 
