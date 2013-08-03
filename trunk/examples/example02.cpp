@@ -31,7 +31,7 @@ int main() {
     //
     tfh[2] = tfh[1];
     
-    // Exceptions are thrown if for out of range accesses
+    // Exceptions are thrown for out of range accesses
     
     try {
       tfh[40] = "Assign out of range";
