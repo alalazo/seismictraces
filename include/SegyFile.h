@@ -2,14 +2,13 @@
 #define	SEGYFILE_H
 
 #include<impl/SegyFile-TextualFileHeader.h>
+#include<impl/SegyFile-BinaryFileHeader.h>
 
 #include<string>
 #include<iostream>
 
 namespace seismic {
     
-    class TextualFileHeader;
-    class BinaryFileHeader;
     class SeismicTrace;
     
     class SegyFile {

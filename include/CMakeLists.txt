@@ -4,5 +4,6 @@ SET(
   SegyFile.h
   impl/SegyFile-constants.h
   impl/SegyFile-TextualFileHeader.h
+  impl/SegyFile-BinaryFileHeader.h
 )
 
