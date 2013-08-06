@@ -4,6 +4,7 @@ CMAKE_POLICY( VERSION 2.8.10 )
 PROJECT( SeismicTraces C CXX )
 SET( SeismicTraces_VERSION_MAJOR 1 )
 SET( SeismicTraces_VERSION_MINOR 0 )
+SET( SeismicTraces_VERSION "${SeismicTraces_VERSION_MAJOR}.${SeismicTraces_VERSION_MINOR}" )
 
 ###################
 ## Build options ##
@@ -105,3 +106,4 @@ IF( ENABLE_TESTING )
   ADD_SUBDIRECTORY( test )
 ENDIF()
 ADD_SUBDIRECTORY( examples )
+ADD_SUBDIRECTORY( doc )

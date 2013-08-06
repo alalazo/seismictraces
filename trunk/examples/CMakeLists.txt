@@ -1,7 +1,8 @@
 SET( 
   example_sources 
   example01.cpp
-  example02.cpp 
+  example02.cpp
+  example03.cpp
 )
 
 FOREACH( source ${example_sources} )

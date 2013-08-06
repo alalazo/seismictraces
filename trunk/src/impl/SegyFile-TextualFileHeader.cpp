@@ -1,6 +1,7 @@
 #include<impl/SegyFile-TextualFileHeader.h>
 
 #include<iostream>
+#include<iomanip>
 #include<stdexcept>
 #include<cstring>
 
@@ -87,6 +88,7 @@ namespace seismic {
     //
     
     ostream & operator<<(ostream& cout, const TextualFileHeader& tfh) {
+        cout << "TEXTUAL FILE HEADER:" << endl << endl;        
         for( unsigned int ii = 0; ii < TextualFileHeader::nlines; ii++) {
             for( unsigned int jj = 0; jj < TextualFileHeader::line_length; jj++) {
                 cout << tfh[ii][jj];
