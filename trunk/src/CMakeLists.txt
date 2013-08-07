@@ -6,3 +6,8 @@ SET(
 )
 
 ADD_LIBRARY( SeismicTraces ${SeismicTraces_sources} )
+
+INSTALL(
+  TARGETS SeismicTraces
+  DESTINATION lib
+)

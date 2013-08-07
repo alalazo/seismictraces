@@ -1,4 +1,4 @@
-#include<SegyFile.h>
+#include<impl/SegyFile-TextualFileHeader.h>
 
 #include<iostream>
 

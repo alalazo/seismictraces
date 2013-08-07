@@ -10,7 +10,7 @@
 namespace seismic {
 
     /**
-     * @brief This class models the Textual file header of a SEGY file
+     * @brief Models the Textual file header of a SEGY file
      * 
      * According to SEGY rev 1 standard (May 2002):
      * 
@@ -43,6 +43,9 @@ namespace seismic {
      * additional checks to reveal non-conformity to the structure prescribed 
      * in the SEGY rev 1 standard.
      * 
+     * The following is a small example of the basic use of the class:
+     * @include example02.cpp
+     * 
      */
     class TextualFileHeader {
     public:
@@ -70,10 +73,25 @@ namespace seismic {
              */
             TextLine(const TextLine& other);
             
+            /**
+             * @brief Assignment from other text line
+             * @param[in] other line to copy
+             * @return text line
+             */
             TextLine& operator=(const TextLine& other);
             
+            /**
+             * @brief Assignment from a string
+             * @param[in] line line line to copy
+             * @return text line 
+             */
             TextLine& operator=(const std::string& line);
             
+            /**
+             * @brief Assignment from a C-style string
+             * @param[in] line line to copy
+             * @return line to copy
+             */
             TextLine& operator=(const char * line);
             
             /**
@@ -150,10 +168,18 @@ namespace seismic {
         char buffer_[nlines][line_length];
     } ;
 
+    /**
+     * @brief Output stream operator for TextualFileHeader
+     * 
+     * @param cout stream
+     * @param tfh input textual file header 
+     * @return cout
+     * 
+     * @see TextualFileHeader
+     */
     std::ostream& operator<<(std::ostream& cout, const TextualFileHeader& tfh);
     
 }
-
 
 #endif	/* SEGYFILE_TEXTUALFILEHEADER_H */
 
