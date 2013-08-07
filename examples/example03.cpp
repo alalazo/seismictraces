@@ -7,13 +7,25 @@ using namespace std;
 
 int main() {
 
+    //
+    // Default construction leaves the underlying buffer uninitialized
+    //
     BinaryFileHeader bfh;
     
-    bfh[BinaryFileHeader::jobID] = 20;
+    //
+    // Single fields can be assigned using enum constants in BinaryFieldHeader
+    //
     
-    bfh[BinaryFileHeader::sampleInterval] = 0;
-    bfh[BinaryFileHeader::formatCode]     = SegyFileFormatCode::IEEEfloat32;
+    bfh[BinaryFileHeader::jobID]       = 20;    
+    bfh[BinaryFileHeader::lineNumber]  = 121;    
+    bfh[BinaryFileHeader::reelNumber]  = 91;    
+    bfh[BinaryFileHeader::nDataTraces] = 0;
+    bfh[BinaryFileHeader::formatCode]  = SegyFileFormatCode::IEEEfloat32;
+    /* ... */
     
+    //
+    // A BinaryFileHeader may be streamed
+    // 
     cout << bfh << endl;
     
     return 0;

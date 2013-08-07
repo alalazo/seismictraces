@@ -31,7 +31,7 @@ namespace seismic {
         cout << "Sweep trace taper length (ms) at end:              " << bfh[BinaryFileHeader::sweepTraceTaperLengthEnd] << endl;
         cout << "Taper type:                                        " << bfh[BinaryFileHeader::taperType] << endl;
         cout << "Correlated data traces:                            " << bfh[BinaryFileHeader::correlatedDataTraces] << endl;
-        cout << "Binary gain recovered:                             " << bfh[BinaryFileHeader::binaryGainRecovery] << endl;
+        cout << "Binary gain recovered:                             " << bfh[BinaryFileHeader::binaryGainRecovered] << endl;
         cout << "Amplitude recovery method:                         " << bfh[BinaryFileHeader::amplitudeRecoveryMethod] << endl;
         cout << "Measurement system:                                " << bfh[BinaryFileHeader::measurementSystem] << endl;
         cout << "Impulse signal polarity:                           " << bfh[BinaryFileHeader::impulseSignalPolarity] << endl;
