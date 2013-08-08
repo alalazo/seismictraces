@@ -49,7 +49,7 @@ namespace seismic {
      */
     class TextualFileHeader {
     public:
-        /// Number of lines in the Textual fileheader
+        /// Number of lines in the Textual file header
         static const int nlines = 40;
         /// Length of a single line in the Textual file header
         static const int line_length = 80;

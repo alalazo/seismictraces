@@ -3,6 +3,7 @@
 #include<iostream>
 
 using namespace seismic;
+using namespace seismic::constants;
 using namespace std;
 
 int main() {
