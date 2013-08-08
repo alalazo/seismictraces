@@ -9,6 +9,7 @@ SET(
   impl/SegyFile-constants.h
   impl/SegyFile-TextualFileHeader.h
   impl/SegyFile-BinaryFileHeader.h
+  impl/SegyFile-TraceHeader.h
 )
 
 INSTALL( 

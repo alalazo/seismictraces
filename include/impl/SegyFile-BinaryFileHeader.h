@@ -5,7 +5,6 @@
 #ifndef SEGYFILE_BINARYFILEHEADER_H
 #define	SEGYFILE_BINARYFILEHEADER_H
 
-#include<string>
 #include<iostream>
 
 // Forced by the use of C++03
@@ -32,6 +31,7 @@ namespace seismic {
      */
     class BinaryFileHeader {
     public:
+        /// Number of bytes in the Binary file header
         static const int buffer_size = 400;
         
         /**
@@ -67,7 +67,7 @@ namespace seismic {
             nsamplesDataTraceOriginalField = 22,
             /// Data sample format code.  __Mandatory for all data__
             ///
-            /// @see SegyFileFormatCode
+            /// @see constants::SegyFileFormatCode
             formatCode                     = 24,
             /// The expected number of data traces per trace ensemble (e.g. the CMP fold).
             /// __Highly recommended for all types of data__
@@ -75,7 +75,7 @@ namespace seismic {
             /// Trace sorting code (i.e. type of ensemble)
             /// __Highly recommended for all types of data__
             ///
-            /// @see TraceSortingCode
+            /// @see constants::TraceSortingCode
             traceSortingCode               = 28,
             /// Vertical sum code
             ///
@@ -92,7 +92,7 @@ namespace seismic {
             sweepLength                    = 36,
             /// Sweep type code
             ///
-            /// @see SweepTypeCode
+            /// @see constants::SweepTypeCode
             sweepTypeID                    = 38,
             /// Trace number of sweep channel
             traceNumberSweepChannel        = 40,
@@ -104,19 +104,19 @@ namespace seismic {
             sweepTraceTaperLengthEnd       = 44,
             /// Taper type
             ///
-            /// @see TaperType
+            /// @see constants::TaperType
             taperType                      = 46,
             /// Correlated data traces
             ///
-            /// @see CorrelatedDataTraces
+            /// @see constants::CorrelatedDataTraces
             correlatedDataTraces           = 48,
             /// Binary gain recovered
             ///
-            /// @see BinaryGainRecovered
+            /// @see constants::BinaryGainRecovered
             binaryGainRecovered            = 50,            
             /// Amplitude recovery method
             ///
-            /// @see AmplitudeRecoveryMethod
+            /// @see constants::AmplitudeRecoveryMethod
             amplitudeRecoveryMethod        = 52,
             /// Measurement system. __Highly recommended for all types of data__
             ///
@@ -125,11 +125,11 @@ namespace seismic {
             /// disagreement, the last Location Data stanza is the controlling 
             /// authority
             ///
-            /// @see Measurement system
+            /// @see constants::Measurement system
             measurementSystem              = 54,
             /// Impulse signal polarity
             ///
-            /// @see ImpulseSignalPolarity
+            /// @see constants::ImpulseSignalPolarity
             impulseSignalPolarity          = 56,
             /// Vibratory polarity code
             ///
