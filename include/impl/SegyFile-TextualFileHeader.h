@@ -175,7 +175,7 @@ namespace seismic {
      * @param tfh input textual file header 
      * @return cout
      * 
-     * @see TextualFileHeader
+     * @relates TextualFileHeader
      */
     std::ostream& operator<<(std::ostream& cout, const TextualFileHeader& tfh);
     

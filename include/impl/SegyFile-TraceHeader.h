@@ -39,6 +39,8 @@ namespace seismic {
      * > exchanged, it is recommended that SEG Ancillary Data Standard data 
      * > set(s) be used.
      * 
+     * The following is a small example of the basic use of the class:
+     * @include example04.cpp
      * 
      */
     class TraceHeader {
@@ -213,7 +215,7 @@ namespace seismic {
             /// (bytes 225-228) which is the mantissa and a two-byte, two's 
             /// complement integer (bytes 209-230) which is the power of ten 
             /// exponent (i.e. Bytes 225-228 * 10**Bytes 229-230)
-            sourceMeasurementMantissa = 224,
+            sourceMeasurementMantissa = 224
         };
 
         /**
@@ -619,7 +621,8 @@ namespace seismic {
      * @param th input trace header 
      * @return cout
      * 
-     * @see TraceHeader
+     * @relates TraceHeader
+     * @todo to be implemented
      */
     std::ostream& operator<<(std::ostream& cout, const TraceHeader& th);
 

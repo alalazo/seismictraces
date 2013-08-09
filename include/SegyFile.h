@@ -1,32 +1,40 @@
+/**
+ * @file SegyFile.h
+ * @brief File containing data in SEG Y rev. 1 format
+ */
 #ifndef SEGYFILE_H
 #define	SEGYFILE_H
 
+#include<SeismicTrace-inl.h>
 #include<impl/SegyFile-TextualFileHeader.h>
 #include<impl/SegyFile-BinaryFileHeader.h>
+#include<impl/SegyFile-TraceHeader.h>
+#include<impl/SegyFile-constants.h>
 
 #include<string>
+#include<fstream>
 #include<iostream>
+#include<ios>
 
 namespace seismic {
     
-    class SeismicTrace;
-    
     class SegyFile {
     public:
-        enum FileMode {READ, WRITE, READWRITE};
         
         SegyFile(
-                const std::string& filename, const FileMode mode,
-                TextualFileHeader& tfh, BinaryFileHeader& bfh
+                const char * filename, TextualFileHeader& tfh, BinaryFileHeader& bfh,
+                std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out
                 );
+        
         
         void read  (SeismicTrace& trace, int n) const;
         void append(SeismicTrace& trace);
         
-        ~SegyFile();
+    private:        
+        std::fstream       fstream_;        
         
-    private:
-        int ntraces_;
+        TextualFileHeader& tfh_;
+        BinaryFileHeader&  bfh_;
     };
         
 }

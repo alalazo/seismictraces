@@ -6,6 +6,7 @@
 #define	SEGYFILE_BINARYFILEHEADER_H
 
 #include<iostream>
+#include<vector>
 
 // Forced by the use of C++03
 #include<stdint.h>
@@ -46,6 +47,14 @@ namespace seismic {
             reelNumber = 8
         };
 
+        /**
+         * @brief Static vector used to iterate over all the items of a
+         * non-contiguous enumeration
+         * 
+         * @see Int32Fields
+         */
+        static const std::vector<Int32Fields> Int32List;
+        
         /**
          * @brief Fields that are mapped to 16-bit integers
          */
@@ -190,6 +199,14 @@ namespace seismic {
         };
         
         /**
+         * @brief Static vector used to iterate over all the items of a
+         * non-contiguous enumeration
+         * 
+         * @see Int16Fields
+         */
+        static const std::vector<Int16Fields> Int16List;        
+        
+        /**
          * @brief Returns the corresponding integer value
          * 
          * @param[in] id constants associated with the requested field
@@ -262,9 +279,10 @@ namespace seismic {
      * @param bfh input binary file header 
      * @return cout
      * 
-     * @see BinaryFileHeader
+     * @relates BinaryFileHeader
      */
     std::ostream& operator<<(std::ostream& cout, const BinaryFileHeader& bfh);
+        
 }
 
 

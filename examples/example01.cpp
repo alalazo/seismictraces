@@ -1,22 +1,24 @@
 #include<SeismicTrace-inl.h>
 
+using namespace seismic;
+
 int main() {
         
-    seismic::SeismicTrace trace;
+    SeismicTrace trace;
     
     //
     // Set the coordinates of the receiver
     //
-    trace(seismic::X) = 0.1f;
-    trace(seismic::Y) = 0.2f;
-    trace(seismic::Z) = 0.3f;
+    trace(SeismicTrace::X) = 0.1f;
+    trace(SeismicTrace::Y) = 0.2f;
+    trace(SeismicTrace::Z) = 0.3f;
     
     //
     // Set the coordinates of the shot
     //
-    trace.shot(seismic::X) = 10.1f;
-    trace.shot(seismic::Y) = 20.1f;
-    trace.shot(seismic::Z) = 30.1f;
+    trace.shot(SeismicTrace::X) = 10.1f;
+    trace.shot(SeismicTrace::Y) = 20.1f;
+    trace.shot(SeismicTrace::Z) = 30.1f;
     
     //
     // Set the time sampling interval
