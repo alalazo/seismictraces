@@ -17,12 +17,13 @@ IF( LARGE_FILE_SUPPORT )
   SET(LARGE_FILE_MACROS "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64")
 ENDIF()
 
-OPTION(ENABLE_TESTING "Enable the build of unit tests, add 'test' target to Makefile" ON)
-IF( ENABLE_TESTING )
-  enable_testing()
-  ## The Google testing framework is used for unit tests
-  FIND_PACKAGE( Threads )
-  FIND_PACKAGE( GTest )
+## Test for Endianess
+INCLUDE(TestBigEndian)
+TEST_BIG_ENDIAN( BYTE_ORDER_BIG_ENDIAN )
+IF( BYTE_ORDER_BIG_ENDIAN )
+  ADD_DEFINITIONS("-DBIG_ENDIAN")
+ELSE()
+  ADD_DEFINITIONS("-DLITTLE_ENDIAN")
 ENDIF()
 
 ##################################
@@ -102,8 +103,6 @@ INCLUDE_DIRECTORIES( include )
 
 ADD_SUBDIRECTORY( include  )
 ADD_SUBDIRECTORY( src )
-IF( ENABLE_TESTING )
-  ADD_SUBDIRECTORY( test )
-ENDIF()
+ADD_SUBDIRECTORY( test )
 ADD_SUBDIRECTORY( examples )
 ADD_SUBDIRECTORY( doc )
