@@ -6,6 +6,7 @@
 #define	SEGYFILE_TRACEHEADER_H
 
 #include<iostream>
+#include<vector>
 
 // Forced by the use of C++03
 #include<stdint.h>
@@ -218,6 +219,8 @@ namespace seismic {
             sourceMeasurementMantissa = 224
         };
 
+        static const std::vector<Int32Fields> Int32List;
+        
         /**
          * @brief Fields that are mapped to 16-bit integers
          */
@@ -545,9 +548,11 @@ namespace seismic {
             ///  4 = Bar-meter (Bar-m)
             ///  5 = Newton (N)
             ///  6 = Kilograms (kg)
-            sourceMEasurementUnit = 230
+            sourceMeasurementUnit = 230
         };
 
+        static const std::vector<Int16Fields> Int16List;
+        
         /**
          * @brief Returns the corresponding integer value
          * 
