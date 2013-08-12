@@ -12,8 +12,6 @@ int main() {
     //
     TextualFileHeader tfh;
     BinaryFileHeader  bfh;
-//    cout << tfh << endl;
-//    cout << bfh << endl;
     
     SegyFile segyFile("/home/mculpo/eni/wdir/seismicTraces/data/C3NAflat.segy",tfh,bfh);
     
@@ -22,7 +20,17 @@ int main() {
     //    
     cout << tfh << endl;
     cout << bfh << endl;
+
+    // 
+    // Read trace number 5 from file
+    //
+    SegyFile::trace_type trace = segyFile.read(5);
     
+    //
+    // Output trace header information
+    //
+    cout << trace.first << endl;
+        
     return 0;
 }
 

@@ -1,4 +1,8 @@
 #include<impl/SegyFile-BinaryFileHeader.h>
+#include<impl/SegyFile-constants.h>
+
+#include<stdexcept>
+#include<sstream>
 
 using namespace std;
 
@@ -100,5 +104,63 @@ namespace seismic {
         cout << "Number of Extended Textual File Headers:           " << bfh[BinaryFileHeader::nextendedTextualFileHeader] << endl;
         cout << endl;
         return cout;
-    }    
+    }
+
+    void checkBinaryFileHeader( const BinaryFileHeader & bfh) {
+        stringstream estream;
+        bool         checkFailed = false;
+        // Number of data traces per ensemble
+        if ( bfh[BinaryFileHeader::nDataTraces] < 0 ) {
+            checkFailed = true;
+            estream << "Number of data traces per ensemble is < 0" << endl;
+        }
+        // Number of auxiliary traces per ensemble
+        if ( bfh[BinaryFileHeader::nAuxiliaryTraces] < 0 ) {
+            checkFailed = true;
+            estream << "Number of auxiliary traces per ensemble is < 0" << endl;
+        }
+        // Sample interval in microseconds
+        if ( bfh[BinaryFileHeader::nAuxiliaryTraces] < 0 ) {
+            checkFailed = true;
+            estream << "Number of auxiliary traces per ensemble is < 0" << endl;
+        }
+        // Number of samples per data trace
+        if ( bfh[BinaryFileHeader::nsamplesDataTrace] <= 0 ) {
+            checkFailed = true;
+            estream << "Number of samples per data trace is <= 0" << endl;
+        }
+        // Data sample format code
+        switch ( bfh[BinaryFileHeader::formatCode] ) {
+            case ( constants::SegyFileFormatCode::IBMfloat32 ):
+            case ( constants::SegyFileFormatCode::Int32      ):
+            case ( constants::SegyFileFormatCode::Fixed32    ):
+            case ( constants::SegyFileFormatCode::IEEEfloat32):
+            case ( constants::SegyFileFormatCode::Int16      ):
+            case ( constants::SegyFileFormatCode::Int8       ):
+                break;
+            default:
+                checkFailed = true;
+                estream << "Invalid value of data sample format code (" << bfh[BinaryFileHeader::formatCode] << ")" << endl;
+                break;
+        }
+        // Fixed length trace flag
+        switch ( bfh[BinaryFileHeader::fixedLengthTraceFlag] ) {
+            case( 0 ):
+            case( 1 ):
+                break;
+            default:
+                checkFailed = true;
+                estream << " Invalid value of fixed length trace flag (" << bfh[BinaryFileHeader::fixedLengthTraceFlag] << ")" << endl;
+                break;
+        }
+        // Number of extended textual file headers
+        if ( bfh[BinaryFileHeader::nextendedTextualFileHeader] < -1 ) {
+            checkFailed = true;
+            estream << "Invalid number of extended textual file header (" << bfh[BinaryFileHeader::nextendedTextualFileHeader] << ")" << endl;
+        }
+        // Throw an exception if some consistency check failed
+        if ( checkFailed ) {
+            throw runtime_error( estream.str() );
+        }
+    }
 }

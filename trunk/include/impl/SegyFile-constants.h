@@ -5,6 +5,10 @@
 #ifndef SEGYFILE_CONSTANTS_H
 #define	SEGYFILE_CONSTANTS_H
 
+#include<stdexcept>
+
+#include<stdint.h>
+
 namespace seismic {
     namespace constants {
 
@@ -29,6 +33,36 @@ namespace seismic {
             };
         };
 
+        /**
+         * @brief Returns the size of a single data sample given the format code
+         * 
+         * @param[in] format code
+         * @return size of a single data sample
+         * 
+         * @relates SegyFileFormatCode
+         */
+        inline size_t sizeOfDataSample(const int16_t obj) {
+            size_t value(0);
+            switch ( obj ) {
+                case ( SegyFileFormatCode::IBMfloat32 ):
+                case ( SegyFileFormatCode::Int32      ):
+                case ( SegyFileFormatCode::Fixed32    ):
+                case ( SegyFileFormatCode::IEEEfloat32):
+                    value = 4;
+                    break;
+                case ( SegyFileFormatCode::Int16      ):
+                    value = 2;
+                    break;
+                case ( SegyFileFormatCode::Int8       ):
+                    value = 1;
+                    break;
+                default:
+                    throw std::runtime_error("Invalid \"Data sample format code\"\n");
+                    break;
+            }
+            return value;
+        }
+        
         /**
          * @brief Exposes an enumeration of the possible "Trace sorting code"
          */

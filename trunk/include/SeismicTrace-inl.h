@@ -13,10 +13,11 @@ namespace seismic {
     /**
      * @brief Models a seismic trace 
      * 
-     * This class is nothing but a std::vector<float> decorated with some metadata
+     * This class is nothing but a std::vector<double> decorated with some metadata
      * 
      * The following is a small example of the basic use of the class:
      * @include example01.cpp
+     * 
      */
     class SeismicTrace : public std::vector< float > {
     private:

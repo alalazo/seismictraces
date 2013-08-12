@@ -283,6 +283,15 @@ namespace seismic {
      */
     std::ostream& operator<<(std::ostream& cout, const BinaryFileHeader& bfh);
         
+    /**
+     * @brief Checks a binary file header for inconsistencies and throws a 
+     * runtime exception if any is found
+     * 
+     * @param[in] bfh binary file header
+     * 
+     * @relates BinaryFileHeader
+     */
+    void checkBinaryFileHeader( const BinaryFileHeader & bfh);              
 }
 
 
