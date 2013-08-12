@@ -29,6 +29,18 @@ namespace seismic {
         pnt[1] = pnt[2];
         pnt[2] = tmp;
     }
+    
+    void swapByteOrder(float& obj) {
+        char * pnt = reinterpret_cast<char*>(&obj);        
+        char   tmp = pnt[0];
+        
+        pnt[0] = pnt[3];
+        pnt[3] = tmp;
+        
+        tmp    = pnt[1];
+        pnt[1] = pnt[2];
+        pnt[2] = tmp;
+    }
 }
 
 #endif	/* UTILITIES_INL_H */

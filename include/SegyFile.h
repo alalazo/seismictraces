@@ -169,8 +169,31 @@ namespace seismic {
                 std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out
                 );
         
+        /**
+         * @brief Returns the number of traces that are currently stored in the SEG Y file
+         * 
+         * @return number of traces
+         */
+        size_t ntraces() const {
+            return traceSeekStrides_.size();
+        }
         
-        trace_type read(int n) const;
+        /**
+         * @brief Reads a trace from file
+         * 
+         * Indexes are zero-based. In case of out-of-range a runtime exception 
+         * is thrown.
+         * 
+         * @param[in] n index of the trace to be read
+         * @return trace header and trace data
+         */
+        trace_type read(const size_t n);
+        
+        /**
+         * @brief Appends a trace to the end of the SEG Y file
+         * 
+         * @param[in] trace trace to be appended
+         */
         void append(const trace_type& trace);
         
     private:
@@ -188,7 +211,29 @@ namespace seismic {
         //////////
         // Extended textual file headers
         //////////
-        int16_t nextendedTextualFileHeader_;        
+        int16_t nextendedTextualFileHeader_;
+        
+        //////////
+        // Private helper functions
+        //////////
+        
+        /**
+         * @brief Read a single trace header from the current position 
+         * of the file stream
+         * 
+         * @param[out] th trace header
+         */
+        void readTraceHeader(TraceHeader& th);        
+        
+        /**
+         * @brief Convert a stream of raw data to a seismic trace
+         * 
+         * _Note: the buffer will be modified during the conversion_
+         * 
+         * @param[in,out] trace seismic trace
+         * @param[in,out] buffer stream of raw data
+         */
+        void convertRawDataSamples(SeismicTrace& trace, std::vector<char>& buffer);
     };
         
 }
