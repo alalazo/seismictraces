@@ -5,7 +5,6 @@
 #ifndef SEGYFILE_H
 #define	SEGYFILE_H
 
-#include<SeismicTrace-inl.h>
 #include<impl/SegyFile-TextualFileHeader.h>
 #include<impl/SegyFile-BinaryFileHeader.h>
 #include<impl/SegyFile-TraceHeader.h>
@@ -150,10 +149,12 @@ namespace seismic {
      * 
      */
     class SegyFile {
+    private:
+        /// Trace data (just the old stream of bytes)
+        typedef std::vector<char> TraceData;
     public:
-
         /// Trace header plus corresponding trace data
-        typedef std::pair< TraceHeader, SeismicTrace > trace_type;
+        typedef std::pair< TraceHeader, TraceData > trace_type;
         
         /**
          * @brief Constructor of a SegyFile
@@ -226,14 +227,13 @@ namespace seismic {
         void readTraceHeader(TraceHeader& th);        
         
         /**
-         * @brief Convert a stream of raw data to a seismic trace
+         * @brief Read a single trace header from the current position 
+         * of the file stream
          * 
-         * _Note: the buffer will be modified during the conversion_
-         * 
-         * @param[in,out] trace seismic trace
-         * @param[in,out] buffer stream of raw data
+         * @param[out] th trace header
          */
-        void convertRawDataSamples(SeismicTrace& trace, std::vector<char>& buffer);
+        void readTraceData(const TraceHeader& th, TraceData& td);
+        
     };
         
 }

@@ -26,11 +26,11 @@ namespace seismic {
             }
 
             void operator()(BinaryFileHeader::Int16Fields idx) {
-                swapByteOrder(bfh_[idx]);
+                invertByteOrder(bfh_[idx]);
             }
 
             void operator()(BinaryFileHeader::Int32Fields idx) {
-                swapByteOrder(bfh_[idx]);
+                invertByteOrder(bfh_[idx]);
             }
 
         private:
@@ -47,11 +47,11 @@ namespace seismic {
             }
 
             void operator()(TraceHeader::Int16Fields idx) {
-                swapByteOrder(th_[idx]);
+                invertByteOrder(th_[idx]);
             }
 
             void operator()(TraceHeader::Int32Fields idx) {
-                swapByteOrder(th_[idx]);
+                invertByteOrder(th_[idx]);
             }
 
         private:
@@ -159,7 +159,7 @@ namespace seismic {
             // must be written to a newly created file
             ////////////////////
 
-            // TO BE IMPLEMENTED
+            /// @todo TO BE IMPLEMENTED
         }
     }
     
@@ -177,34 +177,9 @@ namespace seismic {
         fstream_.seekg( traceSeekStrides_[n] );
         // Read trace header
         readTraceHeader( value.first );
-        //////////        
-        // Copy metadata information into the seismic trace
-        //////////
-        
-        value.second(SeismicTrace::X) = value.first[TraceHeader::groupCoordinateX];
-        value.second(SeismicTrace::Y) = value.first[TraceHeader::groupCoordinateY];
-        value.second(SeismicTrace::Z) = 0.0f;
-        
-        value.second.shot(SeismicTrace::X) = value.first[TraceHeader::sourceCoordinateX];
-        value.second.shot(SeismicTrace::Y) = value.first[TraceHeader::sourceCoordinateY];
-        value.second.shot(SeismicTrace::Z) = 0.0f;
-        
-        value.second.dt() = value.first[TraceHeader::sampleInterval];
-        //////////
         // Read trace data
-        //////////
-        
-        // Retrieve the raw data
-        vector<char> buffer( sizeOfDataSample_*TraceHeader::nsamplesTrace );
-        fstream_.read( &buffer[0] , sizeOfDataSample_*TraceHeader::nsamplesTrace );                
-        // Reserve an appropriate size to speed-up conversion
-        size_t nsamples = value.first[TraceHeader::nsamplesTrace];
-        value.second.reserve( nsamples );
-        // Convert the stream of char to float
-        convertRawDataSamples(value.second,buffer);
-        
-                
-        // Return the correct value
+        readTraceData( value.first, value.second );        
+        // Return the trace
         return value;
     }
     
@@ -222,22 +197,38 @@ namespace seismic {
             for_each(TraceHeader::Int16List.begin(), TraceHeader::Int16List.end(), swapVisitor);
         }
 #endif    
-    }        
-    
-    void SegyFile::convertRawDataSamples(SeismicTrace& trace, std::vector<char>& buffer) {
-        switch( bfh_[BinaryFileHeader::formatCode] ) {
-            case( constants::SegyFileFormatCode::Fixed32 ):                
-                break;                
-            case( constants::SegyFileFormatCode::IEEEfloat32 ):                
-                break;
-            case( constants::SegyFileFormatCode::IBMfloat32 ):
-                break;                
-            case( constants::SegyFileFormatCode::Int32 ):                
-                break;                
-            case( constants::SegyFileFormatCode::Int16 ):
-                break;                
-            case( constants::SegyFileFormatCode::Int8  ):
-                break;                
-        }
     }
+    
+    void SegyFile::readTraceData(const TraceHeader& th, TraceData& td) {
+        // Retrieve the raw data
+        const size_t nsamples = th[TraceHeader::nsamplesTrace];
+        td.resize( sizeOfDataSample_*nsamples );
+        fstream_.read( &td[0] , sizeOfDataSample_*nsamples );
+#ifdef LITTLE_ENDIAN
+        {
+            // If the system is little endian, bytes must be swapped
+            for( size_t ii = 0 ; ii < nsamples; ii++) {
+                invertByteOrder(&td[ii*sizeOfDataSample_],sizeOfDataSample_);
+            }
+        }
+#endif    
+    }
+    
+    
+//    void SegyFile::convertRawDataSamples(SeismicTrace& trace, std::vector<char>& buffer) {
+//        switch( bfh_[BinaryFileHeader::formatCode] ) {
+//            case( constants::SegyFileFormatCode::Fixed32 ):                
+//                break;                
+//            case( constants::SegyFileFormatCode::IEEEfloat32 ):                
+//                break;
+//            case( constants::SegyFileFormatCode::IBMfloat32 ):
+//                break;                
+//            case( constants::SegyFileFormatCode::Int32 ):                
+//                break;                
+//            case( constants::SegyFileFormatCode::Int16 ):
+//                break;                
+//            case( constants::SegyFileFormatCode::Int8  ):
+//                break;                
+//        }
+//    }
 }

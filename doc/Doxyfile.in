@@ -38,7 +38,7 @@ PROJECT_NUMBER         = @SeismicTraces_VERSION@
 # for a project that appears at the top of each page and should give viewer
 # a quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF          =
+PROJECT_BRIEF          = 
 
 # With the PROJECT_LOGO tag one can specify an logo or icon that is
 # included in the documentation. The maximum height of the logo should not
@@ -422,14 +422,14 @@ EXTRACT_ANON_NSPACES   = NO
 # various overviews, but no documentation section is generated.
 # This option has no effect if EXTRACT_ALL is enabled.
 
-HIDE_UNDOC_MEMBERS     = YES
+HIDE_UNDOC_MEMBERS     = NO
 
 # If the HIDE_UNDOC_CLASSES tag is set to YES, Doxygen will hide all
 # undocumented classes that are normally visible in the class hierarchy.
 # If set to NO (the default) these classes will be included in the various
 # overviews. This option has no effect if EXTRACT_ALL is enabled.
 
-HIDE_UNDOC_CLASSES     = YES
+HIDE_UNDOC_CLASSES     = NO
 
 # If the HIDE_FRIEND_COMPOUNDS tag is set to YES, Doxygen will hide all
 # friend (class|struct|union) declarations.
@@ -1181,7 +1181,7 @@ GENERATE_TREEVIEW      = NO
 # documentation. Note that a value of 0 will completely suppress the enum
 # values from appearing in the overview section.
 
-ENUM_VALUES_PER_LINE   = 4
+ENUM_VALUES_PER_LINE   = 1
 
 # If the treeview is enabled (see GENERATE_TREEVIEW) then this tag can be
 # used to set the initial width (in pixels) of the frame in which the tree
@@ -1819,7 +1819,7 @@ DOT_IMAGE_FORMAT       = png
 # need to set HTML_FILE_EXTENSION to xhtml in order to make the SVG files
 # visible. Older versions of IE do not have SVG support.
 
-INTERACTIVE_SVG        = NO
+INTERACTIVE_SVG        = YES
 
 # The tag DOT_PATH can be used to specify the path where the dot tool can be
 # found. If left blank, it is assumed the dot tool can be found in the path.
