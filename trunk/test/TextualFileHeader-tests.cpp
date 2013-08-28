@@ -1,6 +1,12 @@
 #include<impl/SegyFile-TextualFileHeader.h>
 #include<gtest/gtest.h>
 
+/**
+ * @file  TextualFileHeader-tests.cpp
+ * @brief Unit tests for TextualFileHeader class
+ * @test  Tests basic features for a TextualFileHeader instance
+ */
+
 #include<string>
 
 namespace {

@@ -1,4 +1,6 @@
 #include<SegyFile.h>
+#include<Conversion.h>
+
 #include<iostream>
 
 using namespace seismic;
@@ -13,7 +15,8 @@ int main() {
     TextualFileHeader tfh;
     BinaryFileHeader  bfh;
     
-    SegyFile segyFile("/home/mculpo/eni/wdir/seismicTraces/data/C3NAflat.segy",tfh,bfh);
+    /// @fixme: Add a relative path here
+    SegyFile segyFile("/home/mculpo/eni/seismicTraces/data/C3NAflat.segy",tfh,bfh);
     
     //
     // Output header information
@@ -31,6 +34,21 @@ int main() {
     //
     cout << trace.first << endl;
         
+    //
+    // Convert the trace to a more manageable format
+    // 
+    SegyConverter segyConverter(bfh);
+    SeismicTrace  seismicTrace;
+    
+    segyConverter(trace,seismicTrace);
+    
+    //
+    // Print trace values 
+    //
+    for(size_t ii = 0; ii < seismicTrace.size(); ii++) {
+        cout << seismicTrace[ii] << endl;
+    }
+    
     return 0;
 }
 

@@ -627,7 +627,6 @@ namespace seismic {
      * @return cout
      * 
      * @relates TraceHeader
-     * @todo to be implemented
      */
     std::ostream& operator<<(std::ostream& cout, const TraceHeader& th);
 

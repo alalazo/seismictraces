@@ -13,7 +13,8 @@ IF( BUILD_DOCUMENTATION )
   SET( doxyfile             ${PROJECT_BINARY_DIR}/Doxyfile              )
   SET( doxy_html_index_file ${CMAKE_CURRENT_BINARY_DIR}/html/index.html )
   SET( doxy_output_root     ${CMAKE_CURRENT_BINARY_DIR}                 ) # Pasted into Doxyfile.in
-  SET( doxy_input           ${PROJECT_SOURCE_DIR}/src
+  SET( doxy_input           ${PROJECT_SOURCE_DIR}/test
+                            ${PROJECT_SOURCE_DIR}/src
                             ${PROJECT_SOURCE_DIR}/include               ) # Pasted into Doxyfile.in
   SET( doxy_examples        ${PROJECT_SOURCE_DIR}/examples              ) # Pasted into Doxyfile.in
   SET( doxy_extra_files     ${CMAKE_CURRENT_SOURCE_DIR}/mainpage.dox    ) # Pasted into Doxyfile.in
