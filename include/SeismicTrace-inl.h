@@ -13,7 +13,7 @@ namespace seismic {
     /**
      * @brief Models a seismic trace 
      * 
-     * This class is nothing but a std::vector<double> decorated with some metadata
+     * This class is nothing but a std::vector<float> decorated with some metadata
      * 
      * The following is a small example of the basic use of the class:
      * @include example01.cpp
@@ -21,7 +21,7 @@ namespace seismic {
      */
     class SeismicTrace : public std::vector< float > {
     private:
-        typedef float coordinate_type[3];
+        typedef int coordinate_type[3];
         
     public:
         /**
@@ -42,7 +42,7 @@ namespace seismic {
          * @param[in] id coordinate to be accessed
          * @return reference to the requested coordinate
          */
-        float & operator()(const CoordinateID id) {
+        int & operator()(const CoordinateID id) {
             return arrayAccessHelper(id,receiverCoords_);
         }        
         
@@ -52,8 +52,8 @@ namespace seismic {
          * @param[in] id coordinate to be accessed
          * @return reference to the requested coordinate
          */
-        const float& operator()(const CoordinateID id) const {
-            return static_cast< const float&>( const_cast< SeismicTrace& >(*this)(id) );
+        const int& operator()(const CoordinateID id) const {
+            return static_cast< const int&>( const_cast< SeismicTrace& >(*this)(id) );
         }
         
         /**
@@ -62,7 +62,7 @@ namespace seismic {
          * @param[in] id coordinate to be accessed
          * @return reference to the requested coordinate
          */
-        float & shot(const CoordinateID id) {
+        int & shot(const CoordinateID id) {
             return arrayAccessHelper(id,sourceCoords_);
         }
         
@@ -72,8 +72,8 @@ namespace seismic {
          * @param[in] id coordinate to be accessed
          * @return reference to the requested coordinate
          */
-        const float & shot(const CoordinateID id) const {
-            return static_cast< const float& >( const_cast< SeismicTrace& >(*this).shot(id) );
+        const int & shot(const CoordinateID id) const {
+            return static_cast< const int& >( const_cast< SeismicTrace& >(*this).shot(id) );
         }
         
         /**
@@ -95,7 +95,7 @@ namespace seismic {
         
     private:    
         
-        float & arrayAccessHelper(const CoordinateID id, coordinate_type& array)  {
+        int & arrayAccessHelper(const CoordinateID id, coordinate_type& array)  {
              switch( id ) {
                 case X :
                     return array[0];

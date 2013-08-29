@@ -144,8 +144,11 @@ namespace seismic {
      * > set.  Additionally the coordinate units must be the same for all 
      * > coordinates.
      * 
-     * The following is a small example of the basic use of the class:
+     * In the following it is shown how to __read a SEGY file and convert traces__:
      * @include example05.cpp
+     * 
+     * In the following it is shown how to __read a SEGY file, modify the traces and write them back to another file__:
+     * @include example06.cpp
      * 
      */
     class SegyFile {
@@ -227,12 +230,30 @@ namespace seismic {
         void readTraceHeader(TraceHeader& th);        
         
         /**
-         * @brief Read a single trace header from the current position 
+         * @brief Read trace data from the current position 
          * of the file stream
          * 
-         * @param[out] th trace header
+         * @param[in]  th trace header
+         * @param[out] td trace data
          */
         void readTraceData(const TraceHeader& th, TraceData& td);
+        
+        /**
+         * @brief Write a single trace header to the current position 
+         * of the file stream
+         * 
+         * @param[in] th trace header
+         */
+        void writeTraceHeader(const TraceHeader& th);        
+        
+        /**
+         * @brief Write trace data to the current position 
+         * of the file stream
+         * 
+         * @param[in] th trace header
+         * @param[in] td trace data
+         */
+        void writeTraceData(const TraceHeader& th, const TraceData& td);
         
     };
         

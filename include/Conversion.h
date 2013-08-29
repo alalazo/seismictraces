@@ -12,6 +12,9 @@ namespace seismic {
     
     /**
      * @brief Manages conversion between SegyFile::trace_type and SeismicTrace objects
+     * 
+     * The following is a small example of the basic use of the class:
+     * @include example05.cpp     
      */
     class SegyConverter {
     public:
