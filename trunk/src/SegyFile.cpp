@@ -65,7 +65,8 @@ namespace seismic {
             const char * filename, TextualFileHeader& tfh, BinaryFileHeader& bfh,
             std::ios_base::openmode mode)
     : fstream_(filename, mode | ios_base::binary), // A SEG Y file is always opened in binary mode
-    tfh_(tfh), bfh_(bfh) {
+    tfh_(tfh), bfh_(bfh) {   
+        fstream_.peek();
         if ( fstream_.good() ) {
             ////////////////////
             // If eofbit, failbit and badbit are set to false, then 
@@ -158,8 +159,16 @@ namespace seismic {
             // If file was opened for writing tfh and bfh 
             // must be written to a newly created file
             ////////////////////
-
-            /// @todo TO BE IMPLEMENTED
+            fstream_.clear();
+            // Set number of traces to zero, as the file starts empty
+            fstream_.seekp(0,ios_base::beg);
+            // File header buffers
+            char * tfhBuffer( tfh_.get() );
+            char * bfhBuffer( bfh_.get() );                                    
+            // Write Textual file header (3200 bytes)
+            fstream_.write(tfhBuffer, TextualFileHeader::line_length * TextualFileHeader::nlines);
+            // Write Binary file header  (400 bytes)
+            fstream_.write(bfhBuffer, BinaryFileHeader::buffer_size);            
         }
     }
     
@@ -214,21 +223,21 @@ namespace seismic {
 #endif    
     }
     
+    void SegyFile::writeTraceHeader(const TraceHeader& th) {
+        /// @todo TO BE IMPLEMENTED
+    }
     
-//    void SegyFile::convertRawDataSamples(SeismicTrace& trace, std::vector<char>& buffer) {
-//        switch( bfh_[BinaryFileHeader::formatCode] ) {
-//            case( constants::SegyFileFormatCode::Fixed32 ):                
-//                break;                
-//            case( constants::SegyFileFormatCode::IEEEfloat32 ):                
-//                break;
-//            case( constants::SegyFileFormatCode::IBMfloat32 ):
-//                break;                
-//            case( constants::SegyFileFormatCode::Int32 ):                
-//                break;                
-//            case( constants::SegyFileFormatCode::Int16 ):
-//                break;                
-//            case( constants::SegyFileFormatCode::Int8  ):
-//                break;                
-//        }
-//    }
+    void SegyFile::writeTraceData(const TraceHeader& th, const TraceData& td) {
+        /// @todo TO BE IMPLEMENTED
+    }
+    
+    void SegyFile::append(const trace_type& trace) {
+        // Move to the correct position in the file        
+        fstream_.seekp(0,ios_base::end);
+        // Write trace header
+        writeTraceHeader( trace.first );
+        // Write trace data
+        writeTraceData( trace.first, trace.second );        
+    }
+        
 }

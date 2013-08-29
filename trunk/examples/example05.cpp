@@ -1,5 +1,6 @@
 #include<SegyFile.h>
 #include<Conversion.h>
+#include<example_macro.h>
 
 #include<iostream>
 
@@ -15,8 +16,7 @@ int main() {
     TextualFileHeader tfh;
     BinaryFileHeader  bfh;
     
-    /// @fixme: Add a relative path here
-    SegyFile segyFile("/home/mculpo/eni/seismicTraces/data/C3NAflat.segy",tfh,bfh);
+    SegyFile segyFile( DATA_FOLDER "/C3NAflat.segy",tfh,bfh);
     
     //
     // Output header information

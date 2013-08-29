@@ -1,0 +1,7 @@
+#ifndef EXAMPLE_MACRO_CMAKE_H
+#define	EXAMPLE_MACRO_CMAKE_H
+
+#define DATA_FOLDER "@DATA_FOLDER@"
+
+#endif	/* EXAMPLE_MACRO_CMAKE_H */
+
