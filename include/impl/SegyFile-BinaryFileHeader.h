@@ -5,6 +5,8 @@
 #ifndef SEGYFILE_BINARYFILEHEADER_H
 #define	SEGYFILE_BINARYFILEHEADER_H
 
+#include<impl/utilities-inl.h>
+
 #include<iostream>
 #include<vector>
 
@@ -291,7 +293,47 @@ namespace seismic {
      * 
      * @relates BinaryFileHeader
      */
-    void checkBinaryFileHeader( const BinaryFileHeader & bfh);              
+    void checkBinaryFileHeader( const BinaryFileHeader & bfh);
+
+    namespace {
+
+        /// @todo TO BE SUBSTITUTED WITH LAMBDAS AS SOON AS C++11 WILL BE ALLOWED 
+        
+        /**
+         * @brief Functor that given a field of a binary header file, swaps its byte order
+         */
+        class BfhSwapByteOrder {
+        public:
+
+            BfhSwapByteOrder(BinaryFileHeader& bfh) : bfh_(bfh) {
+            }
+
+            void operator()(BinaryFileHeader::Int16Fields idx) {
+                invertByteOrder(bfh_[idx]);
+            }
+
+            void operator()(BinaryFileHeader::Int32Fields idx) {
+                invertByteOrder(bfh_[idx]);
+            }
+
+        private:
+            BinaryFileHeader& bfh_;
+        } ;
+
+    }
+    
+    
+    /**
+     * @brief Inverts the byte order of each field in the binary file header
+     * 
+     * @param bfh binary file header
+     */
+    inline void invertFieldsByteOrder(BinaryFileHeader & bfh) {
+        BfhSwapByteOrder swapVisitor(bfh);
+        std::for_each(BinaryFileHeader::Int32List.begin(), BinaryFileHeader::Int32List.end(), swapVisitor);
+        std::for_each(BinaryFileHeader::Int16List.begin(), BinaryFileHeader::Int16List.end(), swapVisitor);
+    }
+    
 }
 
 

@@ -1,7 +1,5 @@
 #include<SegyFile.h>
 
-#include<impl/utilities-inl.h>
-
 #include<algorithm>
 #include<stdexcept>
 #include<sstream>
@@ -10,57 +8,6 @@ using namespace std;
 
 namespace seismic {
 
-    ////////////////////
-    // Convenience functions
-    ////////////////////
-
-    namespace {
-
-        /**
-         * @brief Functor that given a field of a binary header file, swaps its byte order
-         */
-        class BfhSwapByteOrder {
-        public:
-
-            BfhSwapByteOrder(BinaryFileHeader& bfh) : bfh_(bfh) {
-            }
-
-            void operator()(BinaryFileHeader::Int16Fields idx) {
-                invertByteOrder(bfh_[idx]);
-            }
-
-            void operator()(BinaryFileHeader::Int32Fields idx) {
-                invertByteOrder(bfh_[idx]);
-            }
-
-        private:
-            BinaryFileHeader& bfh_;
-        } ;
-
-        /**
-         * @brief Functor that given a field of a trace header file, swaps its byte order
-         */
-        class ThSwapByteOrder {
-        public:
-
-            ThSwapByteOrder(TraceHeader& th) : th_(th) {
-            }
-
-            void operator()(TraceHeader::Int16Fields idx) {
-                invertByteOrder(th_[idx]);
-            }
-
-            void operator()(TraceHeader::Int32Fields idx) {
-                invertByteOrder(th_[idx]);
-            }
-
-        private:
-            TraceHeader& th_;
-        } ;
-        
-    }
-
-    
     SegyFile::SegyFile(
             const char * filename, TextualFileHeader& tfh, BinaryFileHeader& bfh,
             std::ios_base::openmode mode)
@@ -83,12 +30,8 @@ namespace seismic {
             // Read Binary file header  (400 bytes)
             fstream_.read(bfhBuffer, BinaryFileHeader::buffer_size);
 #ifdef LITTLE_ENDIAN
-            {
-                // If the system is little endian, bytes must be swapped
-                BfhSwapByteOrder swapVisitor(bfh_);
-                for_each(BinaryFileHeader::Int32List.begin(), BinaryFileHeader::Int32List.end(), swapVisitor);
-                for_each(BinaryFileHeader::Int16List.begin(), BinaryFileHeader::Int16List.end(), swapVisitor);
-            }
+            // If the system is little endian, bytes must be swapped
+            invertFieldsByteOrder(bfh_);
 #endif            
             // Check binary file header for inconsistencies
             try {
@@ -105,7 +48,7 @@ namespace seismic {
             // Check the presence of extended textual file header
             nextendedTextualFileHeader_ = bfh_[BinaryFileHeader::nextendedTextualFileHeader];
             // Read Extended textual file headers
-            /// TODO: to be implemented
+            /// @todo Extended textual file header section to be implemented
 
             //////////
             // Construct the vector of strides to permit random access to traces
@@ -164,11 +107,21 @@ namespace seismic {
             fstream_.seekp(0,ios_base::beg);
             // File header buffers
             char * tfhBuffer( tfh_.get() );
-            char * bfhBuffer( bfh_.get() );                                    
             // Write Textual file header (3200 bytes)
             fstream_.write(tfhBuffer, TextualFileHeader::line_length * TextualFileHeader::nlines);
-            // Write Binary file header  (400 bytes)
+
+            // Write Binary file header  (400 bytes)            
+            BinaryFileHeader obfh(bfh);
+            char * bfhBuffer( obfh.get() );
+#ifdef LITTLE_ENDIAN
+            // If the system is little endian, bytes must be swapped
+            invertFieldsByteOrder(obfh);
+#endif
             fstream_.write(bfhBuffer, BinaryFileHeader::buffer_size);            
+            // Compute the correct size of a single data sample
+            sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[BinaryFileHeader::formatCode] );
+            // Check the presence of extended textual file header
+            nextendedTextualFileHeader_ = bfh_[BinaryFileHeader::nextendedTextualFileHeader];            
         }
     }
     
@@ -192,6 +145,15 @@ namespace seismic {
         return value;
     }
     
+    void SegyFile::append(const trace_type& trace) {
+        // Move to the correct position in the file        
+        fstream_.seekp(0,ios_base::end);
+        // Write trace header
+        writeTraceHeader( trace.first  );
+        // Write trace data
+        writeTraceData  ( trace.second );        
+    }
+    
     ////////////////////
     // Private functions
     ////////////////////
@@ -199,45 +161,40 @@ namespace seismic {
     void SegyFile::readTraceHeader(TraceHeader& th) {
         fstream_.read( th.get(), TraceHeader::buffer_size );
 #ifdef LITTLE_ENDIAN
-        {
-            // If the system is little endian, bytes must be swapped
-            ThSwapByteOrder swapVisitor(th);
-            for_each(TraceHeader::Int32List.begin(), TraceHeader::Int32List.end(), swapVisitor);
-            for_each(TraceHeader::Int16List.begin(), TraceHeader::Int16List.end(), swapVisitor);
-        }
+        // If the system is little endian, bytes must be swapped
+        invertFieldsByteOrder(th);
 #endif    
     }
-    
+
     void SegyFile::readTraceData(const TraceHeader& th, TraceData& td) {
         // Retrieve the raw data
         const size_t nsamples = th[TraceHeader::nsamplesTrace];
-        td.resize( sizeOfDataSample_*nsamples );
-        fstream_.read( &td[0] , sizeOfDataSample_*nsamples );
+        td.resize( sizeOfDataSample_ * nsamples );
+        fstream_.read( &td[0] , sizeOfDataSample_ * nsamples );
 #ifdef LITTLE_ENDIAN
-        {
-            // If the system is little endian, bytes must be swapped
-            for( size_t ii = 0 ; ii < nsamples; ii++) {
-                invertByteOrder(&td[ii*sizeOfDataSample_],sizeOfDataSample_);
-            }
+        // If the system is little endian, bytes must be swapped
+        for ( size_t ii = 0 ; ii < nsamples; ii++) {
+            invertByteOrder(&td[ii * sizeOfDataSample_], sizeOfDataSample_);
         }
 #endif    
     }
     
-    void SegyFile::writeTraceHeader(const TraceHeader& th) {
-        /// @todo TO BE IMPLEMENTED
+    void SegyFile::writeTraceHeader(TraceHeader th) {        
+#ifdef LITTLE_ENDIAN
+        // If the system is little endian, bytes must be swapped
+        invertFieldsByteOrder(th);
+#endif    
+        fstream_.write( th.get(), TraceHeader::buffer_size );
     }
-    
-    void SegyFile::writeTraceData(const TraceHeader& th, const TraceData& td) {
-        /// @todo TO BE IMPLEMENTED
+
+    void SegyFile::writeTraceData(TraceData td) {
+        const size_t nsamples = td.size() / sizeOfDataSample_;
+#ifdef LITTLE_ENDIAN
+        // If the system is little endian, bytes must be swapped
+        for ( size_t ii = 0 ; ii < nsamples; ii++) {
+            invertByteOrder(&td[ii * sizeOfDataSample_], sizeOfDataSample_);
+        }
+#endif    
+        fstream_.write( &td[0] , sizeOfDataSample_ * nsamples );
     }
-    
-    void SegyFile::append(const trace_type& trace) {
-        // Move to the correct position in the file        
-        fstream_.seekp(0,ios_base::end);
-        // Write trace header
-        writeTraceHeader( trace.first );
-        // Write trace data
-        writeTraceData( trace.first, trace.second );        
-    }
-        
 }

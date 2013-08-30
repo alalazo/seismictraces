@@ -92,6 +92,10 @@ namespace seismic {
         size_t nsamples   = segyTrace.first[TraceHeader::nsamplesTrace];        
         size_t sampleSize = constants::sizeOfDataSample(bfh_[BinaryFileHeader::formatCode]);
         
+        // Resize buffer
+        segyTrace.second.resize( nsamples*sampleSize );
+        
+        // Convert from float to format
         switch ( bfh_[BinaryFileHeader::formatCode] ) {
             case ( constants::SegyFileFormatCode::IBMfloat32 ) :
                 // IBM floating point format

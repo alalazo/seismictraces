@@ -5,6 +5,9 @@
 #ifndef SEGYFILE_TRACEHEADER_H
 #define	SEGYFILE_TRACEHEADER_H
 
+#include<impl/utilities-inl.h>
+
+#include<algorithm>
 #include<iostream>
 #include<vector>
 
@@ -630,6 +633,44 @@ namespace seismic {
      */
     std::ostream& operator<<(std::ostream& cout, const TraceHeader& th);
 
+    namespace {
+
+        /// @todo TO BE SUBSTITUTED WITH LAMBDAS AS SOON AS C++11 WILL BE ALLOWED 
+        
+        /**
+         * @brief Functor that given a field of a trace header file, swaps its byte order
+         */
+        class ThSwapByteOrder {
+        public:
+
+            ThSwapByteOrder(TraceHeader& th) : th_(th) {
+            }
+
+            void operator()(TraceHeader::Int16Fields idx) {
+                invertByteOrder(th_[idx]);
+            }
+
+            void operator()(TraceHeader::Int32Fields idx) {
+                invertByteOrder(th_[idx]);
+            }
+
+        private:
+            TraceHeader& th_;
+        } ;
+        
+    }
+
+    /**
+     * @brief Inverts the byte order of each field in the trace header
+     * 
+     * @param bfh binary file header
+     */
+    inline void invertFieldsByteOrder(TraceHeader & th) {
+        ThSwapByteOrder swapVisitor(th);
+        std::for_each(TraceHeader::Int32List.begin(), TraceHeader::Int32List.end(), swapVisitor);
+        std::for_each(TraceHeader::Int16List.begin(), TraceHeader::Int16List.end(), swapVisitor);
+    }
+    
 }
 
 #endif	/* SEGYFILE_TRACEHEADER_H */
