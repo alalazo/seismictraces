@@ -54,10 +54,11 @@ int main() {
     otfh[1] = "EXAMPLE06";
     
     obfh[BinaryFileHeader::fixedLengthTraceFlag] = 0;
-    SegyFile segyOutputFile( DATA_FOLDER "/C3NAflat.copy.segy",tfh,bfh, ios_base::out );
+    SegyFile segyOutputFile( DATA_FOLDER "/C3NAflat.copy.segy",otfh,obfh, ios_base::out );
     
     for(size_t ii = 0; ii < segyFile.ntraces(); ++ii) {
         segyConverter( seismicTraces[ii], segyTraces[ii] );
+        segyOutputFile.append( segyTraces[ii] );
     }
     
     return 0;

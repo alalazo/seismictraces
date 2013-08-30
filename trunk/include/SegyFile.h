@@ -20,7 +20,7 @@
 #include<stdint.h>
 
 namespace seismic {
-    
+        
     /**
      * @brief Models a file conforming to SEG Y rev 1 format
      * 
@@ -244,17 +244,15 @@ namespace seismic {
          * 
          * @param[in] th trace header
          */
-        void writeTraceHeader(const TraceHeader& th);        
+        void writeTraceHeader(TraceHeader th);        
         
         /**
          * @brief Write trace data to the current position 
          * of the file stream
          * 
-         * @param[in] th trace header
          * @param[in] td trace data
          */
-        void writeTraceData(const TraceHeader& th, const TraceData& td);
-        
+        void writeTraceData(TraceData td);
     };
         
 }
