@@ -208,6 +208,13 @@ namespace seismic {
          */
         static const std::vector<Int16Fields> Int16List;        
         
+        template<class T>
+        typename T::type const & operator[](T const id) const {
+            // Pointer needed to induce aliasing
+            const char * pnt(&buffer_[id.value]);
+            return *( reinterpret_cast<typename T::type const *>( pnt ) );
+        }
+        
         /**
          * @brief Returns the corresponding integer value
          * 
