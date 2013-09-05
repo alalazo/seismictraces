@@ -1,4 +1,4 @@
-#include<impl/SegyFile-BinaryFileHeader.h>
+#include<impl/rev1/SegyFile-BinaryFileHeader-Rev1.h>
 #include<impl/SegyFile-constants.h>
 #include<iostream>
 
@@ -11,17 +11,17 @@ int main() {
     //
     // Default construction leaves the underlying buffer uninitialized
     //
-    BinaryFileHeader bfh;
+    BinaryFileHeaderInterface& bfh = *(new ConcreteBinaryFileHeader<Rev1>);
     
     //
     // Single fields can be assigned using enum constants in BinaryFieldHeader
     //
         
-    bfh[field(bfh::rev1::jobID)]       = 20;    
-    bfh[field(bfh::rev1::lineNumber)]  = 121;    
-    bfh[field(bfh::rev1::reelNumber)]  = 91;    
-    bfh[field(bfh::rev1::nDataTraces)] = 0;
-    bfh[field(bfh::rev1::formatCode)]  = SegyFileFormatCode::IEEEfloat32;
+    bfh[field(rev0::bfh::jobID)]       = 20;    
+    bfh[field(rev0::bfh::lineNumber)]  = 121;    
+    bfh[field(rev0::bfh::reelNumber)]  = 91;    
+    bfh[field(rev0::bfh::nDataTraces)] = 0;
+    bfh[field(rev0::bfh::formatCode)]  = SegyFileFormatCode::IEEEfloat32;
         
     /* ... */
     
@@ -29,6 +29,8 @@ int main() {
     // A BinaryFileHeader may be streamed
     // 
     cout << bfh << endl;
+    
+    delete &bfh;
     
     return 0;
 }

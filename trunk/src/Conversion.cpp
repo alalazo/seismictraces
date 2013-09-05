@@ -1,5 +1,6 @@
 #include<Conversion.h>
 #include<impl/utilities-inl.h>
+#include<impl/rev1/SegyFile-Fields-Rev1.h>
 
 #include<algorithm>
 #include<stdexcept>
@@ -29,11 +30,11 @@ namespace seismic {
         //////////
         
         size_t nsamples   = segyTrace.first[TraceHeader::nsamplesTrace];        
-        size_t sampleSize = constants::sizeOfDataSample(bfh_[BinaryFileHeader::formatCode]);
+        size_t sampleSize = constants::sizeOfDataSample(bfh_[ field(rev1::bfh::formatCode) ]);
         
         seismicTrace.resize(nsamples,0.0f);                
         
-        switch ( bfh_[BinaryFileHeader::formatCode] ) {
+        switch ( bfh_[ field(rev1::bfh::formatCode) ] ) {
             case ( constants::SegyFileFormatCode::IBMfloat32 ) :
                 // IBM floating point format
                 for (size_t ii = 0; ii < nsamples; ii++) {
@@ -90,13 +91,13 @@ namespace seismic {
         // Read trace data
         //////////
         size_t nsamples   = segyTrace.first[TraceHeader::nsamplesTrace];        
-        size_t sampleSize = constants::sizeOfDataSample(bfh_[BinaryFileHeader::formatCode]);
+        size_t sampleSize = constants::sizeOfDataSample(bfh_[ field(rev1::bfh::formatCode) ]);
         
         // Resize buffer
         segyTrace.second.resize( nsamples*sampleSize );
         
         // Convert from float to format
-        switch ( bfh_[BinaryFileHeader::formatCode] ) {
+        switch ( bfh_[ field(rev1::bfh::formatCode) ] ) {
             case ( constants::SegyFileFormatCode::IBMfloat32 ) :
                 // IBM floating point format
                 for (size_t ii = 0; ii < nsamples; ii++) {

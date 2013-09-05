@@ -1,3 +1,6 @@
+/// @todo TO BE REMOVED AS SOON AS A FACTORY IS READY
+#include<impl/rev1/SegyFile-BinaryFileHeader-Rev1.h>
+
 #include<SegyFile.h>
 #include<Conversion.h>
 #include<example_macro.h>
@@ -14,8 +17,8 @@ int main() {
     // Open a SEG Y file in read mode
     //
     TextualFileHeader tfh;
-    BinaryFileHeader  bfh;
-    
+    BinaryFileHeaderInterface&  bfh = *(new ConcreteBinaryFileHeader<Rev1>);
+
     SegyFile segyFile( DATA_FOLDER "/mig_08gars1_6s.sgy",tfh,bfh);
     
     //
@@ -49,6 +52,7 @@ int main() {
         cout << seismicTrace[ii] << endl;
     }
     
+    delete &bfh;
     return 0;
 }
 
