@@ -1,3 +1,6 @@
+/// @todo TO BE REMOVED AS SOON AS A FACTORY IS READY
+#include<impl/rev1/SegyFile-BinaryFileHeader-Rev1.h>
+
 #include<SegyFile.h>
 #include<Conversion.h>
 #include<example_macro.h>
@@ -15,8 +18,9 @@ int main() {
     // Open input SEG Y file in read mode
     //
     TextualFileHeader tfh;
-    BinaryFileHeader  bfh;
     
+    BinaryFileHeaderInterface&  bfh = *(new ConcreteBinaryFileHeader<Rev1>);
+
     SegyFile segyFile( DATA_FOLDER "/C3NAflat.segy",tfh,bfh);
     
     //
@@ -47,20 +51,21 @@ int main() {
     //
     // Write to a new SEG Y file
     //
-    
-    TextualFileHeader otfh;
-    BinaryFileHeader  obfh(bfh);
-    
-    otfh[1] = "EXAMPLE06";
-    
-    obfh[BinaryFileHeader::fixedLengthTraceFlag] = 0;
-    SegyFile segyOutputFile( DATA_FOLDER "/C3NAflat.copy.segy",otfh,obfh, ios_base::out );
-    
-    for(size_t ii = 0; ii < segyFile.ntraces(); ++ii) {
-        segyConverter( seismicTraces[ii], segyTraces[ii] );
-        segyOutputFile.append( segyTraces[ii] );
-    }
-    
+//    
+//    TextualFileHeader otfh;
+//    BinaryFileHeaderInterface  obfh(bfh);
+//    
+//    otfh[1] = "EXAMPLE06";
+//    
+//    obfh[BinaryFileHeader::fixedLengthTraceFlag] = 0;
+//    SegyFile segyOutputFile( DATA_FOLDER "/C3NAflat.copy.segy",otfh,obfh, ios_base::out );
+//    
+//    for(size_t ii = 0; ii < segyFile.ntraces(); ++ii) {
+//        segyConverter( seismicTraces[ii], segyTraces[ii] );
+//        segyOutputFile.append( segyTraces[ii] );
+//    }
+//
+    delete &bfh;    
     return 0;
 }
 

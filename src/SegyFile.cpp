@@ -4,12 +4,15 @@
 #include<stdexcept>
 #include<sstream>
 
+#include "impl/rev0/SegyFile-Fields-Rev0.h"
+#include "impl/rev1/SegyFile-Fields-Rev1.h"
+
 using namespace std;
 
 namespace seismic {
 
     SegyFile::SegyFile(
-            const char * filename, TextualFileHeader& tfh, BinaryFileHeader& bfh,
+            const char * filename, TextualFileHeader& tfh, BinaryFileHeaderInterface& bfh,
             std::ios_base::openmode mode)
     : fstream_(filename, mode | ios_base::binary), // A SEG Y file is always opened in binary mode
     tfh_(tfh), bfh_(bfh) {   
@@ -28,25 +31,26 @@ namespace seismic {
             // Read Textual file header (3200 bytes)
             fstream_.read(tfhBuffer, TextualFileHeader::line_length * TextualFileHeader::nlines);
             // Read Binary file header  (400 bytes)
-            fstream_.read(bfhBuffer, BinaryFileHeader::buffer_size);
+            fstream_.read(bfhBuffer, BinaryFileHeaderInterface::buffer_size);
 #ifdef LITTLE_ENDIAN
-            // If the system is little endian, bytes must be swapped
-            invertFieldsByteOrder(bfh_);
+            // If the system is little endian, bytes must be swapped            
+            bfh_.invertByteOrder();
 #endif            
             // Check binary file header for inconsistencies
-            try {
-                checkBinaryFileHeader( bfh_ );
-            } catch( runtime_error & e ) {
-                stringstream estream;
-                estream << "FATAL ERROR: " << filename << " is a non-conforming SEG Y file" << endl << endl;
-                estream << "Problem encountered in binary file header:" << endl;
-                estream << e.what();
-                throw runtime_error( estream.str() );
-            }            
+            // @todo CHECK FOR INCONSISTENCIES ON READ
+//            try {
+//                checkBinaryFileHeader( bfh_ );
+//            } catch( runtime_error & e ) {
+//                stringstream estream;
+//                estream << "FATAL ERROR: " << filename << " is a non-conforming SEG Y file" << endl << endl;
+//                estream << "Problem encountered in binary file header:" << endl;
+//                estream << e.what();
+//                throw runtime_error( estream.str() );
+//            }            
             // Compute the correct size of a single data sample
-            sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[BinaryFileHeader::formatCode] );
+            sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[ field(rev1::bfh::formatCode) ] );
             // Check the presence of extended textual file header
-            nextendedTextualFileHeader_ = bfh_[BinaryFileHeader::nextendedTextualFileHeader];
+            nextendedTextualFileHeader_ = bfh_[ field(rev1::bfh::nextendedTextualFileHeader) ];
             // Read Extended textual file headers
             /// @todo Extended textual file header section to be implemented
 
@@ -55,14 +59,17 @@ namespace seismic {
             //////////            
             size_t segyFileSize = fstream_.seekg(0, ios::end).tellg();
             // FIXME: change as soon as Extended textual file header is implemented
-            size_t currentStride = TextualFileHeader::line_length * TextualFileHeader::nlines + BinaryFileHeader::buffer_size + nextendedTextualFileHeader_ * 3200;
+            size_t currentStride = 
+                    TextualFileHeader::line_length * TextualFileHeader::nlines +
+                    BinaryFileHeaderInterface::buffer_size + 
+                    nextendedTextualFileHeader_ * 3200;
             traceSeekStrides_.push_back( currentStride );
 
             while ( true ) {
 
                 size_t nsamples(0);
                 // Compute the number of samples in the next trace to update the stride
-                if ( bfh_[BinaryFileHeader::fixedLengthTraceFlag] == 0 ) {
+                if ( bfh_[ field(rev1::bfh::fixedLengthTraceFlag) ] == 0 ) {
                     //
                     // If the traces does not have fixed length, the file 
                     // must be inspected sequentially
@@ -72,12 +79,12 @@ namespace seismic {
                     fstream_.seekg ( currentStride );
                     readTraceHeader( th );
                     nsamples = th[TraceHeader::nsamplesTrace];
-                } else if ( bfh_[BinaryFileHeader::fixedLengthTraceFlag] == 1 ) {
+                } else if ( bfh_[ field(rev1::bfh::fixedLengthTraceFlag) ] == 1 ) {
                     //
                     // If the traces have all fixed length the strides can be
                     // computed without inspecting the file sequentially
                     //
-                    nsamples = bfh_[BinaryFileHeader::nsamplesDataTrace];
+                    nsamples = bfh_[ field(rev1::bfh::nsamplesDataTrace) ];
                 }
                 // Update the current stride in the file
                 currentStride += TraceHeader::buffer_size + sizeOfDataSample_ * nsamples;
@@ -111,17 +118,17 @@ namespace seismic {
             fstream_.write(tfhBuffer, TextualFileHeader::line_length * TextualFileHeader::nlines);
 
             // Write Binary file header  (400 bytes)            
-            BinaryFileHeader obfh(bfh);
+            BinaryFileHeaderInterface& obfh(bfh);
             char * bfhBuffer( obfh.get() );
 #ifdef LITTLE_ENDIAN
             // If the system is little endian, bytes must be swapped
-            invertFieldsByteOrder(obfh);
+            obfh.invertByteOrder();
 #endif
-            fstream_.write(bfhBuffer, BinaryFileHeader::buffer_size);            
+            fstream_.write(bfhBuffer, BinaryFileHeaderInterface::buffer_size);            
             // Compute the correct size of a single data sample
-            sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[BinaryFileHeader::formatCode] );
+            sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[ field(rev1::bfh::formatCode) ] );
             // Check the presence of extended textual file header
-            nextendedTextualFileHeader_ = bfh_[BinaryFileHeader::nextendedTextualFileHeader];            
+            nextendedTextualFileHeader_ = bfh_[ field(rev1::bfh::nextendedTextualFileHeader) ];            
         }
     }
     

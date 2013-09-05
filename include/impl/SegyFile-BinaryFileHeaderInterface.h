@@ -6,9 +6,9 @@
 namespace seismic {
     
     class BinaryFileHeaderInterface {
+    public:
         /// Number of bytes in the Binary file header
         static const int buffer_size = 400;
-    public:
          
         /**
          * @brief Returns a reference to the underlying bytes interpreted as the correct type
@@ -66,6 +66,8 @@ namespace seismic {
          */
         virtual void invertByteOrder() = 0;
         
+        virtual ~BinaryFileHeaderInterface(){}
+        
     private:
         char buffer_[buffer_size];
     };
@@ -79,7 +81,7 @@ namespace seismic {
      * 
      * @relates BinaryFileHeader
      */
-    std::ostream& operator<<(std::ostream& cout, const BinaryFileHeaderInterface& bfh) {
+    inline std::ostream& operator<<(std::ostream& cout, const BinaryFileHeaderInterface& bfh) {
         bfh.print( cout );
         return cout;
     }

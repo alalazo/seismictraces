@@ -2,6 +2,7 @@ SET(
   SeismicTraces_includes
   SeismicTrace-inl.h
   SegyFile.h
+  Conversion.h
 )
 
 SET( 
@@ -11,7 +12,10 @@ SET(
   impl/SegyFile-BinaryFileHeader.h
   impl/SegyFile-TraceHeader.h
   impl/utilities-inl.h
-  impl/metafunctions-inl.h  
+  impl/metafunctions-inl.h
+  impl/rev0/SegyFile-Fields-Rev0.h
+  impl/rev0/SegyFile-BinaryFileHeader-Rev0.h
+  impl/rev1/SegyFile-Fields-Rev1.h  
 )
 
 INSTALL( 

@@ -23,7 +23,7 @@ namespace seismic {
          * 
          * @param[in] bfh binary file header
          */
-        explicit SegyConverter(const BinaryFileHeader& bfh) : bfh_(bfh) {}
+        explicit SegyConverter(const BinaryFileHeaderInterface& bfh) : bfh_(bfh) {}
         
         /**
          * @brief Convert a SegyFile::trace_type object to a SeismicTrace object
@@ -42,7 +42,7 @@ namespace seismic {
         void operator()(const SeismicTrace& seismicTrace, SegyFile::trace_type& segyTrace);
         
     private:
-        const BinaryFileHeader& bfh_;
+        const BinaryFileHeaderInterface& bfh_;
     } ;
     
 }

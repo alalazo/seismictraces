@@ -63,7 +63,7 @@ namespace seismic {
         cout << "|BINARY FILE HEADER|" << endl;
         cout << "|------------------|" << endl;
         cout << endl;
-        cout << "**** REV-0 FIELDS ***" << endl;
+        cout << "**** REV-0 FIELDS ****" << endl;
         cout << endl;
         cout << "Job identification number:                         " << (*this)[field( rev0::bfh::jobID )] << endl;
         cout << "Line number:                                       " << (*this)[field( rev0::bfh::lineNumber )] << endl;

@@ -1,5 +1,8 @@
 #include<SegyFile.h>
 
+/// @todo TO BE REMOVED AS SOON AS A FACTORY IS READY
+#include<impl/rev1/SegyFile-BinaryFileHeader-Rev1.h>
+
 #include<string>
 #include<stdexcept>
 #include<iostream>
@@ -23,7 +26,7 @@ int main(int argc, char** argv) {
         
         // Open SEG Y file for reading 
         TextualFileHeader tfh;
-        BinaryFileHeader  bfh;
+        BinaryFileHeaderInterface&  bfh = *(new ConcreteBinaryFileHeader<Rev1>);
         
         SegyFile segyFile(inputFilename,tfh,bfh);
         
@@ -33,7 +36,8 @@ int main(int argc, char** argv) {
         SegyFile::trace_type segyTrace = segyFile.read( traceId );
         
         cout << segyTrace.first << endl;
-        
+
+        delete & bfh;        
     } catch ( exception& e) {
         cerr << e.what() << endl;
         return 1;

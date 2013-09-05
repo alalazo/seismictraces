@@ -6,7 +6,7 @@
 #define	SEGYFILE_H
 
 #include<impl/SegyFile-TextualFileHeader.h>
-#include<impl/SegyFile-BinaryFileHeader.h>
+#include<impl/SegyFile-BinaryFileHeaderInterface.h>
 #include<impl/SegyFile-TraceHeader.h>
 #include<impl/SegyFile-constants.h>
 
@@ -16,6 +16,7 @@
 #include<iostream>
 #include<ios>
 #include<utility>
+#include<memory>
 
 #include<stdint.h>
 
@@ -169,7 +170,7 @@ namespace seismic {
          * 
          */
         SegyFile(
-                const char * filename, TextualFileHeader& tfh, BinaryFileHeader& bfh,
+                const char * filename, TextualFileHeader& tfh, BinaryFileHeaderInterface& bfh,
                 std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out
                 );
         
@@ -206,7 +207,7 @@ namespace seismic {
         //////////
         std::fstream       fstream_;                
         TextualFileHeader& tfh_;
-        BinaryFileHeader&  bfh_;
+        BinaryFileHeaderInterface& bfh_;
         //////////
         // Bookkeeping variables to permit random access to traces
         //////////

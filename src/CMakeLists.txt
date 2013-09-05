@@ -6,6 +6,7 @@ SET(
   impl/SegyFile-BinaryFileHeader.cpp
   impl/SegyFile-TraceHeader.cpp
   impl/rev0/SegyFile-BinaryFileHeader-Rev0.cpp
+  impl/rev1/SegyFile-BinaryFileHeader-Rev1.cpp
 )
 
 ADD_LIBRARY( SeismicTraces ${SeismicTraces_sources} )
