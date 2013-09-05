@@ -16,7 +16,7 @@ int main() {
     TextualFileHeader tfh;
     BinaryFileHeader  bfh;
     
-    SegyFile segyFile( DATA_FOLDER "/C3NAflat.segy",tfh,bfh);
+    SegyFile segyFile( DATA_FOLDER "/mig_08gars1_6s.sgy",tfh,bfh);
     
     //
     // Output header information
