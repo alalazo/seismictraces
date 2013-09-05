@@ -120,9 +120,9 @@ namespace seismic {
             estream << "Number of auxiliary traces per ensemble is < 0" << endl;
         }
         // Sample interval in microseconds
-        if ( bfh[BinaryFileHeader::nAuxiliaryTraces] < 0 ) {
+        if ( bfh[BinaryFileHeader::sampleInterval] < 0 ) {
             checkFailed = true;
-            estream << "Number of auxiliary traces per ensemble is < 0" << endl;
+            estream << "Sample interval is < 0" << endl;
         }
         // Number of samples per data trace
         if ( bfh[BinaryFileHeader::nsamplesDataTrace] <= 0 ) {
