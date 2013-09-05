@@ -10,6 +10,8 @@ SET(
   impl/SegyFile-TextualFileHeader.h
   impl/SegyFile-BinaryFileHeader.h
   impl/SegyFile-TraceHeader.h
+  impl/utilities-inl.h
+  impl/metafunctions-inl.h  
 )
 
 INSTALL( 

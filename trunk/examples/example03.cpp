@@ -16,12 +16,13 @@ int main() {
     //
     // Single fields can be assigned using enum constants in BinaryFieldHeader
     //
-    
-    bfh[BinaryFileHeader::jobID]       = 20;    
-    bfh[BinaryFileHeader::lineNumber]  = 121;    
-    bfh[BinaryFileHeader::reelNumber]  = 91;    
-    bfh[BinaryFileHeader::nDataTraces] = 0;
-    bfh[BinaryFileHeader::formatCode]  = SegyFileFormatCode::IEEEfloat32;
+        
+    bfh[field(bfh::rev1::jobID)]       = 20;    
+    bfh[field(bfh::rev1::lineNumber)]  = 121;    
+    bfh[field(bfh::rev1::reelNumber)]  = 91;    
+    bfh[field(bfh::rev1::nDataTraces)] = 0;
+    bfh[field(bfh::rev1::formatCode)]  = SegyFileFormatCode::IEEEfloat32;
+        
     /* ... */
     
     //
