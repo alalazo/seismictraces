@@ -134,19 +134,14 @@ namespace seismic {
         }
     }
 
-    template<>
-    struct subscript_return_type< bfh::rev0::Int32FieldsRev0 > {
-        typedef int32_t type;
-    };
+    SET_SUBSCRIPT_RETURN_TYPE( bfh::rev0::Int32FieldsRev0 , int32_t );
+    SET_SUBSCRIPT_RETURN_TYPE( bfh::rev0::Int16FieldsRev0 , int16_t );
+        
     
-    template<>
-    struct subscript_return_type< bfh::rev0::Int16FieldsRev0 > {
-        typedef int16_t type;
-    };
     
     namespace bfh {
         namespace rev1 {
-            using namespace bfh::rev0; //::Int32FieldsRev0;
+            using namespace bfh::rev0;
 
             /**
              * @brief Fields that are mapped to 16-bit integers
@@ -200,11 +195,8 @@ namespace seismic {
         }
     }
     
-    template<>
-    struct subscript_return_type< bfh::rev1::Int16FieldsRev1 > {
-        typedef int16_t type;
-    };
-        
+    SET_SUBSCRIPT_RETURN_TYPE( bfh::rev1::Int16FieldsRev1 , int16_t );
+    
     ////////////////////
     
     /**

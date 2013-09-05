@@ -45,6 +45,16 @@ namespace seismic {
     SubscriptReturnTypeAggregator<T> field(T id) {
         return SubscriptReturnTypeAggregator<T>(id);
     }
+   
+    /**
+     * @brief Convenience macro to set the subscript return type 
+     * by a specialization of the subcript_return_type meta-function          
+     */
+#define SET_SUBSCRIPT_RETURN_TYPE( T, RETURN_TYPE) \
+    template<> \
+    struct subscript_return_type< T > { \
+        typedef RETURN_TYPE type; \
+    }
     
 }
 
