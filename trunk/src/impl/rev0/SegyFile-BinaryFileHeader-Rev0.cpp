@@ -1,5 +1,9 @@
 #include<impl/rev0/SegyFile-BinaryFileHeader-Rev0.h>
+#include<impl/SegyFile-constants.h>
 #include<impl/utilities-inl.h>
+
+#include<sstream>
+#include<stdexcept>
 
 using namespace std;
 
@@ -65,33 +69,33 @@ namespace seismic {
         cout << endl;
         cout << "**** REV-0 FIELDS ****" << endl;
         cout << endl;
-        cout << "Job identification number:                         " << (*this)[field( rev0::bfh::jobID )] << endl;
-        cout << "Line number:                                       " << (*this)[field( rev0::bfh::lineNumber )] << endl;
-        cout << "Reel number:                                       " << (*this)[field( rev0::bfh::reelNumber )] << endl;
-        cout << "Number of data traces per ensemble:                " << (*this)[field( rev0::bfh::nDataTraces )] << endl;
-        cout << "Number of auxiliary traces per ensemble:           " << (*this)[field( rev0::bfh::nAuxiliaryTraces )] << endl;
-        cout << "Sample interval (us):                              " << (*this)[field( rev0::bfh::sampleInterval )] << endl;
-        cout << "Sample interval (us) of original field recording:  " << (*this)[field( rev0::bfh::sampleIntervalOriginalField )] << endl;
-        cout << "Number of samples per data trace:                  " << (*this)[field( rev0::bfh::nsamplesDataTrace )] << endl;
-        cout << "Number of samples per data trace (original field): " << (*this)[field( rev0::bfh::nsamplesDataTraceOriginalField )] << endl;
-        cout << "Data sample format code:                           " << (*this)[field( rev0::bfh::formatCode )] << endl;
-        cout << "Ensemble fold:                                     " << (*this)[field( rev0::bfh::ensembleFold )] << endl;
-        cout << "Trace sorting code:                                " << (*this)[field( rev0::bfh::traceSortingCode )] << endl;
-        cout << "Vertical sum code:                                 " << (*this)[field( rev0::bfh::verticalSumCode )] << endl;
-        cout << "Sweep frequency (Hz) at start:                     " << (*this)[field( rev0::bfh::sweepFrequencyStart )] << endl;
-        cout << "Sweep frequency (Hz) at end:                       " << (*this)[field( rev0::bfh::sweepFrequencyEnd )] << endl;
-        cout << "Sweep length (ms):                                 " << (*this)[field( rev0::bfh::sweepLength )] << endl;
-        cout << "Sweep type                                         " << (*this)[field( rev0::bfh::sweepTypeID )] << endl;
-        cout << "Trace number of sweep channel:                     " << (*this)[field( rev0::bfh::traceNumberSweepChannel )] << endl;
-        cout << "Sweep trace taper length (ms) at start:            " << (*this)[field( rev0::bfh::sweepTraceTaperLengthStart )] << endl;        
-        cout << "Sweep trace taper length (ms) at end:              " << (*this)[field( rev0::bfh::sweepTraceTaperLengthEnd )] << endl;
-        cout << "Taper type:                                        " << (*this)[field( rev0::bfh::taperType )] << endl;
-        cout << "Correlated data traces:                            " << (*this)[field( rev0::bfh::correlatedDataTraces )] << endl;
-        cout << "Binary gain recovered:                             " << (*this)[field( rev0::bfh::binaryGainRecovered )] << endl;
-        cout << "Amplitude recovery method:                         " << (*this)[field( rev0::bfh::amplitudeRecoveryMethod )] << endl;
-        cout << "Measurement system:                                " << (*this)[field( rev0::bfh::measurementSystem )] << endl;
-        cout << "Impulse signal polarity:                           " << (*this)[field( rev0::bfh::impulseSignalPolarity )] << endl;
-        cout << "Vibratory polarity code:                           " << (*this)[field( rev0::bfh::vibratoryPolarityCode )] << endl;
+        cout << "Job identification number:                         " << (*this)[ field( rev0::bfh::jobID ) ] << endl;
+        cout << "Line number:                                       " << (*this)[ field( rev0::bfh::lineNumber ) ] << endl;
+        cout << "Reel number:                                       " << (*this)[ field( rev0::bfh::reelNumber ) ] << endl;
+        cout << "Number of data traces per ensemble:                " << (*this)[ field( rev0::bfh::nDataTraces ) ] << endl;
+        cout << "Number of auxiliary traces per ensemble:           " << (*this)[ field( rev0::bfh::nAuxiliaryTraces ) ] << endl;
+        cout << "Sample interval (us):                              " << (*this)[ field( rev0::bfh::sampleInterval ) ] << endl;
+        cout << "Sample interval (us) of original field recording:  " << (*this)[ field( rev0::bfh::sampleIntervalOriginalField  ) ] << endl;
+        cout << "Number of samples per data trace:                  " << (*this)[ field( rev0::bfh::nsamplesDataTrace  ) ] << endl;
+        cout << "Number of samples per data trace (original field): " << (*this)[ field( rev0::bfh::nsamplesDataTraceOriginalField  ) ] << endl;
+        cout << "Data sample format code:                           " << (*this)[ field( rev0::bfh::formatCode  ) ] << endl;
+        cout << "Ensemble fold:                                     " << (*this)[ field( rev0::bfh::ensembleFold  ) ] << endl;
+        cout << "Trace sorting code:                                " << (*this)[ field( rev0::bfh::traceSortingCode  ) ] << endl;
+        cout << "Vertical sum code:                                 " << (*this)[ field( rev0::bfh::verticalSumCode  ) ] << endl;
+        cout << "Sweep frequency (Hz) at start:                     " << (*this)[ field( rev0::bfh::sweepFrequencyStart  ) ] << endl;
+        cout << "Sweep frequency (Hz) at end:                       " << (*this)[ field( rev0::bfh::sweepFrequencyEnd  ) ] << endl;
+        cout << "Sweep length (ms):                                 " << (*this)[ field( rev0::bfh::sweepLength  ) ] << endl;
+        cout << "Sweep type                                         " << (*this)[ field( rev0::bfh::sweepTypeID  ) ] << endl;
+        cout << "Trace number of sweep channel:                     " << (*this)[ field( rev0::bfh::traceNumberSweepChannel  ) ] << endl;
+        cout << "Sweep trace taper length (ms) at start:            " << (*this)[ field( rev0::bfh::sweepTraceTaperLengthStart  ) ] << endl;        
+        cout << "Sweep trace taper length (ms) at end:              " << (*this)[ field( rev0::bfh::sweepTraceTaperLengthEnd  ) ] << endl;
+        cout << "Taper type:                                        " << (*this)[ field( rev0::bfh::taperType  ) ] << endl;
+        cout << "Correlated data traces:                            " << (*this)[ field( rev0::bfh::correlatedDataTraces  ) ] << endl;
+        cout << "Binary gain recovered:                             " << (*this)[ field( rev0::bfh::binaryGainRecovered  ) ] << endl;
+        cout << "Amplitude recovery method:                         " << (*this)[ field( rev0::bfh::amplitudeRecoveryMethod  ) ] << endl;
+        cout << "Measurement system:                                " << (*this)[ field( rev0::bfh::measurementSystem  ) ] << endl;
+        cout << "Impulse signal polarity:                           " << (*this)[ field( rev0::bfh::impulseSignalPolarity  ) ] << endl;
+        cout << "Vibratory polarity code:                           " << (*this)[ field( rev0::bfh::vibratoryPolarityCode  ) ] << endl;
         cout << endl;        
     }    
     
@@ -109,11 +113,11 @@ namespace seismic {
             }
 
             void operator()(rev0::bfh::Int16FieldsRev0 idx) {
-                invertByteOrder(bfh_[field(idx)]);
+                invertByteOrder(bfh_[ field(idx ) ]);
             }
 
             void operator()(rev0::bfh::Int32FieldsRev0 idx) {
-                invertByteOrder(bfh_[field(idx)]);
+                invertByteOrder(bfh_[ field(idx ) ]);
             }
 
         private:
@@ -126,5 +130,48 @@ namespace seismic {
         BfhSwapByteOrder swapVisitor( *this );
         std::for_each(ConcreteBinaryFileHeader<Rev0>::Int32List.begin(), ConcreteBinaryFileHeader<Rev0>::Int32List.end(), swapVisitor);
         std::for_each(ConcreteBinaryFileHeader<Rev0>::Int16List.begin(), ConcreteBinaryFileHeader<Rev0>::Int16List.end(), swapVisitor);
+    }
+    
+    void ConcreteBinaryFileHeader<Rev0>::checkConsistencyOrThrow() {
+        stringstream estream;
+        bool         checkFailed = false;
+        // Number of data traces per ensemble
+        if ( (*this)[ field(rev0::bfh::nDataTraces) ] < 0 ) {
+            checkFailed = true;
+            estream << "Number of data traces per ensemble is < 0" << endl;
+        }
+        // Number of auxiliary traces per ensemble
+        if ( (*this)[ field(rev0::bfh::nAuxiliaryTraces) ] < 0 ) {
+            checkFailed = true;
+            estream << "Number of auxiliary traces per ensemble is < 0" << endl;
+        }
+        // Sample interval in microseconds
+        if ( (*this)[ field(rev0::bfh::sampleInterval) ] < 0 ) {
+            checkFailed = true;
+            estream << "Sample interval is < 0" << endl;
+        }
+        // Number of samples per data trace
+        if ( (*this)[ field(rev0::bfh::nsamplesDataTrace) ] <= 0 ) {
+            checkFailed = true;
+            estream << "Number of samples per data trace is <= 0" << endl;
+        }
+        // Data sample format code
+        switch ( (*this)[ field(rev0::bfh::formatCode) ] ) {
+            case ( constants::SegyFileFormatCode::IBMfloat32 ):
+            case ( constants::SegyFileFormatCode::Int32      ):
+            case ( constants::SegyFileFormatCode::Fixed32    ):
+            case ( constants::SegyFileFormatCode::IEEEfloat32):
+            case ( constants::SegyFileFormatCode::Int16      ):
+            case ( constants::SegyFileFormatCode::Int8       ):
+                break;
+            default:
+                checkFailed = true;
+                estream << "Invalid value of data sample format code (" << (*this)[ field(rev0::bfh::formatCode) ] << ")" << endl;
+                break;
+        }
+        // Throw an exception if some consistency check failed
+        if ( checkFailed ) {
+            throw runtime_error( estream.str() );
+        }
     }
 }

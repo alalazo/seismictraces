@@ -19,7 +19,7 @@ int main() {
     //
     TextualFileHeader tfh;
     
-    BinaryFileHeaderInterface&  bfh = *(new ConcreteBinaryFileHeader<Rev1>);
+    BinaryFileHeader&  bfh = *(new ConcreteBinaryFileHeader<Rev1>);
 
     SegyFile segyFile( DATA_FOLDER "/C3NAflat.segy",tfh,bfh);
     

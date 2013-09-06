@@ -12,7 +12,7 @@ using namespace std;
 namespace seismic {
 
     SegyFile::SegyFile(
-            const char * filename, TextualFileHeader& tfh, BinaryFileHeaderInterface& bfh,
+            const char * filename, TextualFileHeader& tfh, BinaryFileHeader& bfh,
             std::ios_base::openmode mode)
     : fstream_(filename, mode | ios_base::binary), // A SEG Y file is always opened in binary mode
     tfh_(tfh), bfh_(bfh) {   
@@ -31,7 +31,7 @@ namespace seismic {
             // Read Textual file header (3200 bytes)
             fstream_.read(tfhBuffer, TextualFileHeader::line_length * TextualFileHeader::nlines);
             // Read Binary file header  (400 bytes)
-            fstream_.read(bfhBuffer, BinaryFileHeaderInterface::buffer_size);
+            fstream_.read(bfhBuffer, BinaryFileHeader::buffer_size);
 #ifdef LITTLE_ENDIAN
             // If the system is little endian, bytes must be swapped            
             bfh_.invertByteOrder();
@@ -61,7 +61,7 @@ namespace seismic {
             // FIXME: change as soon as Extended textual file header is implemented
             size_t currentStride = 
                     TextualFileHeader::line_length * TextualFileHeader::nlines +
-                    BinaryFileHeaderInterface::buffer_size + 
+                    BinaryFileHeader::buffer_size + 
                     nextendedTextualFileHeader_ * 3200;
             traceSeekStrides_.push_back( currentStride );
 
@@ -118,13 +118,13 @@ namespace seismic {
             fstream_.write(tfhBuffer, TextualFileHeader::line_length * TextualFileHeader::nlines);
 
             // Write Binary file header  (400 bytes)            
-            BinaryFileHeaderInterface& obfh(bfh);
+            BinaryFileHeader& obfh(bfh);
             char * bfhBuffer( obfh.get() );
 #ifdef LITTLE_ENDIAN
             // If the system is little endian, bytes must be swapped
             obfh.invertByteOrder();
 #endif
-            fstream_.write(bfhBuffer, BinaryFileHeaderInterface::buffer_size);            
+            fstream_.write(bfhBuffer, BinaryFileHeader::buffer_size);            
             // Compute the correct size of a single data sample
             sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[ field(rev1::bfh::formatCode) ] );
             // Check the presence of extended textual file header

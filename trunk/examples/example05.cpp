@@ -17,7 +17,7 @@ int main() {
     // Open a SEG Y file in read mode
     //
     TextualFileHeader tfh;
-    BinaryFileHeaderInterface&  bfh = *(new ConcreteBinaryFileHeader<Rev1>);
+    BinaryFileHeader&  bfh = *(new ConcreteBinaryFileHeader<Rev1>);
 
     SegyFile segyFile( DATA_FOLDER "/mig_08gars1_6s.sgy",tfh,bfh);
     

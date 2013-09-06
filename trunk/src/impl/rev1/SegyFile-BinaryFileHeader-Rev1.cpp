@@ -1,6 +1,9 @@
 #include<impl/rev1/SegyFile-BinaryFileHeader-Rev1.h>
 #include<impl/utilities-inl.h>
 
+#include<sstream>
+#include<stdexcept>
+
 using namespace std;
 
 namespace seismic {
@@ -66,4 +69,30 @@ namespace seismic {
         BfhSwapByteOrder swapVisitor( *this );        
         std::for_each(ConcreteBinaryFileHeader<Rev1>::Int16List.begin(), ConcreteBinaryFileHeader<Rev1>::Int16List.end(), swapVisitor);
     }
+
+    void ConcreteBinaryFileHeader<Rev1>::checkConsistencyOrThrow() {
+        ConcreteBinaryFileHeader<Rev0>::checkConsistencyOrThrow();
+        stringstream estream;
+        bool         checkFailed = false;
+        // Fixed length trace flag
+        switch ( (*this)[ field(rev1::bfh::fixedLengthTraceFlag) ] ) {
+            case( 0 ):
+            case( 1 ):
+                break;
+            default:
+                checkFailed = true;
+                estream << " Invalid value of fixed length trace flag (" << (*this)[ field(rev1::bfh::fixedLengthTraceFlag) ] << ")" << endl;
+                break;
+        }
+        // Number of extended textual file headers
+        if ( (*this)[ field(rev1::bfh::nextendedTextualFileHeader) ] < -1 ) {
+            checkFailed = true;
+            estream << "Invalid number of extended textual file header (" << (*this)[ field(rev1::bfh::nextendedTextualFileHeader) ] << ")" << endl;
+        }
+        // Throw an exception if some consistency check failed
+        if ( checkFailed ) {
+            throw runtime_error( estream.str() );
+        }
+    }
+    
 }
