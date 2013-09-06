@@ -1,7 +1,7 @@
 #ifndef SEGYFILE_BINARYFILEHEADER_REV0_H
 #define	SEGYFILE_BINARYFILEHEADER_REV0_H
 
-#include<impl/SegyFile-BinaryFileHeaderInterface.h>
+#include<impl/SegyFile-BinaryFileHeader.h>
 #include<impl/rev0/SegyFile-Fields-Rev0.h>
 
 #include<vector>
@@ -9,12 +9,14 @@
 namespace seismic {
 
     template<>
-    class ConcreteBinaryFileHeader<Rev0> : public BinaryFileHeaderInterface {
+    class ConcreteBinaryFileHeader<Rev0> : public BinaryFileHeader {
     public:
         /* virtual */
         void print(std::ostream& cout) const;
         /* virtual */
         void invertByteOrder();
+        /* virtual */
+        void checkConsistencyOrThrow();
     private:
         /**
          * @brief Static vector used to iterate over all the items of a

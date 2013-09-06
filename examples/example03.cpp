@@ -11,7 +11,7 @@ int main() {
     //
     // Default construction leaves the underlying buffer uninitialized
     //
-    BinaryFileHeaderInterface& bfh = *(new ConcreteBinaryFileHeader<Rev1>);
+    BinaryFileHeader& bfh = *(new ConcreteBinaryFileHeader<Rev1>);
     
     //
     // Single fields can be assigned using enum constants in BinaryFieldHeader

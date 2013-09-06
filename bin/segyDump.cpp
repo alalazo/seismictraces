@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
         
         // Open SEG Y file for reading 
         TextualFileHeader tfh;
-        BinaryFileHeaderInterface&  bfh = *(new ConcreteBinaryFileHeader<Rev1>);
+        BinaryFileHeader&  bfh = *(new ConcreteBinaryFileHeader<Rev1>);
         
         SegyFile segyFile(inputFilename,tfh,bfh);
         
