@@ -1,4 +1,5 @@
-#include<impl/SegyFile-TraceHeader.h>
+#include<impl/SegyFile-TraceHeaderInterface.h>
+#include<impl/rev1/SegyFile-Fields-Rev1.h>
 #include<impl/SegyFile-constants.h>
 #include<iostream>
 
@@ -11,23 +12,25 @@ int main() {
     //
     // Default construction leaves the underlying buffer uninitialized
     //
-    TraceHeader th;
+    TraceHeaderInterface& th = *TraceHeaderInterface::create("Rev1");
     
     //
     // Single fields can be assigned using enum constants in TraceHeader
     //
     
-    th[TraceHeader::traceSequenceNumberWithinLine] = 20;    
-    th[TraceHeader::traceSequenceNumberWithinSEGY] = 121;    
-    th[TraceHeader::sourceCoordinateX]             = 91;    
-    th[TraceHeader::sourceCoordinateY]             = 0;
-    th[TraceHeader::nsamplesTrace]                 = 101;
+    th[ field(rev1::th::traceSequenceNumberWithinLine) ] = 20;    
+    th[ field(rev1::th::traceSequenceNumberWithinSEGY) ] = 121;    
+    th[ field(rev1::th::sourceCoordinateX) ]             = 91;    
+    th[ field(rev1::th::sourceCoordinateY) ]             = 0;
+    th[ field(rev1::th::nsamplesTrace) ]                 = 101;
     /* ... */
     
     //
     // A TraceHeader may be streamed
     // 
     cout << th << endl;
+    
+    delete &th;
     
     return 0;
 }

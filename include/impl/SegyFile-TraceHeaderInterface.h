@@ -1,31 +1,28 @@
 /**
- * @file SegyFile-BinaryFileHeader.h
- * @brief Generic interface to a binary file header
+ * @file SegyFile-TraceHeaderInterface.h
+ * @brief Generic interface to a trace header
  */
-#ifndef SEGYFILE_BINARYFILEHEADER_H
-#define	SEGYFILE_BINARYFILEHEADER_H
+#ifndef SEGYFILE_TRACEHEADERINTERFACE_H
+#define	SEGYFILE_TRACEHEADERINTERFACE_H
 
 #include<impl/ObjectFactory-inl.h>
 
 #include<vector>
 #include<iostream>
-#include<string>
 
 namespace seismic {
     
     /**
-     * @brief Interface to a generic binary file header
+     * @brief Interface to a generic trace header
      * 
      * This interface is meant to be extended to model correctly 
-     * the fields in the underlying 400 bytes stream.
-     *
+     * the fields in the underlying 240 bytes stream.
      */
-    class BinaryFileHeader {
+    class TraceHeaderInterface {
     public:
-        /// Number of bytes in the Binary file header
-        static const int buffer_size = 400;
-         
-        BinaryFileHeader() : buffer_(buffer_size,0) {}
+        static const int buffer_size = 240;
+  
+        TraceHeaderInterface() : buffer_(buffer_size,0) {}
         
         /**
          * @brief Returns a reference to the underlying bytes interpreted as the correct type
@@ -52,9 +49,9 @@ namespace seismic {
          */
         template<class T>
         typename T::type & operator[](T const id) {            
-            return const_cast< typename  T::type & >( static_cast<const BinaryFileHeader&>(*this)[id] );
+            return const_cast< typename  T::type & >( static_cast<const TraceHeaderInterface&>(*this)[id] );
         }
-        
+                        
         /**
          * @brief Returns a raw pointer to the underlying buffer
          * 
@@ -70,7 +67,7 @@ namespace seismic {
          * @return Pointer to the beginning of the buffer
          */
         char * get() {
-            return const_cast<char *>( static_cast<const BinaryFileHeader&>(*this).get() );
+            return const_cast<char *>( static_cast<const TraceHeaderInterface&>(*this).get() );
         }
         
         /**
@@ -90,16 +87,16 @@ namespace seismic {
         virtual void checkConsistencyOrThrow() const = 0;
         
         /**
-         * @brief Create a BinaryFileHeader of the same polymorphic type
+         * @brief Create a TraceHeaderInterface of the same polymorphic type
          * 
          * @return pointer to the newly created object
          */
-        virtual BinaryFileHeader * create() const = 0;
+        virtual TraceHeaderInterface * create() const = 0;
                 
         /**
          * @brief Virtual destructor of the base class
          */
-        virtual ~BinaryFileHeader(){}
+        virtual ~TraceHeaderInterface(){}
 
         /**
          * @brief Returns a pointer to a newly created object
@@ -107,43 +104,43 @@ namespace seismic {
          * @param ID object ID
          * @return pointer to a newly created object
          */        
-        inline static BinaryFileHeader * create(std::string ID); 
+        inline static TraceHeaderInterface * create(std::string ID); 
                 
     private:
         //char buffer_[buffer_size];
         std::vector<char> buffer_;
     };
- 
+
     /**
-     * @brief Output stream operator for BinaryFileHeader
+     * @brief Output stream operator for TraceHeaderInterface
      * 
      * @param cout stream
      * @param bfh input binary file header 
      * @return cout
      * 
-     * @relates BinaryFileHeader
+     * @relates TraceHeaderInterface
      */
-    inline std::ostream& operator<<(std::ostream& cout, const BinaryFileHeader& bfh) {
-        bfh.print( cout );
+    inline std::ostream& operator<<(std::ostream& cout, const TraceHeaderInterface& th) {
+        th.print( cout );
         return cout;
     }
     
     /**
      * @brief Master template to be specialized for different standards
      */
-    template< class StdTag>
-    class ConcreteBinaryFileHeader;
+    template<class StdTag>
+    class ConcreteTraceHeader;
     
     /**
-     * @brief Object factory for BinaryFileHeader derived classes
+     * @brief Object factory for TraceHeaderInterface derived classes
      */
-    typedef CloneObjectFactory< BinaryFileHeader , std::string > BinaryFileHeaderCloneFactory;
+    typedef CloneObjectFactory< TraceHeaderInterface , std::string > TraceHeaderCloneFactory;
             
-    BinaryFileHeader * BinaryFileHeader::create(std::string ID) {            
-            return BinaryFileHeaderCloneFactory::getFactory()->create(ID);
+    TraceHeaderInterface * TraceHeaderInterface::create(std::string ID) {            
+            return TraceHeaderCloneFactory::getFactory()->create(ID);
     }
-            
+    
 }
 
-#endif	/* SEGYFILE_BINARYFILEHEADER_H */
+#endif	/* SEGYFILE_TRACEHEADERINTERFACE_H */
 

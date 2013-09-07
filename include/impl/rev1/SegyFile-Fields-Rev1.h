@@ -67,10 +67,180 @@ namespace seismic {
                 nextendedTextualFileHeader = 304
             };
         }
+
+        namespace th {
+            using namespace rev0::th;
+            
+            /**
+             * @brief Fields that are mapped to 32-bit integers
+             */
+            enum Int32FieldsRev1 {
+                /// X coordinate of ensemble (CDP) position of this trace (scalar in Trace Header bytes 71-72 applies)
+                ///
+                /// The coordinate reference system should be identified through an 
+                /// extended header Location Data stanza (see section D-1)
+                ensembleCoordinateX = 180,
+                /// Y coordinate of ensemble (CDP) position of this trace (scalar in bytes Trace Header 71-72 applies)
+                ///
+                /// The coordinate reference system should be identified through an
+                /// extended header Location Data stanza (see section D-1)
+                ensembleCoordinateY = 184,
+                /// For 3-D poststack data, this field should be used for the in-line number
+                ///
+                /// If one in-line per SEG Y file is being recorded, this value 
+                /// should be the same for all traces in the file and the same value
+                /// will be recorded in bytes 3205-3208 of the Binary File Header
+                inlineNumber = 188,
+                /// For 3-D poststack data, this field should be used for the cross-line number
+                ///
+                /// This will typically be the same value as the ensemble (CDP) 
+                /// number in Trace Header bytes 21-24, but this does not have to 
+                /// be the case
+                crosslineNumber = 192,
+                /// Shotpoint number 
+                ///
+                /// This is probably only applicable to 2-D poststack data. 
+                /// Note that it is assumed that the shotpoint number refers to the 
+                /// source location nearest to the ensemble (CDP) location for a 
+                /// particular trace. If this is not the case, there should be a 
+                /// comment in the Textual File Header explaining what the 
+                /// shotpoint number actually refers to
+                shotpointNumber = 196,
+                /// Transduction Constant 
+                ///
+                /// The multiplicative constant used to convert the Data Trace 
+                /// samples to the Transduction Units (specified in Trace Header 
+                /// bytes 211-212). The constant is encoded as a four-byte, two's 
+                /// complement integer (bytes 205-208) which is the mantissa and a 
+                /// two-byte, two's complement integer (bytes 209-210) which is the 
+                /// power of ten exponent (i.e. Bytes 205-208 * 10**Bytes 209-210)
+                transductionConstantMantissa = 204,
+                /// Source Measurement 
+                /// 
+                /// Describes the source effort used to generate the trace. The 
+                /// measurement can be simple, qualitative measurements such as the
+                /// total weight of explosive used or the peak air gun pressure or 
+                /// the number of vibrators times the sweep duration. Although these
+                /// simple measurements are acceptable, it is preferable to use true
+                /// measurement units of energy or work.
+                ///
+                /// The constant is encoded as a four-byte, two's complement integer
+                /// (bytes 225-228) which is the mantissa and a two-byte, two's 
+                /// complement integer (bytes 209-230) which is the power of ten 
+                /// exponent (i.e. Bytes 225-228 * 10**Bytes 229-230)
+                sourceMeasurementMantissa = 224
+            };
+
+            /**
+             * @brief Fields that are mapped to 16-bit integers
+             */
+            enum Int16FieldsRev1 {
+                /// Scalar to be applied to the shotpoint number in Trace Header bytes 197-200 to give the real value
+                ///
+                /// If positive, scalar is used as a multiplier; if negative as a 
+                /// divisor; if zero the shotpoint number is not scaled (i.e. it is 
+                /// an integer. A typical value will be -10, allowing shotpoint 
+                /// numbers with one decimal digit to the right of the decimal
+                /// point)
+                scalarShotpointNumber = 200,
+                /// Trace value measurement unit
+                ///
+                /// @see constants::MeasurementUnit
+                traceValueMeasurementUnit = 202,
+                /// Transduction Constant 
+                ///
+                /// The multiplicative constant used to convert the Data Trace 
+                /// samples to the Transduction Units (specified in Trace Header 
+                /// bytes 211-212). The constant is encoded as a four-byte, two's 
+                /// complement integer (bytes 205-208) which is the mantissa and a 
+                /// two-byte, two's complement integer (bytes 209-210) which is the 
+                /// power of ten exponent (i.e. Bytes 205-208 * 10**Bytes 209-210)
+                transductionConstantExponent = 208,
+                /// Transduction Units 
+                ///
+                /// The unit of measurement of the Data Trace samples after they 
+                /// have been multiplied by the Transduction Constant specified in 
+                /// Trace Header bytes 205-210
+                ///
+                /// @see constants::MeasurementUnit
+                transductionUnits = 210,
+                /// Device/Trace Identifier 
+                ///
+                /// The unit number or id number of the device associated with the 
+                /// Data Trace (i.e. 4368 for vibrator serial number 4368 or 20316 
+                /// for gun 16 on string 3 on vessel 2). This field allows traces 
+                /// to be associated across trace ensembles independently of the 
+                /// trace number (Trace Header bytes 25-28)
+                traceIdentifier = 212,
+                /// Scalar to be applied to times specified in Trace Header bytes 95-114 to give the true time value in milliseconds
+                ///
+                /// Scalar = 1, +10, +100, +1000, or +10,000.  If positive, scalar 
+                /// is used as a multiplier; if negative, scalar is used as divisor.
+                /// A value of zero is assumed to be a scalar value of 1
+                scalarTime = 214,
+                /// Source Type/Orientation
+                ///
+                /// Defines the type and the orientation of the energy source. The
+                /// terms vertical, cross-line and in-line refer to the three axes 
+                /// of an orthogonal coordinate system. The absolute azimuthal 
+                /// orientation of the coordinate system axes can be defined in the 
+                /// Bin Grid Definition Stanza (page 28).
+                ///
+                /// -1 to -n = Other
+                ///        0 = Unknown
+                ///        1 = Vibratory - Vertical orientation
+                ///        2 = Vibratory - Cross-line orientation
+                ///        3 = Vibratory - In-line orientation
+                ///        4 = Impulsive - Vertical orientation
+                ///        5 = Impulsive - Cross-line orientation
+                ///        6 = Impulsive - In-line orientation
+                ///        7 = Distributed Impulsive - Vertical orientation
+                ///        8 = Distributed Impulsive - Cross-line orientation
+                ///        9 = Distributed Impulsive - In-line orientation
+                sourceOrientation = 216,
+                /// Source Measurement 
+                /// 
+                /// Describes the source effort used to generate the trace. The 
+                /// measurement can be simple, qualitative measurements such as the
+                /// total weight of explosive used or the peak air gun pressure or 
+                /// the number of vibrators times the sweep duration. Although these
+                /// simple measurements are acceptable, it is preferable to use true
+                /// measurement units of energy or work.
+                ///
+                /// The constant is encoded as a four-byte, two's complement integer
+                /// (bytes 225-228) which is the mantissa and a two-byte, two's 
+                /// complement integer (bytes 209-230) which is the power of ten 
+                /// exponent (i.e. Bytes 225-228 * 10**Bytes 229-230)
+                sourceMeasurementExponent = 228,
+                /// Source Measurement Unit 
+                ///
+                /// The unit used for the Source Measurement, Trace header bytes 225-230.
+                /// -1 = Other (should be described in Source Measurement Unit stanza, page 40)
+                ///  0 = Unknown
+                ///  1 = Joule (J)
+                ///  2 = Kilowatt (kW)
+                ///  3 = Pascal (Pa)
+                ///  4 = Bar (Bar)
+                ///  4 = Bar-meter (Bar-m)
+                ///  5 = Newton (N)
+                ///  6 = Kilograms (kg)
+                sourceMeasurementUnit = 230
+            };
+
+        }
     }
     
-    SET_SUBSCRIPT_RETURN_TYPE( rev1::bfh::Int16FieldsRev1 , int16_t )
+    //
+    // Binary file header
+    //    
+    SET_SUBSCRIPT_RETURN_TYPE(rev1::bfh::Int16FieldsRev1,int16_t)
         
+    //
+    // Trace header
+    //
+    SET_SUBSCRIPT_RETURN_TYPE(rev1::th::Int32FieldsRev1 ,int32_t)
+    SET_SUBSCRIPT_RETURN_TYPE(rev1::th::Int16FieldsRev1 ,int16_t)
+    
 }
 
 #endif	/* SEGYFILE_FIELDS_REV1_H */

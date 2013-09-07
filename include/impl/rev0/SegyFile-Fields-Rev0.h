@@ -127,10 +127,380 @@ namespace seismic {
                 vibratoryPolarityCode = 58
             };
         }
+    
+        namespace th {
+
+            /**
+             * @brief Fields that are mapped to 32-bit integers
+             */
+            enum Int32FieldsRev0 {
+                /// Trace sequence number within line. __Highly recommended for all types of data__ 
+                ///
+                /// Numbers continue to increase if the same line continues across multiple SEG Y files
+                traceSequenceNumberWithinLine = 0,
+                /// Trace sequence number within SEG Y file 
+                /// 
+                /// Each file starts with trace sequence one
+                traceSequenceNumberWithinSEGY = 4,
+                /// Original field record number. __Highly recommended for all types of data__
+                originalFieldRecordNumber = 8,
+                /// Trace number within the original field record. __Highly recommended for all types of data__
+                traceNumberWithinOriginalField = 12,
+                /// Energy source point number 
+                ///
+                /// Used when more than one record occurs at the same effective 
+                /// surface location. It is recommended that the new entry defined 
+                /// in Trace Header bytes 197-202 be used for shotpoint number
+                energySourcePointNumber = 16,
+                /// Ensemble number (i.e. CDP, CMP, CRP, etc.)
+                ensembleNumber = 20,
+                /// Trace number within the ensemble 
+                ///
+                /// Each ensemble starts with trace number one
+                traceNumberWithinEnsemble = 24,
+                /// Distance from center of the source point to the center of the receiver group 
+                /// 
+                /// Negative if opposite to direction in which line is shot
+                distanceFromCenterSourceToCenterReceiver = 36,
+                /// Receiver group elevation (all elevations above the Vertical datum are positive and below are negative)
+                ///
+                /// The scalar in Trace Header bytes 69-70 applies to these values. 
+                /// The units are feet or meters as specified in Binary File Header 
+                /// bytes 3255-3256. 
+                /// 
+                /// The Vertical Datum should be defined through a Location Data 
+                /// stanza (see section D-1)
+                receiverGroupElevation = 40,
+                /// Surface elevation at source
+                ///
+                /// The scalar in Trace Header bytes 69-70 applies to these values. 
+                /// The units are feet or meters as specified in Binary File Header 
+                /// bytes 3255-3256. 
+                /// 
+                /// The Vertical Datum should be defined through a Location Data 
+                /// stanza (see section D-1)
+                surfaceElevationAtSource = 44,
+                /// Source depth below surface (a positive number)
+                ///
+                /// The scalar in Trace Header bytes 69-70 applies to these values. 
+                /// The units are feet or meters as specified in Binary File Header 
+                /// bytes 3255-3256. 
+                /// 
+                /// The Vertical Datum should be defined through a Location Data 
+                /// stanza (see section D-1)
+                sourceDepthBelowSurface = 48,
+                /// Datum elevation at receiver group
+                ///
+                /// The scalar in Trace Header bytes 69-70 applies to these values. 
+                /// The units are feet or meters as specified in Binary File Header 
+                /// bytes 3255-3256. 
+                /// 
+                /// The Vertical Datum should be defined through a Location Data 
+                /// stanza (see section D-1)
+                datumElevationAtReceiverGroup = 52,
+                /// Datum elevation at source
+                ///
+                /// The scalar in Trace Header bytes 69-70 applies to these values. 
+                /// The units are feet or meters as specified in Binary File Header 
+                /// bytes 3255-3256. 
+                /// 
+                /// The Vertical Datum should be defined through a Location Data 
+                /// stanza (see section D-1)
+                datumElevationAtSource = 56,
+                /// Water depth at source
+                ///
+                /// The scalar in Trace Header bytes 69-70 applies to these values. 
+                /// The units are feet or meters as specified in Binary File Header 
+                /// bytes 3255-3256. 
+                /// 
+                /// The Vertical Datum should be defined through a Location Data 
+                /// stanza (see section D-1)
+                waterDepthAtSource = 60,
+                /// Water depth at group
+                ///
+                /// The scalar in Trace Header bytes 69-70 applies to these values. 
+                /// The units are feet or meters as specified in Binary File Header 
+                /// bytes 3255-3256. 
+                /// 
+                /// The Vertical Datum should be defined through a Location Data 
+                /// stanza (see section D-1)
+                waterDepthAtGroup = 64,
+                /// Source coordinate ‑ X
+                ///
+                /// The coordinate reference system should be identified through an
+                /// extended header Location Data stanza (see section D-1).
+                sourceCoordinateX = 72,
+                /// Source coordinate ‑ Y
+                ///
+                /// The coordinate reference system should be identified through an
+                /// extended header Location Data stanza (see section D-1).
+                sourceCoordinateY = 76,
+                /// Group coordinate ‑ X
+                ///
+                /// The coordinate reference system should be identified through an
+                /// extended header Location Data stanza (see section D-1).
+                groupCoordinateX = 80,
+                /// Group coordinate ‑ Y
+                ///
+                /// The coordinate reference system should be identified through an
+                /// extended header Location Data stanza (see section D-1).
+                groupCoordinateY = 84
+            };
+
+            /**
+             * @brief Fields that are mapped to 16-bit integers
+             */
+            enum Int16FieldsRev0 {
+                /// Trace identification code. __Highly recommended for all types of data__
+                ///
+                /// -1 = Other
+                ///  0 = Unknown
+                ///  1 = Seismic data
+                ///  2 = Dead
+                ///  3 = Dummy
+                ///  4 = Time break
+                ///  5 = Uphole
+                ///  6 = Sweep
+                ///  7 = Timing
+                ///  8 = Waterbreak
+                ///  9 = Near-field gun signature
+                /// 10 = Far-field gun signature
+                /// 11 = Seismic pressure sensor
+                /// 12 = Multicomponent seismic sensor - Vertical component
+                /// 13 = Multicomponent seismic sensor - Cross-line component
+                /// 14 = Multicomponent seismic sensor - In-line component
+                /// 15 = Rotated multicomponent seismic sensor - Vertical component
+                /// 16 = Rotated multicomponent seismic sensor - Transverse component
+                /// 17 = Rotated multicomponent seismic sensor - Radial component
+                /// 18 = Vibrator reaction mass
+                /// 19 = Vibrator baseplate
+                /// 20 = Vibrator estimated ground force
+                /// 21 = Vibrator reference
+                /// 22 = Time-velocity pairs
+                /// 23 … N = optional use,  (maximum N = 32,767)                 
+                traceIdentificationCode = 28,
+                /// Number of vertically summed traces yielding this trace
+                ///
+                /// 1 is one trace, 2 is two summed traces, etc.
+                numberOfVerticallySummedTraces = 30,
+                /// Number of horizontally stacked traces yielding this trace
+                ///
+                /// 1 is one trace, 2 is two stacked traces, etc.
+                numberOfHorizontallyStackedTraces = 32,
+                /// Data use
+                dataUse = 34,
+                /// Scalar to be applied to all elevations and depths specified in Trace Header bytes 41‑68 to give the real value.
+                ///
+                /// Scalar = 1, +10, +100, +1000, or +10,000. If positive, scalar is
+                /// used as a multiplier; if negative, scalar is used as a divisor
+                scalarElevation = 68,
+                /// Scalar to be applied to all coordinates specified in Trace Header bytes 73‑88 and to bytes Trace Header 181-188 to give the real value. 
+                ///
+                /// Scalar = 1, +10, +100, +1000, or +10,000.  If positive, scalar is
+                /// used as a multiplier; if negative, scalar is used as divisor
+                scalarCoordinates = 70,
+                /// Coordinate units
+                ///
+                /// Note: To encode ±DDDMMSS bytes 89-90 equal = ±DDD*104 + MM*102 + SS 
+                /// with bytes 71-72 set to 1; To encode ±DDDMMSS.ss bytes 89-90 
+                /// equal = ±DDD*106 + MM*104 + SS*102 with bytes 71-72 set to -100
+                ///
+                /// @see constants::CoordinateUnits
+                coordinateUnits = 88,
+                /// Weathering velocity
+                ///
+                /// ft/s or m/s as specified in Binary File Header bytes 3255-3256
+                weatheringVelocity = 90,
+                /// Subweathering velocity
+                ///
+                /// ft/s or m/s as specified in Binary File Header bytes 3255-3256
+                subweatheringVelocity = 92,
+                /// Uphole time at source in milliseconds
+                ///
+                /// Time in milliseconds as scaled by the scalar specified in 
+                /// Trace Header bytes 215-216
+                upholeTimeAtSource = 94,
+                /// Uphole time at group in milliseconds
+                ///
+                /// Time in milliseconds as scaled by the scalar specified in 
+                /// Trace Header bytes 215-216
+                upholeTimeAtGroup = 96,
+                /// Source static correction in milliseconds
+                ///
+                /// Time in milliseconds as scaled by the scalar specified in 
+                /// Trace Header bytes 215-216
+                sourceStaticCorrection = 98,
+                /// Group static correction in milliseconds
+                ///
+                /// Time in milliseconds as scaled by the scalar specified in 
+                /// Trace Header bytes 215-216
+                groupStaticCorrection = 100,
+                /// Total static applied in milliseconds (zero if no static has been applied)
+                ///
+                /// Time in milliseconds as scaled by the scalar specified in 
+                /// Trace Header bytes 215-216
+                totalStaticApplied = 102,
+                /// Lag time A
+                ///
+                /// Time in milliseconds between end of 240‑byte trace identification
+                /// header and time break. The value is positive if time break 
+                /// occurs after the end of header; negative if time break occurs 
+                /// before the end of header. Time break is defined as the initiation
+                /// pulse that may be recorded on an auxiliary trace or as otherwise
+                /// specified by the recording system
+                ///
+                /// Time in milliseconds as scaled by the scalar specified in 
+                /// Trace Header bytes 215-216
+                lagTimeA = 104,
+                /// Lag time B
+                ///
+                /// Time in milliseconds between time break and the initiation time 
+                /// of the energy source. May be positive or negative
+                ///
+                /// Time in milliseconds as scaled by the scalar specified in 
+                /// Trace Header bytes 215-216
+                lagTimeB = 106,
+                /// Delay recording time 
+                ///
+                /// Time in milliseconds between initiation time of energy source 
+                /// and the time when recording of data samples begins. In SEG Y 
+                /// rev 0 this entry was intended for deep-water work if data 
+                /// recording does not start at zero time. The entry can be negative
+                /// to accommodate negative start times (i.e. data recorded before 
+                /// time zero, presumably as a result of static application to the 
+                /// data trace). If a non-zero value (negative or positive) is 
+                /// recorded in this entry, a comment to that effect should appear 
+                /// in the Textual File Header
+                ///
+                /// Time in milliseconds as scaled by the scalar specified in 
+                /// Trace Header bytes 215-216
+                delayRecordingTime = 108,
+                /// Mute time — Start time in milliseconds
+                ///
+                /// Time in milliseconds as scaled by the scalar specified in 
+                /// Trace Header bytes 215-216
+                muteTimeStart = 110,
+                /// Mute time — End time in milliseconds
+                ///
+                /// Time in milliseconds as scaled by the scalar specified in 
+                /// Trace Header bytes 215-216
+                muteTimeEnd = 112,
+                /// Number of samples in this trace. __Highly recommended for all types of data__
+                nsamplesTrace = 114,
+                /// Sample interval in microseconds (µs) for this trace. __Highly recommended for all types of data__
+                /// 
+                /// The number of bytes in a trace record must be consistent with 
+                /// the number of samples written in the trace header. This is 
+                /// important for all recording media; but it is particularly 
+                /// crucial for the correct processing of SEG Y data in disk files
+                ///
+                /// If the fixed length trace flag in bytes 3503-3504 of the Binary 
+                /// File Header is set, the sample interval and number of samples in
+                /// every trace in the SEG Y file must be the same as the values 
+                /// recorded in the Binary File Header. If the fixed length trace 
+                /// flag is not set, the sample interval and number of samples may 
+                /// vary from trace to trace.
+                sampleInterval = 116,
+                /// Gain type of field instruments
+                ///
+                /// 1 = fixed
+                /// 2 = binary
+                /// 3 = floating point
+                /// 4 … N = optional use
+                gainType = 118,
+                /// Instrument gain constant (dB)
+                instrumentGainConstant = 120,
+                /// Instrument early or initial gain (dB)
+                instrumentEarlyGain = 122,
+                /// Correlated
+                ///
+                /// @see constants::CorrelatedDataTraces
+                correlated = 124,
+                /// Sweep frequency at start (Hz)
+                sweepFrequencyStart = 126,
+                /// Sweep frequency at end (Hz)
+                sweepFrequencyEnd = 128,
+                /// Sweep length in milliseconds
+                sweepLength = 130,
+                /// Sweep type
+                ///
+                /// @see constants::SweepTypeCode
+                sweepType = 132,
+                /// Sweep trace taper length at start in milliseconds
+                sweepTraceTaperLengthStart = 134,
+                /// Sweep trace taper length at end in milliseconds
+                sweepTraceTaperLengthEnd = 136,
+                /// Taper type
+                ///
+                /// @see constants::TaperType
+                taperType = 138,
+                /// Alias filter frequency (Hz), if used
+                aliasFilterFrequency = 140,
+                /// Alias filter slope (dB/octave)
+                aliasFilterSlope = 142,
+                /// Notch filter frequency (Hz), if used
+                notchFilterFrequency = 144,
+                /// Notch filter slope (dB/octave)
+                notchFilterSlope = 146,
+                /// Low-cut frequency (Hz), if used
+                lowCutFrequency = 148,
+                /// High-cut frequency (Hz), if used
+                highCutFrequency = 150,
+                /// Low-cut slope (dB/octave)
+                lowCutSlope = 152,
+                /// High-cut slope (dB/octave)
+                highCutSlope = 154,
+                /// Year data recorded 
+                ///
+                /// The 1975 standard is unclear as to whether this should be 
+                /// recorded as a 2-digit or a 4-digit year and both have been used.
+                /// For SEG Y revisions beyond rev 0, the year should be recorded 
+                /// as the complete 4-digit Gregorian calendar year (i.e. the year 
+                /// 2001 should be recorded as 2001 (0x7D1))
+                yearDataRecorded = 156,
+                /// Day of year 
+                ///
+                /// Julian day for GMT and UTC time basis
+                dayOfTheYear = 158,
+                /// Hour of day (24 hour clock)
+                hourOfDay = 160,
+                /// Minute of hour
+                minuteOfHour = 162,
+                /// Second of minute
+                secondOfMinute = 164,
+                /// Time basis code
+                timeBasisCode = 166,
+                /// Trace weighting factor 
+                ///
+                /// Defined as 2‑N volts for the least significant bit.
+                /// (N = 0, 1, …, 32767)
+                traceWeightingFactor = 168,
+                /// Geophone group number of roll switch position one
+                geophoneGroupNumberOfRollSwitch = 170,
+                /// Geophone group number of trace number one within original field record
+                geophoneGroupNumberOfTraceNumber = 172,
+                /// Geophone group number of last trace within original field record
+                geophoneGroupNumberOfLastTrace = 174,
+                /// Gap size (total number of groups dropped)
+                gapSize = 176,
+                /// Over travel associated with taper at beginning or end of line
+                overTravel = 178                
+            };
+
+        }
     }
 
+    //
+    // Binary file header
+    //
     SET_SUBSCRIPT_RETURN_TYPE(rev0::bfh::Int32FieldsRev0, int32_t)
     SET_SUBSCRIPT_RETURN_TYPE(rev0::bfh::Int16FieldsRev0, int16_t)
+    
+    //
+    // Trace header
+    //
+    SET_SUBSCRIPT_RETURN_TYPE(rev0::th::Int32FieldsRev0 , int32_t)
+    SET_SUBSCRIPT_RETURN_TYPE(rev0::th::Int16FieldsRev0 , int16_t)
 
 }
 
