@@ -10,7 +10,7 @@ using namespace std;
 int main() {
     
     //
-    // Default construction leaves the underlying buffer uninitialized
+    // Default construction leaves the underlying byte stream initialized to 0
     //
     BinaryFileHeader& bfh = *BinaryFileHeader::create("Rev1");
     
