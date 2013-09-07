@@ -70,7 +70,7 @@ namespace seismic {
         std::for_each(ConcreteBinaryFileHeader<Rev1>::Int16List.begin(), ConcreteBinaryFileHeader<Rev1>::Int16List.end(), swapVisitor);
     }
 
-    void ConcreteBinaryFileHeader<Rev1>::checkConsistencyOrThrow() {
+    void ConcreteBinaryFileHeader<Rev1>::checkConsistencyOrThrow() const {
         ConcreteBinaryFileHeader<Rev0>::checkConsistencyOrThrow();
         stringstream estream;
         bool         checkFailed = false;
@@ -94,5 +94,9 @@ namespace seismic {
             throw runtime_error( estream.str() );
         }
     }
+    
+    const bool ConcreteBinaryFileHeader<Rev1>::isRegistered(
+            BinaryFileHeaderCloneFactory::getFactory()->registerType( "Rev1", new ConcreteBinaryFileHeader<Rev1> )
+            );
     
 }

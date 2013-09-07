@@ -1,10 +1,21 @@
 #ifndef SEGYFILE_BINARYFILEHEADERINTERFACE_H
 #define	SEGYFILE_BINARYFILEHEADERINTERFACE_H
 
+#include<impl/ObjectFactory-inl.h>
+
+#include<vector>
 #include<iostream>
+#include<string>
 
 namespace seismic {
     
+    /**
+     * @brief Interface to a generic binary file header
+     * 
+     * This interface is meant to be extended to model correctly 
+     * the fields in the underlying 400 bytes stream.
+     *
+     */
     class BinaryFileHeader {
     public:
         /// Number of bytes in the Binary file header
@@ -70,17 +81,32 @@ namespace seismic {
          * @brief Check if the values of mandatory fields are set, and throws exceptions if
          * a non-conformity is detected
          */
-        virtual void checkConsistencyOrThrow() = 0;
+        virtual void checkConsistencyOrThrow() const = 0;
         
+        /**
+         * @brief Create a BinaryFileHeader of the same polymorphic type
+         * 
+         * @return pointer to the newly created object
+         */
+        virtual BinaryFileHeader * create() const = 0;
+                
         /**
          * @brief Virtual destructor of the base class
          */
         virtual ~BinaryFileHeader(){}
-        
+
+        /**
+         * @brief Returns a pointer to a newly created object
+         * 
+         * @param ID object ID
+         * @return pointer to a newly created object
+         */        
+        inline static BinaryFileHeader * create(std::string ID); 
+                
     private:
         char buffer_[buffer_size];
     };
-    
+ 
     /**
      * @brief Output stream operator for BinaryFileHeader
      * 
@@ -101,6 +127,15 @@ namespace seismic {
     template< class StdTag>
     class ConcreteBinaryFileHeader;
     
+    /**
+     * @brief Object factory for BinaryFileHeader derived classes
+     */
+    typedef CloneObjectFactory< BinaryFileHeader , std::string > BinaryFileHeaderCloneFactory;
+            
+    BinaryFileHeader * BinaryFileHeader::create(std::string ID) {            
+            return BinaryFileHeaderCloneFactory::getFactory()->create(ID);
+    }
+            
 }
 
 #endif	/* SEGYFILE_BINARYFILEHEADERINTERFACE_H */

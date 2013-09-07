@@ -7,12 +7,13 @@ SET(
 
 SET( 
   SeismicTraces_impl_includes
+  impl/utilities-inl.h
+  impl/metafunctions-inl.h
+  impl/ObjectFactory-inl.h
   impl/SegyFile-constants.h
   impl/SegyFile-TextualFileHeader.h
   impl/SegyFile-BinaryFileHeader.h
   impl/SegyFile-TraceHeader.h
-  impl/utilities-inl.h
-  impl/metafunctions-inl.h
   impl/rev0/SegyFile-Fields-Rev0.h
   impl/rev0/SegyFile-BinaryFileHeader-Rev0.h
   impl/rev1/SegyFile-Fields-Rev1.h  
