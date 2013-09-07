@@ -8,7 +8,10 @@
 #include<impl/SegyFile-TextualFileHeader.h>
 #include<impl/SegyFile-BinaryFileHeader.h>
 #include<impl/SegyFile-TraceHeader.h>
+// Enumerations and constants related to SEG Y standard
 #include<impl/SegyFile-constants.h>
+#include<impl/rev0/SegyFile-Fields-Rev0.h>
+#include<impl/rev1/SegyFile-Fields-Rev1.h>
 
 #include<string>
 #include<vector>

@@ -129,8 +129,8 @@ namespace seismic {
         }
     }
 
-    SET_SUBSCRIPT_RETURN_TYPE(rev0::bfh::Int32FieldsRev0, int32_t);
-    SET_SUBSCRIPT_RETURN_TYPE(rev0::bfh::Int16FieldsRev0, int16_t);
+    SET_SUBSCRIPT_RETURN_TYPE(rev0::bfh::Int32FieldsRev0, int32_t)
+    SET_SUBSCRIPT_RETURN_TYPE(rev0::bfh::Int16FieldsRev0, int16_t)
 
 }
 

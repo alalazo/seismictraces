@@ -34,7 +34,12 @@ namespace seismic {
         /* virtual */
         void invertByteOrder();
         /* virtual */
-        void checkConsistencyOrThrow();
+        void checkConsistencyOrThrow() const;
+        /* virtual */
+        ConcreteBinaryFileHeader<Rev1> * create() const {
+            return new ConcreteBinaryFileHeader<Rev1>;
+        }
+                
     private:
         /**
          * @brief Static vector used to iterate over all the items of a
@@ -44,6 +49,10 @@ namespace seismic {
          */
         static const std::vector< rev1::bfh::Int16FieldsRev1 > Int16List;
 
+        /**
+         * @brief Field needed to register the class into its factory
+         */
+        static const bool isRegistered;        
     };
     
 }

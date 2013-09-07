@@ -132,7 +132,7 @@ namespace seismic {
         std::for_each(ConcreteBinaryFileHeader<Rev0>::Int16List.begin(), ConcreteBinaryFileHeader<Rev0>::Int16List.end(), swapVisitor);
     }
     
-    void ConcreteBinaryFileHeader<Rev0>::checkConsistencyOrThrow() {
+    void ConcreteBinaryFileHeader<Rev0>::checkConsistencyOrThrow() const {
         stringstream estream;
         bool         checkFailed = false;
         // Number of data traces per ensemble
@@ -174,4 +174,11 @@ namespace seismic {
             throw runtime_error( estream.str() );
         }
     }
+    
+    const bool ConcreteBinaryFileHeader<Rev0>::isRegistered(
+            BinaryFileHeaderCloneFactory::getFactory()->registerType( "Rev0", new ConcreteBinaryFileHeader<Rev0> )            
+            );
+    
+    
+    
 }
