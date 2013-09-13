@@ -10,6 +10,7 @@ SET(
   impl/utilities-inl.h
   impl/metafunctions-inl.h
   impl/ObjectFactory-inl.h
+  impl/GenericByteStream-inl.h
   impl/SegyFile-constants.h
   impl/SegyFile-TextualFileHeader.h
   impl/SegyFile-BinaryFileHeader.h

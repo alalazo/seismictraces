@@ -12,7 +12,7 @@ int main() {
     //
     // Default construction leaves the underlying byte stream initialized to 0
     //
-    BinaryFileHeader& bfh = *BinaryFileHeader::create("Rev1");
+    BinaryFileHeader::smart_reference_type bfh( BinaryFileHeader::create("Rev1") );
     
     //
     // Single fields can be assigned using enum constants in BinaryFieldHeader
@@ -30,8 +30,6 @@ int main() {
     // A BinaryFileHeader may be streamed
     // 
     cout << bfh << endl;
-    
-    delete &bfh;
     
     return 0;
 }
