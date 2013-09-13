@@ -176,7 +176,7 @@ namespace seismic {
     }
     
     const bool ConcreteBinaryFileHeader<Rev0>::isRegistered(
-            BinaryFileHeaderCloneFactory::getFactory()->registerType( "Rev0", new ConcreteBinaryFileHeader<Rev0> )            
+            BinaryFileHeader::factory_type::getFactory()->registerType( "Rev0", new ConcreteBinaryFileHeader<Rev0> )            
             );
     
     

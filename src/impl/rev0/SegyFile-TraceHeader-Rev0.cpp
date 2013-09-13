@@ -220,6 +220,6 @@ namespace seismic {
     }
     
     const bool ConcreteTraceHeader<Rev0>::isRegistered(
-            TraceHeaderCloneFactory::getFactory()->registerType("Rev0",new ConcreteTraceHeader<Rev0>)
+            TraceHeaderInterface::factory_type::getFactory()->registerType("Rev0",new ConcreteTraceHeader<Rev0>)
             );
 }

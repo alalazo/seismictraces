@@ -12,7 +12,7 @@ int main() {
     //
     // Default construction leaves the underlying buffer uninitialized
     //
-    TraceHeaderInterface& th = *TraceHeaderInterface::create("Rev1");
+    TraceHeaderInterface::smart_reference_type th( TraceHeaderInterface::create("Rev1") );
     
     //
     // Single fields can be assigned using enum constants in TraceHeader
@@ -29,8 +29,6 @@ int main() {
     // A TraceHeader may be streamed
     // 
     cout << th << endl;
-    
-    delete &th;
     
     return 0;
 }
