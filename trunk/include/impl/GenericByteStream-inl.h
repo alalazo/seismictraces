@@ -1,8 +1,29 @@
+/*
+ *  SeismicTraces : another C++ library that reads files in SEG-Y format
+ * 
+ *  Copyright (C) 2014  Massimiliano Culpo
+ * 
+ *  This file is part of SeismicTraces.
+ *
+ *  SeismicTraces is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  SeismicTraces is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with SeismicTraces.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #ifndef GENERICBYTESTREAM_INL_H
 #define	GENERICBYTESTREAM_INL_H
 
 #include<impl/ObjectFactory-inl.h>
 
+#include<memory>
 #include<vector>
 
 namespace seismic {
@@ -25,10 +46,10 @@ namespace seismic {
         static const int buffer_size = size;
          
         /// Factory type for the GenericByteStream
-        typedef CloneObjectFactory< GenericByteStream , std::string > factory_type;
+        typedef CloneObjectFactory< GenericByteStream, std::string > factory_type;
         /// SmartReferenceType for the GenericByteStream
-        typedef GenericByteStreamSmartReference< size >               smart_reference_type;
-        
+        typedef GenericByteStreamSmartReference< size > smart_reference_type;
+
         GenericByteStream() : buffer_(buffer_size,0) {}
         
         /**
@@ -185,7 +206,7 @@ namespace seismic {
         }
                 
     private:
-        std::auto_ptr< GenericByteStream<size> > ptr_;        
+        std::shared_ptr< GenericByteStream<size> > ptr_;        
     };
     
     /**
