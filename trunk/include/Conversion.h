@@ -20,7 +20,7 @@
  */
 
 /**
- * @file  ConversionManager.h
+ * @file  Conversion.h
  * @brief Conversion functions between objects of different format
  */
 #ifndef CONVERSION_H

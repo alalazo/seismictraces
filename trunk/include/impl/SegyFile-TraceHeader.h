@@ -32,8 +32,7 @@
 #include<iostream>
 #include<vector>
 
-// Forced by the use of C++03
-#include<stdint.h>
+#include<cstdint>
 
 namespace seismic {
 

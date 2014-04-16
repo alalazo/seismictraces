@@ -21,7 +21,7 @@
 
 /**
  * @file SegyFile-constants.h
- * @brief Contains all the enums and constants needed to describe a SEGY file
+ * @brief Contains all the enumerations and constants needed to describe a SEGY file
  */
 #ifndef SEGYFILE_CONSTANTS_H
 #define	SEGYFILE_CONSTANTS_H

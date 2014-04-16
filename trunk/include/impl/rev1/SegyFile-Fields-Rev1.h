@@ -24,8 +24,7 @@
 #include<impl/metafunctions-inl.h>
 #include<impl/rev0/SegyFile-Fields-Rev0.h>
 
-// Forced by the use of C++03
-#include<stdint.h>
+#include<cstdint>
 
 namespace seismic {
     /**
@@ -89,7 +88,7 @@ namespace seismic {
         }
 
         namespace th {
-            using namespace rev0::th;
+            using namespace rev0::th_enumerations__;
             
             /**
              * @brief Fields that are mapped to 32-bit integers

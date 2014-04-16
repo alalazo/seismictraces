@@ -38,10 +38,10 @@ int main() {
     // Single fields can be assigned using enum constants in TraceHeader
     //
     
-    th[ field(rev1::th::traceSequenceNumberWithinLine) ] = 20;    
-    th[ field(rev1::th::traceSequenceNumberWithinSEGY) ] = 121;    
-    th[ field(rev1::th::sourceCoordinateX) ]             = 91;    
-    th[ field(rev1::th::sourceCoordinateY) ]             = 0;
+    th[ rev0::th::traceSequenceNumberWithinLine ] = 20;
+    th[ rev0::th::traceSequenceNumberWithinSEGY ] = 121;    
+    th[ rev0::th::sourceCoordinateX ]             = 91;    
+    th[ rev0::th::sourceCoordinateY ]             = 0;
     th[ field(rev1::th::nsamplesTrace) ]                 = 101;
     /* ... */
     
