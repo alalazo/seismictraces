@@ -1,35 +1,35 @@
 SET( 
   SeismicTraces_includes
-  SeismicTrace-inl.h
-  SegyFile.h
-  Conversion.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/SeismicTrace-inl.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/SegyFile.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/Conversion.h
 )
 
 SET( 
   SeismicTraces_impl_includes
-  impl/utilities-inl.h
-  impl/metafunctions-inl.h
-  impl/ObjectFactory-inl.h
-  impl/GenericByteStream-inl.h
-  impl/SegyFile-constants.h
-  impl/SegyFile-TextualFileHeader.h
-  impl/SegyFile-BinaryFileHeader.h
-  impl/SegyFile-TraceHeaderInterface.h
-  impl/SegyFile-TraceHeader.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/utilities-inl.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/metafunctions-inl.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/ObjectFactory-inl.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/GenericByteStream-inl.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-constants.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-TextualFileHeader.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-BinaryFileHeader.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-TraceHeaderInterface.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-TraceHeader.h
 )
 
 SET( 
   SeismicTraces_rev0_includes
-  impl/rev0/SegyFile-Fields-Rev0.h
-  impl/rev0/SegyFile-BinaryFileHeader-Rev0.h
-  impl/rev0/SegyFile-TraceHeader-Rev0.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/rev0/SegyFile-Fields-Rev0.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/rev0/SegyFile-BinaryFileHeader-Rev0.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/rev0/SegyFile-TraceHeader-Rev0.h
 )
 
 SET( 
   SeismicTraces_rev1_includes
-  impl/rev1/SegyFile-Fields-Rev1.h
-  impl/rev1/SegyFile-BinaryFileHeader-Rev1.h
-  impl/rev1/SegyFile-TraceHeader-Rev1.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/rev1/SegyFile-Fields-Rev1.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/rev1/SegyFile-BinaryFileHeader-Rev1.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/rev1/SegyFile-TraceHeader-Rev1.h
 )
 
 INSTALL( 
@@ -50,4 +50,13 @@ INSTALL(
 INSTALL(
   FILES ${SeismicTraces_rev1_includes} 
   DESTINATION include/impl/rev1
+)
+
+SET(
+  Doxygen_DEPENDENCIES
+  ${SeismicTraces_includes}
+  ${SeismicTraces_impl_includes} 
+  ${SeismicTraces_rev0_includes}
+  ${SeismicTraces_rev1_includes} 
+  PARENT_SCOPE
 )

@@ -18,13 +18,18 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with SeismicTraces.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * @file GenericByteStream-inl.h
+ * @brief Interface to a generic byte stream of known size
+ */
 #ifndef GENERICBYTESTREAM_INL_H
 #define	GENERICBYTESTREAM_INL_H
 
 #include<impl/ObjectFactory-inl.h>
 
+#include<array>
 #include<memory>
-#include<vector>
 
 namespace seismic {
     
@@ -50,8 +55,6 @@ namespace seismic {
         /// SmartReferenceType for the GenericByteStream
         typedef GenericByteStreamSmartReference< size > smart_reference_type;
 
-        GenericByteStream() : buffer_(buffer_size,0) {}
-        
         /**
          * @brief Returns a reference to the underlying bytes interpreted as the correct type
          * 
@@ -137,8 +140,7 @@ namespace seismic {
         inline static GenericByteStream * create(std::string ID); 
                 
     private:
-        //char buffer_[buffer_size];
-        std::vector<char> buffer_;
+        std::array<char,size> buffer_;
     };
  
     template<int size>
@@ -162,7 +164,7 @@ namespace seismic {
     }
     
     /**
-     * @brief RAII class with reference semantic for an object of type BinaryFileHeader
+     * @brief RAII class with reference semantic for an object of type GenericByteStreamSmartReference
      */
     template<int size>
     class GenericByteStreamSmartReference {

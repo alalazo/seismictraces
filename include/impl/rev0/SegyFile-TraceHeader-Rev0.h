@@ -47,7 +47,7 @@ namespace seismic {
          * 
          * @see Int32Fields
          */
-        static const std::vector< rev0::th::Int32FieldsRev0 > Int32List;
+        static const std::vector< Int32Field > Int32List;
 
         /**
          * @brief Static vector used to iterate over all the items of a
@@ -55,14 +55,14 @@ namespace seismic {
          * 
          * @see Int16Fields
          */
-        static const std::vector< rev0::th::Int16FieldsRev0 > Int16List;
+        static const std::vector< rev0::th_enumerations__::Int16FieldsRev0 > Int16List;
 
         /**
          * @brief Field needed to register the class into its factory
          */
         static const bool isRegistered;
     };
-    
+
 }
 
 #endif	/* SEGYFILE_TRACEHEADER_REV0_H */

@@ -35,7 +35,7 @@ IF( BUILD_DOCUMENTATION )
                       # The optimal solution would be creating a custom_command for ${doxyfile}
                       # generation but I still have to figure out how...
                       MAIN_DEPENDENCY ${doxyfile} ${doxyfile_in}
-                      DEPENDS ${doxy_extra_files} ${file_dependencies}
+                      DEPENDS ${doxy_extra_files} ${Doxygen_DEPENDENCIES}
                       COMMENT "Generating HTML documentation")
   
   ADD_CUSTOM_TARGET( doc ALL DEPENDS ${doxy_html_index_file} )

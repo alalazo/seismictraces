@@ -18,22 +18,35 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with SeismicTraces.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * @file SegyFile-Fields-Rev0.h
+ * @brief Contains constants for SEG-Y format revision 0
+ */
 #ifndef SEGYFILE_FIELDS_REV0_H
 #define	SEGYFILE_FIELDS_REV0_H
 
 #include<impl/metafunctions-inl.h>
 
-// Forced by the use of C++03
-#include<stdint.h>
+#include<cstdint>
 
+/**
+ * @brief Main namespace in which all the entities in the library are enclosed
+ */
 namespace seismic {
-
+        
     /**
      * @brief Template tag to intantiate a Rev0 conforming class
      */
     class Rev0 {};
     
+    /**
+     * @brief Constants used in SEG-Y format revision 0
+     */
     namespace rev0 {
+        /**
+         * @brief Binary file header constants
+         */
         namespace bfh {
 
             /**
@@ -147,126 +160,18 @@ namespace seismic {
                 vibratoryPolarityCode = 58
             };
         }
-    
-        namespace th {
-
+            
+        /**
+         * @defgroup traceHeaderConstantsRev0 prova
+         */
+        
+        namespace th_enumerations__ {
+        
             /**
-             * @brief Fields that are mapped to 32-bit integers
+             * @addtogroup traceHeaderConstantsRev0
+             * @{             
              */
-            enum Int32FieldsRev0 {
-                /// Trace sequence number within line. __Highly recommended for all types of data__ 
-                ///
-                /// Numbers continue to increase if the same line continues across multiple SEG Y files
-                traceSequenceNumberWithinLine = 0,
-                /// Trace sequence number within SEG Y file 
-                /// 
-                /// Each file starts with trace sequence one
-                traceSequenceNumberWithinSEGY = 4,
-                /// Original field record number. __Highly recommended for all types of data__
-                originalFieldRecordNumber = 8,
-                /// Trace number within the original field record. __Highly recommended for all types of data__
-                traceNumberWithinOriginalField = 12,
-                /// Energy source point number 
-                ///
-                /// Used when more than one record occurs at the same effective 
-                /// surface location. It is recommended that the new entry defined 
-                /// in Trace Header bytes 197-202 be used for shotpoint number
-                energySourcePointNumber = 16,
-                /// Ensemble number (i.e. CDP, CMP, CRP, etc.)
-                ensembleNumber = 20,
-                /// Trace number within the ensemble 
-                ///
-                /// Each ensemble starts with trace number one
-                traceNumberWithinEnsemble = 24,
-                /// Distance from center of the source point to the center of the receiver group 
-                /// 
-                /// Negative if opposite to direction in which line is shot
-                distanceFromCenterSourceToCenterReceiver = 36,
-                /// Receiver group elevation (all elevations above the Vertical datum are positive and below are negative)
-                ///
-                /// The scalar in Trace Header bytes 69-70 applies to these values. 
-                /// The units are feet or meters as specified in Binary File Header 
-                /// bytes 3255-3256. 
-                /// 
-                /// The Vertical Datum should be defined through a Location Data 
-                /// stanza (see section D-1)
-                receiverGroupElevation = 40,
-                /// Surface elevation at source
-                ///
-                /// The scalar in Trace Header bytes 69-70 applies to these values. 
-                /// The units are feet or meters as specified in Binary File Header 
-                /// bytes 3255-3256. 
-                /// 
-                /// The Vertical Datum should be defined through a Location Data 
-                /// stanza (see section D-1)
-                surfaceElevationAtSource = 44,
-                /// Source depth below surface (a positive number)
-                ///
-                /// The scalar in Trace Header bytes 69-70 applies to these values. 
-                /// The units are feet or meters as specified in Binary File Header 
-                /// bytes 3255-3256. 
-                /// 
-                /// The Vertical Datum should be defined through a Location Data 
-                /// stanza (see section D-1)
-                sourceDepthBelowSurface = 48,
-                /// Datum elevation at receiver group
-                ///
-                /// The scalar in Trace Header bytes 69-70 applies to these values. 
-                /// The units are feet or meters as specified in Binary File Header 
-                /// bytes 3255-3256. 
-                /// 
-                /// The Vertical Datum should be defined through a Location Data 
-                /// stanza (see section D-1)
-                datumElevationAtReceiverGroup = 52,
-                /// Datum elevation at source
-                ///
-                /// The scalar in Trace Header bytes 69-70 applies to these values. 
-                /// The units are feet or meters as specified in Binary File Header 
-                /// bytes 3255-3256. 
-                /// 
-                /// The Vertical Datum should be defined through a Location Data 
-                /// stanza (see section D-1)
-                datumElevationAtSource = 56,
-                /// Water depth at source
-                ///
-                /// The scalar in Trace Header bytes 69-70 applies to these values. 
-                /// The units are feet or meters as specified in Binary File Header 
-                /// bytes 3255-3256. 
-                /// 
-                /// The Vertical Datum should be defined through a Location Data 
-                /// stanza (see section D-1)
-                waterDepthAtSource = 60,
-                /// Water depth at group
-                ///
-                /// The scalar in Trace Header bytes 69-70 applies to these values. 
-                /// The units are feet or meters as specified in Binary File Header 
-                /// bytes 3255-3256. 
-                /// 
-                /// The Vertical Datum should be defined through a Location Data 
-                /// stanza (see section D-1)
-                waterDepthAtGroup = 64,
-                /// Source coordinate ‑ X
-                ///
-                /// The coordinate reference system should be identified through an
-                /// extended header Location Data stanza (see section D-1).
-                sourceCoordinateX = 72,
-                /// Source coordinate ‑ Y
-                ///
-                /// The coordinate reference system should be identified through an
-                /// extended header Location Data stanza (see section D-1).
-                sourceCoordinateY = 76,
-                /// Group coordinate ‑ X
-                ///
-                /// The coordinate reference system should be identified through an
-                /// extended header Location Data stanza (see section D-1).
-                groupCoordinateX = 80,
-                /// Group coordinate ‑ Y
-                ///
-                /// The coordinate reference system should be identified through an
-                /// extended header Location Data stanza (see section D-1).
-                groupCoordinateY = 84
-            };
-
+            
             /**
              * @brief Fields that are mapped to 16-bit integers
              */
@@ -507,7 +412,135 @@ namespace seismic {
                 overTravel = 178                
             };
 
+            /**         
+             * @}         
+             */
+        
         }
+
+        /**
+         * @brief Trace header constants
+         */
+        struct th {
+            /// > Trace sequence number within line. __Highly recommended for all types of data__ 
+            /// >
+            /// > Numbers continue to increase if the same line continues across multiple SEG Y files            
+            static const Int32Field traceSequenceNumberWithinLine;
+            /// > Trace sequence number within SEG Y file 
+            /// >
+            /// > Each file starts with trace sequence one
+            static const Int32Field traceSequenceNumberWithinSEGY;
+            /// >
+            /// > Original field record number. __Highly recommended for all types of data__
+            /// >
+            static const Int32Field originalFieldRecordNumber;
+            /// >
+            /// > Trace number within the original field record. __Highly recommended for all types of data__
+            /// >
+            static const Int32Field traceNumberWithinOriginalField;
+            /// > Energy source point number 
+            /// > 
+            /// > Used when more than one record occurs at the same effective 
+            /// > surface location. It is recommended that the new entry defined 
+            /// > in Trace Header bytes 197-202 be used for shotpoint number
+            static const Int32Field energySourcePointNumber;
+            /// >
+            /// > Ensemble number (i.e. CDP, CMP, CRP, etc.)
+            /// >
+            static const Int32Field ensembleNumber;
+            /// > Trace number within the ensemble 
+            /// > 
+            /// > Each ensemble starts with trace number one
+            static const Int32Field traceNumberWithinEnsemble;
+            /// > Distance from center of the source point to the center of the receiver group 
+            /// > 
+            /// > Negative if opposite to direction in which line is shot
+            static const Int32Field distanceFromCenterSourceToCenterReceiver;
+            /// > Receiver group elevation (all elevations above the Vertical datum are positive and below are negative)
+            /// >
+            /// > The scalar in Trace Header bytes 69-70 applies to these values. 
+            /// > The units are feet or meters as specified in Binary File Header 
+            /// > bytes 3255-3256. 
+            /// > 
+            /// > The Vertical Datum should be defined through a Location Data 
+            /// > stanza (see section D-1)
+            static const Int32Field receiverGroupElevation;
+            /// > Surface elevation at source
+            /// >
+            /// > The scalar in Trace Header bytes 69-70 applies to these values. 
+            /// > The units are feet or meters as specified in Binary File Header 
+            /// > bytes 3255-3256. 
+            /// > 
+            /// > The Vertical Datum should be defined through a Location Data 
+            /// > stanza (see section D-1)
+            static const Int32Field surfaceElevationAtSource;
+            /// > Source depth below surface (a positive number)
+            /// >
+            /// > The scalar in Trace Header bytes 69-70 applies to these values. 
+            /// > The units are feet or meters as specified in Binary File Header 
+            /// > bytes 3255-3256. 
+            /// > 
+            /// > The Vertical Datum should be defined through a Location Data 
+            /// > stanza (see section D-1)
+            static const Int32Field sourceDepthBelowSurface;
+            /// > Datum elevation at receiver group
+            /// >
+            /// > The scalar in Trace Header bytes 69-70 applies to these values. 
+            /// > The units are feet or meters as specified in Binary File Header 
+            /// > bytes 3255-3256. 
+            /// > 
+            /// > The Vertical Datum should be defined through a Location Data 
+            /// > stanza (see section D-1)
+            static const Int32Field datumElevationAtReceiverGroup;
+            /// > Datum elevation at source
+            /// >
+            /// > The scalar in Trace Header bytes 69-70 applies to these values. 
+            /// > The units are feet or meters as specified in Binary File Header 
+            /// > bytes 3255-3256. 
+            /// > 
+            /// > The Vertical Datum should be defined through a Location Data 
+            /// > stanza (see section D-1)
+            static const Int32Field datumElevationAtSource;
+            /// > Water depth at source
+            /// >
+            /// > The scalar in Trace Header bytes 69-70 applies to these values. 
+            /// > The units are feet or meters as specified in Binary File Header 
+            /// > bytes 3255-3256. 
+            /// > 
+            /// > The Vertical Datum should be defined through a Location Data 
+            /// > stanza (see section D-1)
+            static const Int32Field waterDepthAtSource;
+            /// > Water depth at group
+            /// >
+            /// > The scalar in Trace Header bytes 69-70 applies to these values. 
+            /// > The units are feet or meters as specified in Binary File Header 
+            /// > bytes 3255-3256. 
+            /// > 
+            /// > The Vertical Datum should be defined through a Location Data 
+            /// > stanza (see section D-1)
+            static const Int32Field waterDepthAtGroup;
+            /// > Source coordinate ‑ X
+            /// >
+            /// > The coordinate reference system should be identified through an
+            /// > extended header Location Data stanza (see section D-1).
+            static const Int32Field sourceCoordinateX;
+            /// > Source coordinate ‑ Y
+            /// >
+            /// > The coordinate reference system should be identified through an
+            /// > extended header Location Data stanza (see section D-1).
+            static const Int32Field sourceCoordinateY;
+            /// > Group coordinate ‑ X
+            /// >
+            /// > The coordinate reference system should be identified through an
+            /// > extended header Location Data stanza (see section D-1).
+            static const Int32Field groupCoordinateX;
+            /// > Group coordinate ‑ Y
+            /// >
+            /// > The coordinate reference system should be identified through an
+            /// > extended header Location Data stanza (see section D-1).
+            static const Int32Field groupCoordinateY;
+        };
+
     }
 
     //
@@ -519,8 +552,8 @@ namespace seismic {
     //
     // Trace header
     //
-    SET_SUBSCRIPT_RETURN_TYPE(rev0::th::Int32FieldsRev0 , int32_t)
-    SET_SUBSCRIPT_RETURN_TYPE(rev0::th::Int16FieldsRev0 , int16_t)
+    //SET_SUBSCRIPT_RETURN_TYPE(rev0::th_enumerations__::Int32FieldsRev0 , int32_t)
+    SET_SUBSCRIPT_RETURN_TYPE(rev0::th_enumerations__::Int16FieldsRev0 , int16_t)
 
 }
 

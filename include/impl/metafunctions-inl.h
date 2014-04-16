@@ -26,8 +26,28 @@
 #ifndef METAFUNCTIONS_INL_H
 #define	METAFUNCTIONS_INL_H
 
+#include<cstdint>
+
 namespace seismic {
 
+    /**
+     * @brief REDO DOC
+     */
+    struct Int32Field {
+        typedef int32_t type;
+        template< class T >
+        Int32Field(T value) : value_(value){}
+        const long long int value_;
+    };
+    
+    struct Int16Field {
+        typedef int16_t type;
+        template<class T>
+        Int16Field(T value) : value_(value){}
+        const long long int value_;
+    };
+    
+    
     namespace meta {
 
         /**

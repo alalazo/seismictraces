@@ -35,7 +35,8 @@
 
 namespace seismic {
     
-    typedef GenericByteStream<400> BinaryFileHeader;
+    /// @brief BinaryFileHeader of a SEG-Y file
+    using BinaryFileHeader = GenericByteStream<400>;
     
     /**
      * @brief Master template to be specialized for different standards

@@ -230,7 +230,7 @@ namespace seismic {
         //////////
         // File related information
         //////////
-        std::fstream       fstream_;                
+        std::fstream fstream_;                
         TextualFileHeader& tfh_;
         BinaryFileHeader& bfh_;
         //////////
