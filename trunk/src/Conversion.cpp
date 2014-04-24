@@ -50,11 +50,11 @@ namespace seismic {
         //////////
         
         size_t nsamples   = segyTrace.first[TraceHeader::nsamplesTrace];        
-        size_t sampleSize = constants::sizeOfDataSample(bfh_[ field(rev1::bfh::formatCode) ]);
+        size_t sampleSize = constants::sizeOfDataSample(bfh_[rev1::bfh::formatCode]);
         
         seismicTrace.resize(nsamples,0.0f);                
         
-        switch ( bfh_[ field(rev1::bfh::formatCode) ] ) {
+        switch ( bfh_[rev1::bfh::formatCode] ) {
             case ( constants::SegyFileFormatCode::IBMfloat32 ) :
                 // IBM floating point format
                 for (size_t ii = 0; ii < nsamples; ii++) {
@@ -111,13 +111,13 @@ namespace seismic {
         // Read trace data
         //////////
         size_t nsamples   = segyTrace.first[TraceHeader::nsamplesTrace];        
-        size_t sampleSize = constants::sizeOfDataSample(bfh_[ field(rev1::bfh::formatCode) ]);
+        size_t sampleSize = constants::sizeOfDataSample(bfh_[rev1::bfh::formatCode]);
         
         // Resize buffer
         segyTrace.second.resize( nsamples*sampleSize );
         
         // Convert from float to format
-        switch ( bfh_[ field(rev1::bfh::formatCode) ] ) {
+        switch ( bfh_[rev1::bfh::formatCode] ) {
             case ( constants::SegyFileFormatCode::IBMfloat32 ) :
                 // IBM floating point format
                 for (size_t ii = 0; ii < nsamples; ii++) {

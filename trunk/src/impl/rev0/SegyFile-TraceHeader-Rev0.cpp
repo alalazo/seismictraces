@@ -59,60 +59,60 @@ namespace seismic {
             return int32List;
         }
 
-        vector<rev0::th_enumerations__::Int16FieldsRev0> initializeInt16List() {
-            vector<rev0::th_enumerations__::Int16FieldsRev0> int16List;
-            int16List.push_back( rev0::th_enumerations__::traceIdentificationCode           );
-            int16List.push_back( rev0::th_enumerations__::numberOfVerticallySummedTraces    );
-            int16List.push_back( rev0::th_enumerations__::numberOfHorizontallyStackedTraces );
-            int16List.push_back( rev0::th_enumerations__::dataUse                           );
-            int16List.push_back( rev0::th_enumerations__::scalarElevation                   );
-            int16List.push_back( rev0::th_enumerations__::scalarCoordinates                 );
-            int16List.push_back( rev0::th_enumerations__::coordinateUnits                   );
-            int16List.push_back( rev0::th_enumerations__::weatheringVelocity                );
-            int16List.push_back( rev0::th_enumerations__::subweatheringVelocity             );
-            int16List.push_back( rev0::th_enumerations__::upholeTimeAtSource                );
-            int16List.push_back( rev0::th_enumerations__::upholeTimeAtGroup                 );
-            int16List.push_back( rev0::th_enumerations__::sourceStaticCorrection            );
-            int16List.push_back( rev0::th_enumerations__::groupStaticCorrection             );
-            int16List.push_back( rev0::th_enumerations__::totalStaticApplied                );
-            int16List.push_back( rev0::th_enumerations__::lagTimeA                          );
-            int16List.push_back( rev0::th_enumerations__::lagTimeB                          );
-            int16List.push_back( rev0::th_enumerations__::delayRecordingTime                );
-            int16List.push_back( rev0::th_enumerations__::muteTimeStart                     );
-            int16List.push_back( rev0::th_enumerations__::muteTimeEnd                       );
-            int16List.push_back( rev0::th_enumerations__::nsamplesTrace                     );
-            int16List.push_back( rev0::th_enumerations__::sampleInterval                    );
-            int16List.push_back( rev0::th_enumerations__::gainType                          );
-            int16List.push_back( rev0::th_enumerations__::instrumentGainConstant            );
-            int16List.push_back( rev0::th_enumerations__::instrumentEarlyGain               );
-            int16List.push_back( rev0::th_enumerations__::correlated                        );
-            int16List.push_back( rev0::th_enumerations__::sweepFrequencyStart               );
-            int16List.push_back( rev0::th_enumerations__::sweepFrequencyEnd                 );
-            int16List.push_back( rev0::th_enumerations__::sweepLength                       );
-            int16List.push_back( rev0::th_enumerations__::sweepType                         );
-            int16List.push_back( rev0::th_enumerations__::sweepTraceTaperLengthStart        );
-            int16List.push_back( rev0::th_enumerations__::sweepTraceTaperLengthEnd          );
-            int16List.push_back( rev0::th_enumerations__::taperType                         );
-            int16List.push_back( rev0::th_enumerations__::aliasFilterFrequency              );
-            int16List.push_back( rev0::th_enumerations__::aliasFilterSlope                  );
-            int16List.push_back( rev0::th_enumerations__::notchFilterFrequency              );
-            int16List.push_back( rev0::th_enumerations__::notchFilterSlope                  );
-            int16List.push_back( rev0::th_enumerations__::lowCutFrequency                   );
-            int16List.push_back( rev0::th_enumerations__::highCutFrequency                  );
-            int16List.push_back( rev0::th_enumerations__::lowCutSlope                       );
-            int16List.push_back( rev0::th_enumerations__::highCutSlope                      );
-            int16List.push_back( rev0::th_enumerations__::yearDataRecorded                  );
-            int16List.push_back( rev0::th_enumerations__::dayOfTheYear                      );
-            int16List.push_back( rev0::th_enumerations__::hourOfDay                         );
-            int16List.push_back( rev0::th_enumerations__::minuteOfHour                      );
-            int16List.push_back( rev0::th_enumerations__::secondOfMinute                    );
-            int16List.push_back( rev0::th_enumerations__::timeBasisCode                     );
-            int16List.push_back( rev0::th_enumerations__::traceWeightingFactor              );
-            int16List.push_back( rev0::th_enumerations__::geophoneGroupNumberOfRollSwitch   );
-            int16List.push_back( rev0::th_enumerations__::geophoneGroupNumberOfTraceNumber  );
-            int16List.push_back( rev0::th_enumerations__::geophoneGroupNumberOfLastTrace    );
-            int16List.push_back( rev0::th_enumerations__::gapSize                           );
-            int16List.push_back( rev0::th_enumerations__::overTravel                        );
+        vector<Int16Field> initializeInt16List() {
+            vector<Int16Field> int16List;
+            int16List.push_back( rev0::th::traceIdentificationCode           );
+            int16List.push_back( rev0::th::numberOfVerticallySummedTraces    );
+            int16List.push_back( rev0::th::numberOfHorizontallyStackedTraces );
+            int16List.push_back( rev0::th::dataUse                           );
+            int16List.push_back( rev0::th::scalarElevation                   );
+            int16List.push_back( rev0::th::scalarCoordinates                 );
+            int16List.push_back( rev0::th::coordinateUnits                   );
+            int16List.push_back( rev0::th::weatheringVelocity                );
+            int16List.push_back( rev0::th::subweatheringVelocity             );
+            int16List.push_back( rev0::th::upholeTimeAtSource                );
+            int16List.push_back( rev0::th::upholeTimeAtGroup                 );
+            int16List.push_back( rev0::th::sourceStaticCorrection            );
+            int16List.push_back( rev0::th::groupStaticCorrection             );
+            int16List.push_back( rev0::th::totalStaticApplied                );
+            int16List.push_back( rev0::th::lagTimeA                          );
+            int16List.push_back( rev0::th::lagTimeB                          );
+            int16List.push_back( rev0::th::delayRecordingTime                );
+            int16List.push_back( rev0::th::muteTimeStart                     );
+            int16List.push_back( rev0::th::muteTimeEnd                       );
+            int16List.push_back( rev0::th::nsamplesTrace                     );
+            int16List.push_back( rev0::th::sampleInterval                    );
+            int16List.push_back( rev0::th::gainType                          );
+            int16List.push_back( rev0::th::instrumentGainConstant            );
+            int16List.push_back( rev0::th::instrumentEarlyGain               );
+            int16List.push_back( rev0::th::correlated                        );
+            int16List.push_back( rev0::th::sweepFrequencyStart               );
+            int16List.push_back( rev0::th::sweepFrequencyEnd                 );
+            int16List.push_back( rev0::th::sweepLength                       );
+            int16List.push_back( rev0::th::sweepType                         );
+            int16List.push_back( rev0::th::sweepTraceTaperLengthStart        );
+            int16List.push_back( rev0::th::sweepTraceTaperLengthEnd          );
+            int16List.push_back( rev0::th::taperType                         );
+            int16List.push_back( rev0::th::aliasFilterFrequency              );
+            int16List.push_back( rev0::th::aliasFilterSlope                  );
+            int16List.push_back( rev0::th::notchFilterFrequency              );
+            int16List.push_back( rev0::th::notchFilterSlope                  );
+            int16List.push_back( rev0::th::lowCutFrequency                   );
+            int16List.push_back( rev0::th::highCutFrequency                  );
+            int16List.push_back( rev0::th::lowCutSlope                       );
+            int16List.push_back( rev0::th::highCutSlope                      );
+            int16List.push_back( rev0::th::yearDataRecorded                  );
+            int16List.push_back( rev0::th::dayOfTheYear                      );
+            int16List.push_back( rev0::th::hourOfDay                         );
+            int16List.push_back( rev0::th::minuteOfHour                      );
+            int16List.push_back( rev0::th::secondOfMinute                    );
+            int16List.push_back( rev0::th::timeBasisCode                     );
+            int16List.push_back( rev0::th::traceWeightingFactor              );
+            int16List.push_back( rev0::th::geophoneGroupNumberOfRollSwitch   );
+            int16List.push_back( rev0::th::geophoneGroupNumberOfTraceNumber  );
+            int16List.push_back( rev0::th::geophoneGroupNumberOfLastTrace    );
+            int16List.push_back( rev0::th::gapSize                           );
+            int16List.push_back( rev0::th::overTravel                        );
             return int16List;
         }
     }
@@ -120,7 +120,7 @@ namespace seismic {
     // Static vectors
     ////////////////////
     const vector<Int32Field> ConcreteTraceHeader<Rev0>::Int32List( initializeInt32List() );
-    const vector<rev0::th_enumerations__::Int16FieldsRev0> ConcreteTraceHeader<Rev0>::Int16List( initializeInt16List() );
+    const vector<Int16Field> ConcreteTraceHeader<Rev0>::Int16List( initializeInt16List() );
 
     void ConcreteTraceHeader<Rev0>::print(std::ostream& cout) const {
         cout << "|------------|" << endl;
@@ -136,10 +136,10 @@ namespace seismic {
         cout << "Energy source point number:                                " << (*this)[ rev0::th::energySourcePointNumber ]           << endl;
         cout << "Ensemble number:                                           " << (*this)[ rev0::th::ensembleNumber ]                    << endl;
         cout << "Trace number within the ensemble:                          " << (*this)[ rev0::th::traceNumberWithinEnsemble ]         << endl;
-        cout << "Trace identification code:                                 " << (*this)[ field(rev0::th_enumerations__::traceIdentificationCode) ]           << endl;
-        cout << "Number of vertically summed traces yielding this trace:    " << (*this)[ field(rev0::th_enumerations__::numberOfVerticallySummedTraces) ]    << endl;
-        cout << "Number of horizontally stacked traces yielding this trace: " << (*this)[ field(rev0::th_enumerations__::numberOfHorizontallyStackedTraces) ] << endl;
-        cout << "Data use:                                                  " << (*this)[ field(rev0::th_enumerations__::dataUse) ]                           << endl;
+        cout << "Trace identification code:                                 " << (*this)[ rev0::th::traceIdentificationCode ]           << endl;
+        cout << "Number of vertically summed traces yielding this trace:    " << (*this)[ rev0::th::numberOfVerticallySummedTraces ]    << endl;
+        cout << "Number of horizontally stacked traces yielding this trace: " << (*this)[ rev0::th::numberOfHorizontallyStackedTraces ] << endl;
+        cout << "Data use:                                                  " << (*this)[ rev0::th::dataUse ]                           << endl;
         cout << "Distance from the source point to the receiver group:      " << (*this)[ rev0::th::distanceFromCenterSourceToCenterReceiver] << endl;
         cout << "Receiver group elevation:                                  " << (*this)[ rev0::th::receiverGroupElevation ]            << endl;
         cout << "Surface elevation at source:                               " << (*this)[ rev0::th::surfaceElevationAtSource ]          << endl;
@@ -148,58 +148,58 @@ namespace seismic {
         cout << "Datum elevation at source:                                 " << (*this)[ rev0::th::datumElevationAtSource ]            << endl;
         cout << "Water depth at source:                                     " << (*this)[ rev0::th::waterDepthAtSource ]                << endl;
         cout << "Water depth at group:                                      " << (*this)[ rev0::th::waterDepthAtGroup ]                 << endl;
-        cout << "Scalar to be applied to all elevations and depths:         " << (*this)[ field(rev0::th_enumerations__::scalarElevation) ]                   << endl;
-        cout << "Scalar to be applied to all coordinates:                   " << (*this)[ field(rev0::th_enumerations__::scalarCoordinates) ]                 << endl;
+        cout << "Scalar to be applied to all elevations and depths:         " << (*this)[ rev0::th::scalarElevation ]                   << endl;
+        cout << "Scalar to be applied to all coordinates:                   " << (*this)[ rev0::th::scalarCoordinates ]                 << endl;
         cout << "Source coordinate ‑ X:                                     " << (*this)[ rev0::th::sourceCoordinateX ]                 << endl;
         cout << "Source coordinate ‑ Y:                                     " << (*this)[ rev0::th::sourceCoordinateY ]                 << endl;
         cout << "Group coordinate ‑ X:                                      " << (*this)[ rev0::th::groupCoordinateX ]                  << endl;
         cout << "Group coordinate ‑ Y:                                      " << (*this)[ rev0::th::groupCoordinateY ]                  << endl;
-        cout << "Coordinate units:                                          " << (*this)[ field(rev0::th_enumerations__::coordinateUnits) ]                   << endl;
-        cout << "Weathering velocity:                                       " << (*this)[ field(rev0::th_enumerations__::weatheringVelocity) ]                << endl;
-        cout << "Subweathering velocity:                                    " << (*this)[ field(rev0::th_enumerations__::subweatheringVelocity) ]             << endl;
-        cout << "Uphole time at source in milliseconds:                     " << (*this)[ field(rev0::th_enumerations__::upholeTimeAtSource) ]                << endl;
-        cout << "Uphole time at group in milliseconds:                      " << (*this)[ field(rev0::th_enumerations__::upholeTimeAtGroup) ]                 << endl;
-        cout << "Source static correction in milliseconds:                  " << (*this)[ field(rev0::th_enumerations__::sourceStaticCorrection) ]            << endl;
-        cout << "Group static correction in milliseconds:                   " << (*this)[ field(rev0::th_enumerations__::groupStaticCorrection) ]             << endl;
-        cout << "Total static applied in milliseconds:                      " << (*this)[ field(rev0::th_enumerations__::totalStaticApplied) ]                << endl;
-        cout << "Lag time A:                                                " << (*this)[ field(rev0::th_enumerations__::lagTimeA) ]                          << endl;
-        cout << "Lag time B:                                                " << (*this)[ field(rev0::th_enumerations__::lagTimeB) ]                          << endl;
-        cout << "Delay recording time:                                      " << (*this)[ field(rev0::th_enumerations__::delayRecordingTime) ]                << endl;
-        cout << "Mute time — Start time in milliseconds:                    " << (*this)[ field(rev0::th_enumerations__::muteTimeStart) ]                     << endl;
-        cout << "Mute time — End time in milliseconds:                      " << (*this)[ field(rev0::th_enumerations__::muteTimeEnd) ]                       << endl;
-        cout << "Number of samples in this trace:                           " << (*this)[ field(rev0::th_enumerations__::nsamplesTrace) ]                     << endl;
-        cout << "Sample interval in microseconds:                           " << (*this)[ field(rev0::th_enumerations__::sampleInterval) ]                    << endl;
-        cout << "Gain type of field instruments:                            " << (*this)[ field(rev0::th_enumerations__::gainType) ]                          << endl;
-        cout << "Instrument gain constant:                                  " << (*this)[ field(rev0::th_enumerations__::instrumentGainConstant) ]            << endl;
-        cout << "Instrument early or initial gain:                          " << (*this)[ field(rev0::th_enumerations__::instrumentEarlyGain) ]               << endl;
-        cout << "Correlated:                                                " << (*this)[ field(rev0::th_enumerations__::correlated) ]                        << endl;
-        cout << "Sweep frequency at start (Hz):                             " << (*this)[ field(rev0::th_enumerations__::sweepFrequencyStart) ]               << endl;
-        cout << "Sweep frequency at end (Hz):                               " << (*this)[ field(rev0::th_enumerations__::sweepFrequencyEnd) ]                 << endl;
-        cout << "Sweep length in milliseconds:                              " << (*this)[ field(rev0::th_enumerations__::sweepLength) ]                       << endl;
-        cout << "Sweep type:                                                " << (*this)[ field(rev0::th_enumerations__::sweepType) ]                         << endl;
-        cout << "Sweep trace taper length at start in milliseconds:         " << (*this)[ field(rev0::th_enumerations__::sweepTraceTaperLengthStart) ]        << endl;
-        cout << "Sweep trace taper length at end in milliseconds:           " << (*this)[ field(rev0::th_enumerations__::sweepTraceTaperLengthEnd) ]          << endl;
-        cout << "Taper type:                                                " << (*this)[ field(rev0::th_enumerations__::taperType) ]                         << endl;
-        cout << "Alias filter frequency (Hz), if used:                      " << (*this)[ field(rev0::th_enumerations__::aliasFilterFrequency) ]              << endl;
-        cout << "Alias filter slope (dB/octave):                            " << (*this)[ field(rev0::th_enumerations__::aliasFilterSlope) ]                  << endl;
-        cout << "Notch filter frequency (Hz), if used:                      " << (*this)[ field(rev0::th_enumerations__::notchFilterFrequency) ]              << endl;
-        cout << "Notch filter slope (dB/octave):                            " << (*this)[ field(rev0::th_enumerations__::notchFilterSlope) ]                  << endl;
-        cout << "Low-cut frequency (Hz), if used:                           " << (*this)[ field(rev0::th_enumerations__::lowCutFrequency) ]                   << endl;
-        cout << "High-cut frequency (Hz), if used:                          " << (*this)[ field(rev0::th_enumerations__::highCutFrequency) ]                  << endl;
-        cout << "Low-cut slope (dB/octave):                                 " << (*this)[ field(rev0::th_enumerations__::lowCutSlope) ]                       << endl;
-        cout << "High-cut slope (dB/octave):                                " << (*this)[ field(rev0::th_enumerations__::highCutSlope) ]                      << endl;
-        cout << "Year data recorded:                                        " << (*this)[ field(rev0::th_enumerations__::yearDataRecorded) ]                  << endl;
-        cout << "Day of year:                                               " << (*this)[ field(rev0::th_enumerations__::dayOfTheYear) ]                      << endl;
-        cout << "Hour of day (24 hour clock):                               " << (*this)[ field(rev0::th_enumerations__::hourOfDay) ]                         << endl;
-        cout << "Minute of hour:                                            " << (*this)[ field(rev0::th_enumerations__::minuteOfHour) ]                      << endl;
-        cout << "Second of minute:                                          " << (*this)[ field(rev0::th_enumerations__::secondOfMinute) ]                    << endl;
-        cout << "Time basis code:                                           " << (*this)[ field(rev0::th_enumerations__::timeBasisCode) ]                     << endl;
-        cout << "Trace weighting factor:                                    " << (*this)[ field(rev0::th_enumerations__::traceWeightingFactor) ]              << endl;
-        cout << "Geophone group number (roll switch position one):          " << (*this)[ field(rev0::th_enumerations__::geophoneGroupNumberOfRollSwitch) ]   << endl;
-        cout << "Geophone group number (trace 1 within original field):     " << (*this)[ field(rev0::th_enumerations__::geophoneGroupNumberOfTraceNumber) ]  << endl;
-        cout << "Geophone group number (last trace within original field):  " << (*this)[ field(rev0::th_enumerations__::geophoneGroupNumberOfLastTrace) ]    << endl;
-        cout << "Gap size (total number of groups dropped):                 " << (*this)[ field(rev0::th_enumerations__::gapSize) ]                           << endl;
-        cout << "Over travel associated with taper:                         " << (*this)[ field(rev0::th_enumerations__::overTravel) ]                        << endl;
+        cout << "Coordinate units:                                          " << (*this)[ rev0::th::coordinateUnits ]                   << endl;
+        cout << "Weathering velocity:                                       " << (*this)[ rev0::th::weatheringVelocity ]                << endl;
+        cout << "Subweathering velocity:                                    " << (*this)[ rev0::th::subweatheringVelocity ]             << endl;
+        cout << "Uphole time at source in milliseconds:                     " << (*this)[ rev0::th::upholeTimeAtSource ]                << endl;
+        cout << "Uphole time at group in milliseconds:                      " << (*this)[ rev0::th::upholeTimeAtGroup ]                 << endl;
+        cout << "Source static correction in milliseconds:                  " << (*this)[ rev0::th::sourceStaticCorrection ]            << endl;
+        cout << "Group static correction in milliseconds:                   " << (*this)[ rev0::th::groupStaticCorrection ]             << endl;
+        cout << "Total static applied in milliseconds:                      " << (*this)[ rev0::th::totalStaticApplied ]                << endl;
+        cout << "Lag time A:                                                " << (*this)[ rev0::th::lagTimeA ]                          << endl;
+        cout << "Lag time B:                                                " << (*this)[ rev0::th::lagTimeB ]                          << endl;
+        cout << "Delay recording time:                                      " << (*this)[ rev0::th::delayRecordingTime ]                << endl;
+        cout << "Mute time — Start time in milliseconds:                    " << (*this)[ rev0::th::muteTimeStart ]                     << endl;
+        cout << "Mute time — End time in milliseconds:                      " << (*this)[ rev0::th::muteTimeEnd ]                       << endl;
+        cout << "Number of samples in this trace:                           " << (*this)[ rev0::th::nsamplesTrace ]                     << endl;
+        cout << "Sample interval in microseconds:                           " << (*this)[ rev0::th::sampleInterval ]                    << endl;
+        cout << "Gain type of field instruments:                            " << (*this)[ rev0::th::gainType ]                          << endl;
+        cout << "Instrument gain constant:                                  " << (*this)[ rev0::th::instrumentGainConstant ]            << endl;
+        cout << "Instrument early or initial gain:                          " << (*this)[ rev0::th::instrumentEarlyGain ]               << endl;
+        cout << "Correlated:                                                " << (*this)[ rev0::th::correlated ]                        << endl;
+        cout << "Sweep frequency at start (Hz):                             " << (*this)[ rev0::th::sweepFrequencyStart ]               << endl;
+        cout << "Sweep frequency at end (Hz):                               " << (*this)[ rev0::th::sweepFrequencyEnd ]                 << endl;
+        cout << "Sweep length in milliseconds:                              " << (*this)[ rev0::th::sweepLength ]                       << endl;
+        cout << "Sweep type:                                                " << (*this)[ rev0::th::sweepType ]                         << endl;
+        cout << "Sweep trace taper length at start in milliseconds:         " << (*this)[ rev0::th::sweepTraceTaperLengthStart ]        << endl;
+        cout << "Sweep trace taper length at end in milliseconds:           " << (*this)[ rev0::th::sweepTraceTaperLengthEnd ]          << endl;
+        cout << "Taper type:                                                " << (*this)[ rev0::th::taperType ]                         << endl;
+        cout << "Alias filter frequency (Hz), if used:                      " << (*this)[ rev0::th::aliasFilterFrequency ]              << endl;
+        cout << "Alias filter slope (dB/octave):                            " << (*this)[ rev0::th::aliasFilterSlope ]                  << endl;
+        cout << "Notch filter frequency (Hz), if used:                      " << (*this)[ rev0::th::notchFilterFrequency ]              << endl;
+        cout << "Notch filter slope (dB/octave):                            " << (*this)[ rev0::th::notchFilterSlope ]                  << endl;
+        cout << "Low-cut frequency (Hz), if used:                           " << (*this)[ rev0::th::lowCutFrequency ]                   << endl;
+        cout << "High-cut frequency (Hz), if used:                          " << (*this)[ rev0::th::highCutFrequency ]                  << endl;
+        cout << "Low-cut slope (dB/octave):                                 " << (*this)[ rev0::th::lowCutSlope ]                       << endl;
+        cout << "High-cut slope (dB/octave):                                " << (*this)[ rev0::th::highCutSlope ]                      << endl;
+        cout << "Year data recorded:                                        " << (*this)[ rev0::th::yearDataRecorded ]                  << endl;
+        cout << "Day of year:                                               " << (*this)[ rev0::th::dayOfTheYear ]                      << endl;
+        cout << "Hour of day (24 hour clock):                               " << (*this)[ rev0::th::hourOfDay ]                         << endl;
+        cout << "Minute of hour:                                            " << (*this)[ rev0::th::minuteOfHour ]                      << endl;
+        cout << "Second of minute:                                          " << (*this)[ rev0::th::secondOfMinute ]                    << endl;
+        cout << "Time basis code:                                           " << (*this)[ rev0::th::timeBasisCode ]                     << endl;
+        cout << "Trace weighting factor:                                    " << (*this)[ rev0::th::traceWeightingFactor ]              << endl;
+        cout << "Geophone group number (roll switch position one):          " << (*this)[ rev0::th::geophoneGroupNumberOfRollSwitch ]   << endl;
+        cout << "Geophone group number (trace 1 within original field):     " << (*this)[ rev0::th::geophoneGroupNumberOfTraceNumber ]  << endl;
+        cout << "Geophone group number (last trace within original field):  " << (*this)[ rev0::th::geophoneGroupNumberOfLastTrace ]    << endl;
+        cout << "Gap size (total number of groups dropped):                 " << (*this)[ rev0::th::gapSize ]                           << endl;
+        cout << "Over travel associated with taper:                         " << (*this)[ rev0::th::overTravel ]                        << endl;
     }
     
     namespace {
@@ -215,8 +215,8 @@ namespace seismic {
             ThSwapByteOrder(ConcreteTraceHeader<Rev0>& th) : th_(th) {
             }
 
-            void operator()(rev0::th_enumerations__::Int16FieldsRev0 idx) {
-                invertByteOrder(th_[field(idx)]);
+            void operator()(Int16Field idx) {
+                invertByteOrder(th_[idx]);
             }
 
             void operator()(Int32Field idx) {

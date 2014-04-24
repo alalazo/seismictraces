@@ -38,11 +38,11 @@ int main() {
     // Single fields can be assigned using enum constants in BinaryFieldHeader
     //
         
-    bfh[field(rev1::bfh::jobID)]       = 20;    
-    bfh[field(rev1::bfh::lineNumber)]  = 121;    
-    bfh[field(rev1::bfh::reelNumber)]  = 91;    
-    bfh[field(rev1::bfh::nDataTraces)] = 0;
-    bfh[field(rev1::bfh::formatCode)]  = SegyFileFormatCode::IEEEfloat32;
+    bfh[rev1::bfh::jobID]       = 20;    
+    bfh[rev1::bfh::lineNumber]  = 121;    
+    bfh[rev1::bfh::reelNumber]  = 91;    
+    bfh[rev1::bfh::nDataTraces] = 0;
+    bfh[rev1::bfh::formatCode]  = SegyFileFormatCode::IEEEfloat32;
         
     /* ... */
     

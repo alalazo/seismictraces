@@ -67,7 +67,7 @@ namespace seismic {
          * 
          * @see Int32Fields
          */
-        static const std::vector< rev1::bfh::Int16FieldsRev1 > Int16List;
+        static const std::vector<Int16Field> Int16List;
 
         /**
          * @brief Field needed to register the class into its factory

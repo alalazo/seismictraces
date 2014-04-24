@@ -49,7 +49,7 @@ namespace seismic {
          * 
          * @see Int32Fields
          */
-        static const std::vector< rev0::bfh::Int32FieldsRev0 > Int32List;
+        static const std::vector< Int32Field > Int32List;
 
         /**
          * @brief Static vector used to iterate over all the items of a
@@ -57,7 +57,7 @@ namespace seismic {
          * 
          * @see Int16Fields
          */
-        static const std::vector< rev0::bfh::Int16FieldsRev0 > Int16List;
+        static const std::vector< Int16Field > Int16List;
 
         /**
          * @brief Field needed to register the class into its factory
