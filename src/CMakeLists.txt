@@ -8,6 +8,7 @@ SET(
   impl/rev0/SegyFile-Fields-Rev0.cpp
   impl/rev0/SegyFile-TraceHeader-Rev0.cpp
   impl/rev1/SegyFile-BinaryFileHeader-Rev1.cpp
+  impl/rev1/SegyFile-Fields-Rev1.cpp
   impl/rev1/SegyFile-TraceHeader-Rev1.cpp  
 )
 

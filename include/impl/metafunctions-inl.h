@@ -29,79 +29,32 @@
 #include<cstdint>
 
 namespace seismic {
-
+    
     /**
-     * @brief REDO DOC
+     * @brief Bundles the stride in a byte-stream and the type to which a chink of 
+     * bytes has to be casted
+     * 
+     * @tparam R underlying type of the chunk of bytes at stride value_
      */
-    struct Int32Field {
-        typedef int32_t type;
+    template< class R>
+    struct Field {
+        /// Using declaration of the return type
+        using type = R;
+        
+        /**
+         * @brief Constructor from anything that can be converted to long long int
+         * 
+         * @param value stride in a byte stream
+         */
         template< class T >
-        Int32Field(T value) : value_(value){}
+        Field(T value) : value_(value){}
+        
+        /// Stride in a byte-stream
         const long long int value_;
     };
-    
-    struct Int16Field {
-        typedef int16_t type;
-        template<class T>
-        Int16Field(T value) : value_(value){}
-        const long long int value_;
-    };
-    
-    
-    namespace meta {
-
-        /**
-         * @brief Computes the return type for an overload of the
-         * subscript operator taking an instance of type T as input
-         * 
-         * @tparam T input type 
-         */
-        template<class T>
-        struct subscript_return_type {
-        };
-
-        /**
-         * @brief Aggregates the information on subscript return type
-         * to a generic class. Useful for named enumerations.
-         * 
-         * @tparam input type
-         */
-        template<class T>
-        struct SubscriptReturnTypeAggregator {
-            typedef typename subscript_return_type<T>::type type;
-
-            SubscriptReturnTypeAggregator(T value) : value_(value) {
-            }
-
-            const T value_;
-        };
-    }
-
-    /**
-     * @brief Convenience function to deduce type T and instantiate a 
-     * SubscriptReturnTypeAggregator<T> object
-     * 
-     * @tparam input type
-     * 
-     * @param id value
-     * @return SubscriptReturnTypeAggregator<T> 
-     */
-    template<class T>
-    meta::SubscriptReturnTypeAggregator<T> field(T id) {
-        return meta::SubscriptReturnTypeAggregator<T>(id);
-    }
-
-    /**
-     * @brief Convenience macro to set the subscript return type 
-     * by a specialization of the subcript_return_type meta-function          
-     */
-#define SET_SUBSCRIPT_RETURN_TYPE( T, RETURN_TYPE) \
-    namespace meta { \
-        template<> \
-        struct subscript_return_type< T > { \
-            typedef RETURN_TYPE type; \
-        }; \
-    }
+        
+    using Int32Field = Field<int32_t>;
+    using Int16Field = Field<int16_t>;    
 }
 
 #endif	/* METAFUNCTIONS_INL_H */

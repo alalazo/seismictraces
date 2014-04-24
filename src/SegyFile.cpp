@@ -68,9 +68,9 @@ namespace seismic {
 //                throw runtime_error( estream.str() );
 //            }            
             // Compute the correct size of a single data sample
-            sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[ field(rev1::bfh::formatCode) ] );
+            sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[rev1::bfh::formatCode] );
             // Check the presence of extended textual file header
-            nextendedTextualFileHeader_ = bfh_[ field(rev1::bfh::nextendedTextualFileHeader) ];
+            nextendedTextualFileHeader_ = bfh_[rev1::bfh::nextendedTextualFileHeader];
             // Read Extended textual file headers
             /// @todo Extended textual file header section to be implemented
 
@@ -89,7 +89,7 @@ namespace seismic {
 
                 size_t nsamples(0);
                 // Compute the number of samples in the next trace to update the stride
-                if ( bfh_[ field(rev1::bfh::fixedLengthTraceFlag) ] == 0 ) {
+                if ( bfh_[rev1::bfh::fixedLengthTraceFlag] == 0 ) {
                     //
                     // If the traces does not have fixed length, the file 
                     // must be inspected sequentially
@@ -99,12 +99,12 @@ namespace seismic {
                     fstream_.seekg ( currentStride );
                     readTraceHeader( th );
                     nsamples = th[TraceHeader::nsamplesTrace];
-                } else if ( bfh_[ field(rev1::bfh::fixedLengthTraceFlag) ] == 1 ) {
+                } else if ( bfh_[rev1::bfh::fixedLengthTraceFlag] == 1 ) {
                     //
                     // If the traces have all fixed length the strides can be
                     // computed without inspecting the file sequentially
                     //
-                    nsamples = bfh_[ field(rev1::bfh::nsamplesDataTrace) ];
+                    nsamples = bfh_[rev1::bfh::nsamplesDataTrace];
                 }
                 // Update the current stride in the file
                 currentStride += TraceHeader::buffer_size + sizeOfDataSample_ * nsamples;
@@ -146,9 +146,9 @@ namespace seismic {
 #endif
             fstream_.write(bfhBuffer, BinaryFileHeader::buffer_size);            
             // Compute the correct size of a single data sample
-            sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[ field(rev1::bfh::formatCode) ] );
+            sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[rev1::bfh::formatCode] );
             // Check the presence of extended textual file header
-            nextendedTextualFileHeader_ = bfh_[ field(rev1::bfh::nextendedTextualFileHeader) ];            
+            nextendedTextualFileHeader_ = bfh_[rev1::bfh::nextendedTextualFileHeader];            
         }
     }
     

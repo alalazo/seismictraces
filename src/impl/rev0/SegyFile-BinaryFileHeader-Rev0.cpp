@@ -39,16 +39,16 @@ namespace seismic {
         //
         ////////////////////
         
-        vector<rev0::bfh::Int32FieldsRev0> initializeInt32List() {
-            vector<rev0::bfh::Int32FieldsRev0> int32List;
+        vector<Int32Field> initializeInt32List() {
+            vector<Int32Field> int32List;
             int32List.push_back( rev0::bfh::jobID      );
             int32List.push_back( rev0::bfh::lineNumber );
             int32List.push_back( rev0::bfh::reelNumber );
             return int32List;
         }
         
-        vector<rev0::bfh::Int16FieldsRev0> initializeInt16List() {
-            vector<rev0::bfh::Int16FieldsRev0> int16List;
+        vector<Int16Field> initializeInt16List() {
+            vector<Int16Field> int16List;
 	    int16List.push_back(rev0::bfh::nDataTraces                   );		   
 	    int16List.push_back(rev0::bfh::nAuxiliaryTraces              );	   
 	    int16List.push_back(rev0::bfh::sampleInterval                );		   
@@ -79,8 +79,8 @@ namespace seismic {
     ////////////////////
     // Static vectors
     ////////////////////
-    const vector<rev0::bfh::Int32FieldsRev0> ConcreteBinaryFileHeader<Rev0>::Int32List(initializeInt32List());
-    const vector<rev0::bfh::Int16FieldsRev0> ConcreteBinaryFileHeader<Rev0>::Int16List(initializeInt16List());
+    const vector<Int32Field> ConcreteBinaryFileHeader<Rev0>::Int32List(initializeInt32List());
+    const vector<Int16Field> ConcreteBinaryFileHeader<Rev0>::Int16List(initializeInt16List());
     
     void ConcreteBinaryFileHeader<Rev0>::print(std::ostream& cout) const {
         cout << "|------------------|" << endl;
@@ -89,33 +89,33 @@ namespace seismic {
         cout << endl;
         cout << "**** REV-0 FIELDS ****" << endl;
         cout << endl;
-        cout << "Job identification number:                         " << (*this)[ field( rev0::bfh::jobID ) ] << endl;
-        cout << "Line number:                                       " << (*this)[ field( rev0::bfh::lineNumber ) ] << endl;
-        cout << "Reel number:                                       " << (*this)[ field( rev0::bfh::reelNumber ) ] << endl;
-        cout << "Number of data traces per ensemble:                " << (*this)[ field( rev0::bfh::nDataTraces ) ] << endl;
-        cout << "Number of auxiliary traces per ensemble:           " << (*this)[ field( rev0::bfh::nAuxiliaryTraces ) ] << endl;
-        cout << "Sample interval (us):                              " << (*this)[ field( rev0::bfh::sampleInterval ) ] << endl;
-        cout << "Sample interval (us) of original field recording:  " << (*this)[ field( rev0::bfh::sampleIntervalOriginalField  ) ] << endl;
-        cout << "Number of samples per data trace:                  " << (*this)[ field( rev0::bfh::nsamplesDataTrace  ) ] << endl;
-        cout << "Number of samples per data trace (original field): " << (*this)[ field( rev0::bfh::nsamplesDataTraceOriginalField  ) ] << endl;
-        cout << "Data sample format code:                           " << (*this)[ field( rev0::bfh::formatCode  ) ] << endl;
-        cout << "Ensemble fold:                                     " << (*this)[ field( rev0::bfh::ensembleFold  ) ] << endl;
-        cout << "Trace sorting code:                                " << (*this)[ field( rev0::bfh::traceSortingCode  ) ] << endl;
-        cout << "Vertical sum code:                                 " << (*this)[ field( rev0::bfh::verticalSumCode  ) ] << endl;
-        cout << "Sweep frequency (Hz) at start:                     " << (*this)[ field( rev0::bfh::sweepFrequencyStart  ) ] << endl;
-        cout << "Sweep frequency (Hz) at end:                       " << (*this)[ field( rev0::bfh::sweepFrequencyEnd  ) ] << endl;
-        cout << "Sweep length (ms):                                 " << (*this)[ field( rev0::bfh::sweepLength  ) ] << endl;
-        cout << "Sweep type                                         " << (*this)[ field( rev0::bfh::sweepTypeID  ) ] << endl;
-        cout << "Trace number of sweep channel:                     " << (*this)[ field( rev0::bfh::traceNumberSweepChannel  ) ] << endl;
-        cout << "Sweep trace taper length (ms) at start:            " << (*this)[ field( rev0::bfh::sweepTraceTaperLengthStart  ) ] << endl;        
-        cout << "Sweep trace taper length (ms) at end:              " << (*this)[ field( rev0::bfh::sweepTraceTaperLengthEnd  ) ] << endl;
-        cout << "Taper type:                                        " << (*this)[ field( rev0::bfh::taperType  ) ] << endl;
-        cout << "Correlated data traces:                            " << (*this)[ field( rev0::bfh::correlatedDataTraces  ) ] << endl;
-        cout << "Binary gain recovered:                             " << (*this)[ field( rev0::bfh::binaryGainRecovered  ) ] << endl;
-        cout << "Amplitude recovery method:                         " << (*this)[ field( rev0::bfh::amplitudeRecoveryMethod  ) ] << endl;
-        cout << "Measurement system:                                " << (*this)[ field( rev0::bfh::measurementSystem  ) ] << endl;
-        cout << "Impulse signal polarity:                           " << (*this)[ field( rev0::bfh::impulseSignalPolarity  ) ] << endl;
-        cout << "Vibratory polarity code:                           " << (*this)[ field( rev0::bfh::vibratoryPolarityCode  ) ] << endl;
+        cout << "Job identification number:                         " << (*this)[ rev0::bfh::jobID ] << endl;
+        cout << "Line number:                                       " << (*this)[ rev0::bfh::lineNumber ] << endl;
+        cout << "Reel number:                                       " << (*this)[ rev0::bfh::reelNumber ] << endl;
+        cout << "Number of data traces per ensemble:                " << (*this)[ rev0::bfh::nDataTraces ] << endl;
+        cout << "Number of auxiliary traces per ensemble:           " << (*this)[ rev0::bfh::nAuxiliaryTraces ] << endl;
+        cout << "Sample interval (us):                              " << (*this)[ rev0::bfh::sampleInterval ] << endl;
+        cout << "Sample interval (us) of original field recording:  " << (*this)[ rev0::bfh::sampleIntervalOriginalField  ] << endl;
+        cout << "Number of samples per data trace:                  " << (*this)[ rev0::bfh::nsamplesDataTrace  ] << endl;
+        cout << "Number of samples per data trace (original field): " << (*this)[ rev0::bfh::nsamplesDataTraceOriginalField  ] << endl;
+        cout << "Data sample format code:                           " << (*this)[ rev0::bfh::formatCode  ] << endl;
+        cout << "Ensemble fold:                                     " << (*this)[ rev0::bfh::ensembleFold  ] << endl;
+        cout << "Trace sorting code:                                " << (*this)[ rev0::bfh::traceSortingCode  ] << endl;
+        cout << "Vertical sum code:                                 " << (*this)[ rev0::bfh::verticalSumCode  ] << endl;
+        cout << "Sweep frequency (Hz) at start:                     " << (*this)[ rev0::bfh::sweepFrequencyStart  ] << endl;
+        cout << "Sweep frequency (Hz) at end:                       " << (*this)[ rev0::bfh::sweepFrequencyEnd  ] << endl;
+        cout << "Sweep length (ms):                                 " << (*this)[ rev0::bfh::sweepLength  ] << endl;
+        cout << "Sweep type                                         " << (*this)[ rev0::bfh::sweepTypeID  ] << endl;
+        cout << "Trace number of sweep channel:                     " << (*this)[ rev0::bfh::traceNumberSweepChannel  ] << endl;
+        cout << "Sweep trace taper length (ms) at start:            " << (*this)[ rev0::bfh::sweepTraceTaperLengthStart  ] << endl;        
+        cout << "Sweep trace taper length (ms) at end:              " << (*this)[ rev0::bfh::sweepTraceTaperLengthEnd  ] << endl;
+        cout << "Taper type:                                        " << (*this)[ rev0::bfh::taperType  ] << endl;
+        cout << "Correlated data traces:                            " << (*this)[ rev0::bfh::correlatedDataTraces  ] << endl;
+        cout << "Binary gain recovered:                             " << (*this)[ rev0::bfh::binaryGainRecovered  ] << endl;
+        cout << "Amplitude recovery method:                         " << (*this)[ rev0::bfh::amplitudeRecoveryMethod  ] << endl;
+        cout << "Measurement system:                                " << (*this)[ rev0::bfh::measurementSystem  ] << endl;
+        cout << "Impulse signal polarity:                           " << (*this)[ rev0::bfh::impulseSignalPolarity  ] << endl;
+        cout << "Vibratory polarity code:                           " << (*this)[ rev0::bfh::vibratoryPolarityCode  ] << endl;
         cout << endl;        
     }    
     
@@ -132,12 +132,12 @@ namespace seismic {
             BfhSwapByteOrder(ConcreteBinaryFileHeader<Rev0>& bfh) : bfh_(bfh) {
             }
 
-            void operator()(rev0::bfh::Int16FieldsRev0 idx) {
-                invertByteOrder(bfh_[ field(idx ) ]);
+            void operator()(Int16Field idx) {
+                invertByteOrder(bfh_[idx]);
             }
 
-            void operator()(rev0::bfh::Int32FieldsRev0 idx) {
-                invertByteOrder(bfh_[ field(idx ) ]);
+            void operator()(Int32Field idx) {
+                invertByteOrder(bfh_[idx]);
             }
 
         private:
@@ -156,27 +156,27 @@ namespace seismic {
         stringstream estream;
         bool         checkFailed = false;
         // Number of data traces per ensemble
-        if ( (*this)[ field(rev0::bfh::nDataTraces) ] < 0 ) {
+        if ( (*this)[rev0::bfh::nDataTraces] < 0 ) {
             checkFailed = true;
             estream << "Number of data traces per ensemble is < 0" << endl;
         }
         // Number of auxiliary traces per ensemble
-        if ( (*this)[ field(rev0::bfh::nAuxiliaryTraces) ] < 0 ) {
+        if ( (*this)[rev0::bfh::nAuxiliaryTraces] < 0 ) {
             checkFailed = true;
             estream << "Number of auxiliary traces per ensemble is < 0" << endl;
         }
         // Sample interval in microseconds
-        if ( (*this)[ field(rev0::bfh::sampleInterval) ] < 0 ) {
+        if ( (*this)[rev0::bfh::sampleInterval] < 0 ) {
             checkFailed = true;
             estream << "Sample interval is < 0" << endl;
         }
         // Number of samples per data trace
-        if ( (*this)[ field(rev0::bfh::nsamplesDataTrace) ] <= 0 ) {
+        if ( (*this)[rev0::bfh::nsamplesDataTrace] <= 0 ) {
             checkFailed = true;
             estream << "Number of samples per data trace is <= 0" << endl;
         }
         // Data sample format code
-        switch ( (*this)[ field(rev0::bfh::formatCode) ] ) {
+        switch ( (*this)[rev0::bfh::formatCode] ) {
             case ( constants::SegyFileFormatCode::IBMfloat32 ):
             case ( constants::SegyFileFormatCode::Int32      ):
             case ( constants::SegyFileFormatCode::Fixed32    ):
@@ -186,7 +186,7 @@ namespace seismic {
                 break;
             default:
                 checkFailed = true;
-                estream << "Invalid value of data sample format code (" << (*this)[ field(rev0::bfh::formatCode) ] << ")" << endl;
+                estream << "Invalid value of data sample format code (" << (*this)[rev0::bfh::formatCode] << ")" << endl;
                 break;
         }
         // Throw an exception if some consistency check failed

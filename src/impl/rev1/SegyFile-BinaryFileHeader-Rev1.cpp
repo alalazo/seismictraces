@@ -38,8 +38,8 @@ namespace seismic {
         //
         ////////////////////
         
-        vector<rev1::bfh::Int16FieldsRev1> initializeInt16List() {
-            vector<rev1::bfh::Int16FieldsRev1> int16List;
+        vector<Int16Field> initializeInt16List() {
+            vector<Int16Field> int16List;
             int16List.push_back( rev1::bfh::segyFormatRevisionNumber   );
 	    int16List.push_back( rev1::bfh::fixedLengthTraceFlag       );
 	    int16List.push_back( rev1::bfh::nextendedTextualFileHeader );
@@ -49,15 +49,15 @@ namespace seismic {
     ////////////////////
     // Static vectors
     ////////////////////
-    const vector<rev1::bfh::Int16FieldsRev1> ConcreteBinaryFileHeader<Rev1>::Int16List(initializeInt16List());
+    const vector<Int16Field> ConcreteBinaryFileHeader<Rev1>::Int16List(initializeInt16List());
     
     void ConcreteBinaryFileHeader<Rev1>::print(std::ostream& cout) const {
         ConcreteBinaryFileHeader<Rev0>::print(cout);
         cout << "**** REV-1 FIELDS ****" << endl;
         cout << endl;
-        cout << "SEGY format revision number:                       " << (*this)[field(rev1::bfh::segyFormatRevisionNumber)] << endl;
-        cout << "Fixed length trace flag:                           " << (*this)[field(rev1::bfh::fixedLengthTraceFlag)] << endl;
-        cout << "Number of Extended Textual File Headers:           " << (*this)[field(rev1::bfh::nextendedTextualFileHeader)] << endl;
+        cout << "SEGY format revision number:                       " << (*this)[rev1::bfh::segyFormatRevisionNumber] << endl;
+        cout << "Fixed length trace flag:                           " << (*this)[rev1::bfh::fixedLengthTraceFlag] << endl;
+        cout << "Number of Extended Textual File Headers:           " << (*this)[rev1::bfh::nextendedTextualFileHeader] << endl;
         cout << endl;        
     }
     
@@ -74,8 +74,8 @@ namespace seismic {
             BfhSwapByteOrder(ConcreteBinaryFileHeader<Rev1>& bfh) : bfh_(bfh) {
             }
 
-            void operator()(rev1::bfh::Int16FieldsRev1 idx) {
-                invertByteOrder(bfh_[field(idx)]);
+            void operator()(Int16Field idx) {
+                invertByteOrder(bfh_[idx]);
             }
             
         private:
@@ -95,19 +95,19 @@ namespace seismic {
         stringstream estream;
         bool         checkFailed = false;
         // Fixed length trace flag
-        switch ( (*this)[ field(rev1::bfh::fixedLengthTraceFlag) ] ) {
+        switch ( (*this)[rev1::bfh::fixedLengthTraceFlag] ) {
             case( 0 ):
             case( 1 ):
                 break;
             default:
                 checkFailed = true;
-                estream << " Invalid value of fixed length trace flag (" << (*this)[ field(rev1::bfh::fixedLengthTraceFlag) ] << ")" << endl;
+                estream << " Invalid value of fixed length trace flag (" << (*this)[rev1::bfh::fixedLengthTraceFlag] << ")" << endl;
                 break;
         }
         // Number of extended textual file headers
-        if ( (*this)[ field(rev1::bfh::nextendedTextualFileHeader) ] < -1 ) {
+        if ( (*this)[rev1::bfh::nextendedTextualFileHeader] < -1 ) {
             checkFailed = true;
-            estream << "Invalid number of extended textual file header (" << (*this)[ field(rev1::bfh::nextendedTextualFileHeader) ] << ")" << endl;
+            estream << "Invalid number of extended textual file header (" << (*this)[rev1::bfh::nextendedTextualFileHeader] << ")" << endl;
         }
         // Throw an exception if some consistency check failed
         if ( checkFailed ) {
