@@ -79,8 +79,18 @@ namespace seismic {
     ////////////////////
     // Static vectors
     ////////////////////
-    const vector<Int32Field> ConcreteBinaryFileHeader<Rev0>::Int32List(initializeInt32List());
-    const vector<Int16Field> ConcreteBinaryFileHeader<Rev0>::Int16List(initializeInt16List());
+    
+    const vector<Int32Field>& ConcreteBinaryFileHeader<Rev0>::Int32List() {
+        const static vector<Int32Field> list( initializeInt32List() );
+        return list;
+    }
+
+    const vector<Int16Field>& ConcreteBinaryFileHeader<Rev0>::Int16List() {
+        const static vector<Int16Field> list( initializeInt16List() );
+        return list;
+    }
+
+    
     
     void ConcreteBinaryFileHeader<Rev0>::print(std::ostream& cout) const {
         cout << "|------------------|" << endl;
@@ -119,37 +129,22 @@ namespace seismic {
         cout << endl;        
     }    
     
-    namespace {
-
-        /// @todo TO BE SUBSTITUTED WITH LAMBDAS AS SOON AS C++11 WILL BE ALLOWED 
-        
-        /**
-         * @brief Functor that given a field of a binary header file, swaps its byte order
-         */
-        class BfhSwapByteOrder {
-        public:
-
-            BfhSwapByteOrder(ConcreteBinaryFileHeader<Rev0>& bfh) : bfh_(bfh) {
-            }
-
-            void operator()(Int16Field idx) {
-                invertByteOrder(bfh_[idx]);
-            }
-
-            void operator()(Int32Field idx) {
-                invertByteOrder(bfh_[idx]);
-            }
-
-        private:
-            ConcreteBinaryFileHeader<Rev0>& bfh_;
-        } ;
-
-    }
-    
     void ConcreteBinaryFileHeader<Rev0>::invertByteOrder() {
-        BfhSwapByteOrder swapVisitor( *this );
-        std::for_each(ConcreteBinaryFileHeader<Rev0>::Int32List.begin(), ConcreteBinaryFileHeader<Rev0>::Int32List.end(), swapVisitor);
-        std::for_each(ConcreteBinaryFileHeader<Rev0>::Int16List.begin(), ConcreteBinaryFileHeader<Rev0>::Int16List.end(), swapVisitor);
+        // Invert 32 bit integer fields
+        std::for_each(
+                ConcreteBinaryFileHeader<Rev0>::Int32List().begin(),
+                ConcreteBinaryFileHeader<Rev0>::Int32List().end(),
+                [this](const Int32Field& idx){
+                    seismic::invertByteOrder( (*this)[idx] );
+                }
+                );
+        std::for_each(
+                ConcreteBinaryFileHeader<Rev0>::Int16List().begin(),
+                ConcreteBinaryFileHeader<Rev0>::Int16List().end(),
+                [this](const Int16Field& idx){
+                    seismic::invertByteOrder( (*this)[idx] );                    
+                }                
+                );
     }
     
     void ConcreteBinaryFileHeader<Rev0>::checkConsistencyOrThrow() const {

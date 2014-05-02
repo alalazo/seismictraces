@@ -49,8 +49,12 @@ namespace seismic {
     ////////////////////
     // Static vectors
     ////////////////////
-    const vector<Int16Field> ConcreteBinaryFileHeader<Rev1>::Int16List(initializeInt16List());
-    
+
+    const vector<Int16Field>& ConcreteBinaryFileHeader<Rev1>::Int16List() {
+        static const vector<Int16Field> list( initializeInt16List() );
+        return list;
+    }
+
     void ConcreteBinaryFileHeader<Rev1>::print(std::ostream& cout) const {
         ConcreteBinaryFileHeader<Rev0>::print(cout);
         cout << "**** REV-1 FIELDS ****" << endl;
@@ -83,11 +87,17 @@ namespace seismic {
         };
 
     }
-    
     void ConcreteBinaryFileHeader<Rev1>::invertByteOrder() {
+        // Invert the fields of Rev0
         ConcreteBinaryFileHeader<Rev0>::invertByteOrder();
-        BfhSwapByteOrder swapVisitor( *this );        
-        std::for_each(ConcreteBinaryFileHeader<Rev1>::Int16List.begin(), ConcreteBinaryFileHeader<Rev1>::Int16List.end(), swapVisitor);
+        // Invert fields that are specific to Rev1
+        std::for_each(
+                ConcreteBinaryFileHeader<Rev1>::Int16List().begin(),
+                ConcreteBinaryFileHeader<Rev1>::Int16List().end(),
+                [this](const Int16Field & idx) {
+                    seismic::invertByteOrder((*this)[idx]);
+                }
+        );
     }
 
     void ConcreteBinaryFileHeader<Rev1>::checkConsistencyOrThrow() const {
