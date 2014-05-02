@@ -65,9 +65,18 @@ namespace seismic {
     ////////////////////
     // Static vectors
     ////////////////////
-    const vector<Int32Field> ConcreteTraceHeader<Rev1>::Int32List( initializeInt32List() );
-    const vector<Int16Field> ConcreteTraceHeader<Rev1>::Int16List( initializeInt16List() );
 
+    const std::vector<Int16Field>& ConcreteTraceHeader<Rev1>::Int16List() {
+        static const vector<Int16Field> list( initializeInt16List() );
+        return list;
+    }
+
+    const std::vector<Int32Field>& ConcreteTraceHeader<Rev1>::Int32List() {
+        static const vector<Int32Field> list( initializeInt32List() );
+        return list;
+    }
+
+    
     namespace {
 
         /// @todo TO BE SUBSTITUTED WITH LAMBDAS AS SOON AS C++11 WILL BE ALLOWED 
@@ -121,10 +130,20 @@ namespace seismic {
     
     
     void ConcreteTraceHeader<Rev1>::invertByteOrder() {
-        ThSwapByteOrder swapVisitor( *this );
         ConcreteTraceHeader<Rev0>::invertByteOrder();
-        std::for_each(ConcreteTraceHeader<Rev1>::Int32List.begin(), ConcreteTraceHeader<Rev1>::Int32List.end(), swapVisitor);
-        std::for_each(ConcreteTraceHeader<Rev1>::Int16List.begin(), ConcreteTraceHeader<Rev1>::Int16List.end(), swapVisitor);
+        std::for_each(
+                ConcreteTraceHeader<Rev1>::Int32List().begin(),
+                ConcreteTraceHeader<Rev1>::Int32List().end(),
+                [this](const Int32Field & idx) {
+                    seismic::invertByteOrder((*this)[idx]);
+                }
+        );
+        std::for_each(
+                ConcreteTraceHeader<Rev1>::Int16List().begin(),
+                ConcreteTraceHeader<Rev1>::Int16List().end(),
+                [this](const Int16Field & idx) {
+                    seismic::invertByteOrder((*this)[idx]);
+                });
     }
     
     void ConcreteTraceHeader<Rev1>::checkConsistencyOrThrow() const {

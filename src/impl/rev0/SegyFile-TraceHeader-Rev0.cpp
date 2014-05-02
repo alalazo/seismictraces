@@ -119,8 +119,16 @@ namespace seismic {
     ////////////////////
     // Static vectors
     ////////////////////
-    const vector<Int32Field> ConcreteTraceHeader<Rev0>::Int32List( initializeInt32List() );
-    const vector<Int16Field> ConcreteTraceHeader<Rev0>::Int16List( initializeInt16List() );
+
+    const vector<Int16Field>& ConcreteTraceHeader<Rev0>::Int16List() {
+        static const vector<Int16Field> list( initializeInt16List() );
+        return list;
+    }
+
+    const vector<Int32Field>& ConcreteTraceHeader<Rev0>::Int32List() {
+        static const vector<Int32Field> list( initializeInt32List() );
+        return list;
+    }
 
     void ConcreteTraceHeader<Rev0>::print(std::ostream& cout) const {
         cout << "|------------|" << endl;
@@ -202,37 +210,23 @@ namespace seismic {
         cout << "Over travel associated with taper:                         " << (*this)[ rev0::th::overTravel ]                        << endl;
     }
     
-    namespace {
-
-        /// @todo TO BE SUBSTITUTED WITH LAMBDAS AS SOON AS C++11 WILL BE ALLOWED 
-        
-        /**
-         * @brief Functor that given a field of a trace header file, swaps its byte order
-         */
-        class ThSwapByteOrder {
-        public:
-
-            ThSwapByteOrder(ConcreteTraceHeader<Rev0>& th) : th_(th) {
-            }
-
-            void operator()(Int16Field idx) {
-                invertByteOrder(th_[idx]);
-            }
-
-            void operator()(Int32Field idx) {
-                invertByteOrder(th_[idx]);
-            }
-
-        private:
-            ConcreteTraceHeader<Rev0>& th_;
-        } ;
-        
-    }
-
     void ConcreteTraceHeader<Rev0>::invertByteOrder() {
-        ThSwapByteOrder swapVisitor( *this );
-        std::for_each(ConcreteTraceHeader<Rev0>::Int32List.begin(), ConcreteTraceHeader<Rev0>::Int32List.end(), swapVisitor);
-        std::for_each(ConcreteTraceHeader<Rev0>::Int16List.begin(), ConcreteTraceHeader<Rev0>::Int16List.end(), swapVisitor);
+        // Invert int32_t fields
+        std::for_each(
+                ConcreteTraceHeader<Rev0>::Int32List().begin(),
+                ConcreteTraceHeader<Rev0>::Int32List().end(),
+                [this](const Int32Field & idx) {
+                    seismic::invertByteOrder((*this)[idx]);
+                }
+        );
+        // Invert int16_t fields
+        std::for_each(
+                ConcreteTraceHeader<Rev0>::Int16List().begin(),
+                ConcreteTraceHeader<Rev0>::Int16List().end(),
+                [this](const Int16Field & idx) {
+                    seismic::invertByteOrder((*this)[idx]);
+                }
+        );
     }
     
     void ConcreteTraceHeader<Rev0>::checkConsistencyOrThrow() const {

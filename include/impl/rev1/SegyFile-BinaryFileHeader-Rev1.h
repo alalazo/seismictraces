@@ -62,12 +62,12 @@ namespace seismic {
                 
     private:
         /**
-         * @brief Static vector used to iterate over all the items of a
-         * non-contiguous enumeration
+         * @brief Returns a reference to a static vector used to 
+         * iterate over all the int16_t fields of the stream
          * 
-         * @see Int32Fields
+         * @return reference to a static constant vector
          */
-        static const std::vector<Int16Field> Int16List;
+        const std::vector<Int16Field>& Int16List();
 
         /**
          * @brief Field needed to register the class into its factory

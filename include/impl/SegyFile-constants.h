@@ -28,7 +28,7 @@
 
 #include<stdexcept>
 
-#include<stdint.h>
+#include<cstdint>
 
 namespace seismic {
     namespace constants {

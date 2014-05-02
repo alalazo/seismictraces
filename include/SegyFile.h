@@ -43,7 +43,7 @@
 #include<utility>
 #include<memory>
 
-#include<stdint.h>
+#include<cstdint>
 
 namespace seismic {
         
@@ -180,7 +180,7 @@ namespace seismic {
     class SegyFile {
     private:
         /// Trace data (just the old stream of bytes)
-        typedef std::vector<char> TraceData;
+        using TraceData = std::vector<char>;
     public:
         /// Trace header plus corresponding trace data
         typedef std::pair< TraceHeader, TraceData > trace_type;
