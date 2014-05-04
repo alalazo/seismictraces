@@ -22,7 +22,6 @@
 #include<impl/rev1/SegyFile-BinaryFileHeader-Rev1.h>
 
 #include<SegyFile.h>
-#include<Conversion.h>
 #include<example_macro.h>
 
 #include<vector>
@@ -37,38 +36,35 @@ int main() {
     //
     // Open input SEG Y file in read mode
     //
-    TextualFileHeader tfh;
+    SegyFile segyFile( DATA_FOLDER "/mig_08gars1_6s.sgy" , "Rev1");
     
-    BinaryFileHeader&  bfh = *(new ConcreteBinaryFileHeader<Rev1>);
-
-    SegyFile segyFile( DATA_FOLDER "/mig_08gars1_6s.sgy",tfh,bfh);
-    
-    cout << bfh << endl;
+    //cout << segyFile.getTextualFileHeader() << endl;
+    cout << segyFile.getBinaryFileHeader() << endl;
     
     //
     // Read all the samples and convert the traces to a more manageable format
     //
     
     vector< SegyFile::trace_type > segyTraces;
-    vector< SeismicTrace >         seismicTraces( segyFile.ntraces() );
-    SegyConverter                  segyConverter(bfh);
-    
-    for(size_t ii = 0; ii < segyFile.ntraces(); ++ii) {      
-        segyTraces.push_back( segyFile.read(ii) );
-        segyConverter( segyTraces[ii],seismicTraces[ii] );
-    }
+//    vector< SeismicTrace >         seismicTraces( segyFile.ntraces() );
+//    SegyConverter                  segyConverter( segyFile.getBinaryFileHeader() );
+//    
+//    for(size_t ii = 0; ii < segyFile.ntraces(); ++ii) {      
+//        segyTraces.push_back( segyFile.read(ii) );
+//        segyConverter( segyTraces[ii],seismicTraces[ii] );
+//    }
     
     //
     // Modify a couple of traces
     //
     
-    size_t traceIdx = 5;
-    seismicTraces[traceIdx].resize( 10, 3.0f );
-    
-    traceIdx = 10;
-    for( size_t ii = 0; ii < 10; ++ii) {    
-        seismicTraces[traceIdx].push_back(ii);
-    }
+//    size_t traceIdx = 5;
+//    seismicTraces[traceIdx].resize( 10, 3.0f );
+//    
+//    traceIdx = 10;
+//    for( size_t ii = 0; ii < 10; ++ii) {    
+//        seismicTraces[traceIdx].push_back(ii);
+//    }
     
     //
     // Write to a new SEG Y file
@@ -87,7 +83,6 @@ int main() {
 //        segyOutputFile.append( segyTraces[ii] );
 //    }
 //
-    delete &bfh;    
     return 0;
 }
 

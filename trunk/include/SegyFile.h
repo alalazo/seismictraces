@@ -29,6 +29,7 @@
 #include<impl/SegyFile-TextualFileHeader.h>
 #include<impl/SegyFile-BinaryFileHeader.h>
 #include<impl/SegyFile-TraceHeader.h>
+
 // Enumerations and constants related to SEG Y standard
 #include<impl/SegyFile-constants.h>
 
@@ -178,35 +179,70 @@ namespace seismic {
      * 
      */
     class SegyFile {
-    private:
-        /// Trace data (just the old stream of bytes)
-        using TraceData = std::vector<char>;
     public:
+        /// Trace data (just the old stream of bytes)
+        using trace_data_type = std::vector<char>;
         /// Trace header plus corresponding trace data
-        typedef std::pair< TraceHeader, TraceData > trace_type;
+        using trace_type = std::pair< TraceHeaderInterface::smart_reference_type, trace_data_type >;
         
         /**
          * @brief Constructor of a SegyFile
          * 
          * @param[in] filename name of the SEG Y file to be read/written
-         * @param[in,out] tfh Textual file header
-         * @param[in,out] bfh Binary file header
+         * @param[in] revision_tag type of SEG Y file to be created
          * @param[in] mode open mode of the file
          * 
          */
         SegyFile(
-                const char * filename, TextualFileHeader& tfh, BinaryFileHeader& bfh,
+                const char * filename, 
+                const std::string & revision_tag = "Rev0",
                 std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out
                 );
+
+        /**
+         * @brief Returns the textual file header
+         * 
+         * @return textual file header
+         */
+        const TextualFileHeader& getTextualFileHeader() const {
+            return *tfh_;
+        }
+        
+        /**
+         * @brief Returns the textual file header
+         * 
+         * @return textual file header
+         */
+        TextualFileHeader& getTextualFileHeader() {
+            return const_cast<TextualFileHeader&>( static_cast<const SegyFile&>(*this).getTextualFileHeader() );
+        }
+        
+        /**
+         * @brief Returns the binary file header
+         * 
+         * @return binary file header
+         */
+        const BinaryFileHeader& getBinaryFileHeader() const {
+            return *bfh_;
+        }
+        
+        /**
+         * @brief Returns the binary file header
+         * 
+         * @return binary file header
+         */
+        BinaryFileHeader& getBinaryFileHeader() {
+            return const_cast<BinaryFileHeader&>( static_cast<const SegyFile&>(*this).getBinaryFileHeader() );
+        }        
         
         /**
          * @brief Returns the number of traces that are currently stored in the SEG Y file
          * 
          * @return number of traces
          */
-        size_t ntraces() const {
-            return traceSeekStrides_.size();
-        }
+//        size_t ntraces() const {
+//            return traceSeekStrides_.size();
+//        }
         
         /**
          * @brief Reads a trace from file
@@ -217,22 +253,22 @@ namespace seismic {
          * @param[in] n index of the trace to be read
          * @return trace header and trace data
          */
-        trace_type read(const size_t n);
+        trace_type readTrace(const size_t n);
         
         /**
          * @brief Appends a trace to the end of the SEG Y file
          * 
          * @param[in] trace trace to be appended
          */
-        void append(const trace_type& trace);
+        void appendTrace(const trace_type& trace);
         
     private:
         //////////
         // File related information
         //////////
         std::fstream fstream_;                
-        TextualFileHeader& tfh_;
-        BinaryFileHeader& bfh_;
+        std::shared_ptr<TextualFileHeader> tfh_;
+        std::shared_ptr<BinaryFileHeader> bfh_;
         //////////
         // Bookkeeping variables to permit random access to traces
         //////////
@@ -253,7 +289,7 @@ namespace seismic {
          * 
          * @param[out] th trace header
          */
-        void readTraceHeader(TraceHeader& th);        
+        //void readTraceHeader(TraceHeaderInterface::smart_reference_type& th);        
         
         /**
          * @brief Read trace data from the current position 
@@ -262,7 +298,7 @@ namespace seismic {
          * @param[in]  th trace header
          * @param[out] td trace data
          */
-        void readTraceData(const TraceHeader& th, TraceData& td);
+        //void readTraceData(const TraceHeader& th, trace_data_type& td);
         
         /**
          * @brief Write a single trace header to the current position 
@@ -270,7 +306,7 @@ namespace seismic {
          * 
          * @param[in] th trace header
          */
-        void writeTraceHeader(TraceHeader th);        
+        //void writeTraceHeader(TraceHeader th);        
         
         /**
          * @brief Write trace data to the current position 
@@ -278,7 +314,7 @@ namespace seismic {
          * 
          * @param[in] td trace data
          */
-        void writeTraceData(TraceData td);
+        //void writeTraceData(trace_data_type td);
     };
         
 }

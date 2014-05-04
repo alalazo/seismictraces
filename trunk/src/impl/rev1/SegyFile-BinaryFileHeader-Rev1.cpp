@@ -87,6 +87,7 @@ namespace seismic {
         };
 
     }
+    
     void ConcreteBinaryFileHeader<Rev1>::invertByteOrder() {
         // Invert the fields of Rev0
         ConcreteBinaryFileHeader<Rev0>::invertByteOrder();

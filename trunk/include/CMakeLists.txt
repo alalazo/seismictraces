@@ -2,7 +2,6 @@ SET(
   SeismicTraces_includes
   ${CMAKE_CURRENT_SOURCE_DIR}/SeismicTrace-inl.h
   ${CMAKE_CURRENT_SOURCE_DIR}/SegyFile.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/Conversion.h
 )
 
 SET( 
@@ -14,7 +13,6 @@ SET(
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-constants.h
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-TextualFileHeader.h
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-BinaryFileHeader.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-TraceHeaderInterface.h
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-TraceHeader.h
 )
 
