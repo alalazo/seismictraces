@@ -28,11 +28,9 @@ using namespace std;
 
 namespace seismic {
 
-    SegyFile::SegyFile(
-            const char * filename, TextualFileHeader& tfh, BinaryFileHeader& bfh,
-            std::ios_base::openmode mode)
+    SegyFile::SegyFile(const char * filename, const std::string & revision_tag, std::ios_base::openmode mode)
     : fstream_(filename, mode | ios_base::binary), // A SEG Y file is always opened in binary mode
-    tfh_(tfh), bfh_(bfh) {   
+    tfh_( new TextualFileHeader ), bfh_( BinaryFileHeader::create(revision_tag) ) {   
         fstream_.peek();
         if ( fstream_.good() ) {
             ////////////////////
@@ -43,15 +41,15 @@ namespace seismic {
             // Move to the beginning of the file
             fstream_.seekg(0,ios::beg);
             // File header buffers
-            char * tfhBuffer( tfh_.get() );
-            char * bfhBuffer( bfh_.get() );
+            char * tfhBuffer( tfh_->get() );
+            char * bfhBuffer( bfh_->get() );
             // Read Textual file header (3200 bytes)
             fstream_.read(tfhBuffer, TextualFileHeader::line_length * TextualFileHeader::nlines);
             // Read Binary file header  (400 bytes)
             fstream_.read(bfhBuffer, BinaryFileHeader::buffer_size);
 #ifdef LITTLE_ENDIAN
             // If the system is little endian, bytes must be swapped            
-            bfh_.invertByteOrder();
+            bfh_->invertByteOrder();
 #endif            
             // Check binary file header for inconsistencies
             // @todo CHECK FOR INCONSISTENCIES ON READ
@@ -65,28 +63,28 @@ namespace seismic {
 //                throw runtime_error( estream.str() );
 //            }            
             // Compute the correct size of a single data sample
-            sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[rev1::bfh::formatCode] );
+            sizeOfDataSample_ = constants::sizeOfDataSample( (*bfh_)[rev1::bfh::formatCode] );
             // Check the presence of extended textual file header
-            nextendedTextualFileHeader_ = bfh_[rev1::bfh::nextendedTextualFileHeader];
+            nextendedTextualFileHeader_ = (*bfh_)[rev1::bfh::nextendedTextualFileHeader];
             // Read Extended textual file headers
             /// @todo Extended textual file header section to be implemented
 
             //////////
             // Construct the vector of strides to permit random access to traces
             //////////            
-            size_t segyFileSize = fstream_.seekg(0, ios::end).tellg();
+            //size_t segyFileSize = fstream_.seekg(0, ios::end).tellg();
             // FIXME: change as soon as Extended textual file header is implemented
             size_t currentStride = 
                     TextualFileHeader::line_length * TextualFileHeader::nlines +
                     BinaryFileHeader::buffer_size + 
                     nextendedTextualFileHeader_ * 3200;
             traceSeekStrides_.push_back( currentStride );
-
+/*
             while ( true ) {
 
                 size_t nsamples(0);
                 // Compute the number of samples in the next trace to update the stride
-                if ( bfh_[rev1::bfh::fixedLengthTraceFlag] == 0 ) {
+                if ( (*bfh_)[rev1::bfh::fixedLengthTraceFlag] == 0 ) {
                     //
                     // If the traces does not have fixed length, the file 
                     // must be inspected sequentially
@@ -96,12 +94,12 @@ namespace seismic {
                     fstream_.seekg ( currentStride );
                     readTraceHeader( th );
                     nsamples = th[TraceHeader::nsamplesTrace];
-                } else if ( bfh_[rev1::bfh::fixedLengthTraceFlag] == 1 ) {
+                } else if ( (*bfh_)[rev1::bfh::fixedLengthTraceFlag] == 1 ) {
                     //
                     // If the traces have all fixed length the strides can be
                     // computed without inspecting the file sequentially
                     //
-                    nsamples = bfh_[rev1::bfh::nsamplesDataTrace];
+                    nsamples = (*bfh_)[rev1::bfh::nsamplesDataTrace];
                 }
                 // Update the current stride in the file
                 currentStride += TraceHeader::buffer_size + sizeOfDataSample_ * nsamples;
@@ -120,7 +118,7 @@ namespace seismic {
                 // Push back value into the vector used as buffer 
                 traceSeekStrides_.push_back( currentStride );
             }
-
+*/
         } else {
             ////////////////////
             // If file was opened for writing tfh and bfh 
@@ -130,12 +128,12 @@ namespace seismic {
             // Set number of traces to zero, as the file starts empty
             fstream_.seekp(0,ios_base::beg);
             // File header buffers
-            char * tfhBuffer( tfh_.get() );
+            char * tfhBuffer( tfh_->get() );
             // Write Textual file header (3200 bytes)
             fstream_.write(tfhBuffer, TextualFileHeader::line_length * TextualFileHeader::nlines);
 
             // Write Binary file header  (400 bytes)            
-            BinaryFileHeader& obfh(bfh);
+            BinaryFileHeader& obfh(*bfh_);
             char * bfhBuffer( obfh.get() );
 #ifdef LITTLE_ENDIAN
             // If the system is little endian, bytes must be swapped
@@ -143,12 +141,12 @@ namespace seismic {
 #endif
             fstream_.write(bfhBuffer, BinaryFileHeader::buffer_size);            
             // Compute the correct size of a single data sample
-            sizeOfDataSample_ = constants::sizeOfDataSample( bfh_[rev1::bfh::formatCode] );
+            sizeOfDataSample_ = constants::sizeOfDataSample( (*bfh_)[rev1::bfh::formatCode] );
             // Check the presence of extended textual file header
-            nextendedTextualFileHeader_ = bfh_[rev1::bfh::nextendedTextualFileHeader];            
+            nextendedTextualFileHeader_ = (*bfh_)[rev1::bfh::nextendedTextualFileHeader];            
         }
     }
-    
+    /*
     SegyFile::trace_type SegyFile::read(size_t n)  {    
         SegyFile::trace_type value;
         // Check for out of ranges
@@ -168,7 +166,9 @@ namespace seismic {
         // Return the trace
         return value;
     }
+    */
     
+    /*
     void SegyFile::append(const trace_type& trace) {
         // Move to the correct position in the file        
         fstream_.seekp(0,ios_base::end);
@@ -177,11 +177,12 @@ namespace seismic {
         // Write trace data
         writeTraceData  ( trace.second );        
     }
+    */
     
     ////////////////////
     // Private functions
     ////////////////////
-
+/*
     void SegyFile::readTraceHeader(TraceHeader& th) {
         fstream_.read( th.get(), TraceHeader::buffer_size );
 #ifdef LITTLE_ENDIAN
@@ -190,7 +191,7 @@ namespace seismic {
 #endif    
     }
 
-    void SegyFile::readTraceData(const TraceHeader& th, TraceData& td) {
+    void SegyFile::readTraceData(const TraceHeader& th, trace_data_type& td) {
         // Retrieve the raw data
         const size_t nsamples = th[TraceHeader::nsamplesTrace];
         td.resize( sizeOfDataSample_ * nsamples );
@@ -211,7 +212,7 @@ namespace seismic {
         fstream_.write( th.get(), TraceHeader::buffer_size );
     }
 
-    void SegyFile::writeTraceData(TraceData td) {
+    void SegyFile::writeTraceData(trace_data_type td) {
         const size_t nsamples = td.size() / sizeOfDataSample_;
 #ifdef LITTLE_ENDIAN
         // If the system is little endian, bytes must be swapped
@@ -221,4 +222,5 @@ namespace seismic {
 #endif    
         fstream_.write( &td[0] , sizeOfDataSample_ * nsamples );
     }
+  */
 }

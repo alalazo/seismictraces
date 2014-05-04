@@ -75,33 +75,6 @@ namespace seismic {
         static const vector<Int32Field> list( initializeInt32List() );
         return list;
     }
-
-    
-    namespace {
-
-        /// @todo TO BE SUBSTITUTED WITH LAMBDAS AS SOON AS C++11 WILL BE ALLOWED 
-        
-        /**
-         * @brief Functor that given a field of a trace header file, swaps its byte order
-         */
-        class ThSwapByteOrder {
-        public:
-
-            ThSwapByteOrder(ConcreteTraceHeader<Rev1>& th) : th_(th) {
-            }
-
-            void operator()(Int16Field idx) {
-                invertByteOrder(th_[idx]);
-            }
-
-            void operator()(Int32Field idx) {
-                invertByteOrder(th_[idx]);
-            }
-
-        private:
-            ConcreteTraceHeader<Rev1>& th_;
-        } ;        
-    }
     
     void ConcreteTraceHeader<Rev1>::print(std::ostream& cout) const {
         ConcreteTraceHeader<Rev0>::print(cout);

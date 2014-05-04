@@ -21,7 +21,7 @@
 #ifndef SEGYFILE_TRACEHEADER_REV0_H
 #define	SEGYFILE_TRACEHEADER_REV0_H
 
-#include<impl/SegyFile-TraceHeaderInterface.h>
+#include<impl/SegyFile-TraceHeader.h>
 #include<impl/rev0/SegyFile-Fields-Rev0.h>
 
 namespace seismic {

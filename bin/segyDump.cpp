@@ -38,26 +38,22 @@ int main(int argc, char** argv) {
         if ( argc < 3 ) {
             throw runtime_error("Wrong number of parameters");
         }
-        
-        /// @todo CLI PARAMETERS HANDLING TO BE IMPLEMENTED        
-        char * inputFilename  = argv[1];
-        int    traceId        = atoi( argv[2] );
-        //char * outputFilename = argv[3];
-        
-        // Open SEG Y file for reading 
-        TextualFileHeader tfh;
-        BinaryFileHeader&  bfh = *(new ConcreteBinaryFileHeader<Rev1>);
-        
-        SegyFile segyFile(inputFilename,tfh,bfh);
-        
-        // Dump header information
-        cout << bfh << endl;
-        
-        SegyFile::trace_type segyTrace = segyFile.read( traceId );
-        
-        cout << segyTrace.first << endl;
+//        
+//        /// @todo CLI PARAMETERS HANDLING TO BE IMPLEMENTED        
+//        char * inputFilename  = argv[1];
+//        int    traceId        = atoi( argv[2] );
+//        //char * outputFilename = argv[3];
+//        
+//        // Open SEG Y file for reading 
+//        SegyFile segyFile(inputFilename,"Rev1");
+//        
+//        // Dump header information
+//        cout << segyFile.getBinaryFileHeader() << endl;
+//        
+//        //SegyFile::trace_type segyTrace = segyFile.read( traceId );
+//        
+//        cout << segyTrace.first << endl;
 
-        delete & bfh;        
     } catch ( exception& e) {
         cerr << e.what() << endl;
         return 1;

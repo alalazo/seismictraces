@@ -18,7 +18,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with SeismicTraces.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include<impl/SegyFile-TraceHeaderInterface.h>
+#include<impl/SegyFile-TraceHeader.h>
 #include<impl/rev1/SegyFile-Fields-Rev1.h>
 #include<impl/SegyFile-constants.h>
 #include<iostream>

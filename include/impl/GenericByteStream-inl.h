@@ -51,10 +51,12 @@ namespace seismic {
         static const int buffer_size = size;
          
         /// Factory type for the GenericByteStream
-        typedef CloneObjectFactory< GenericByteStream, std::string > factory_type;
+        using factory_type = CloneObjectFactory< GenericByteStream, std::string >;
         /// SmartReferenceType for the GenericByteStream
-        typedef GenericByteStreamSmartReference< size > smart_reference_type;
-
+        using smart_reference_type = GenericByteStreamSmartReference< size >;
+        // Handle type for a the GenericByteStream object
+        using handle_type = std::shared_ptr<GenericByteStream>;
+        
         /**
          * @brief Returns a reference to the underlying bytes interpreted as the correct type
          * 
@@ -198,6 +200,24 @@ namespace seismic {
             return const_cast< typename  T::type & >( static_cast<const GenericByteStreamSmartReference&>(*this)[id] );
         }
         
+         /**
+         * @brief Returns a raw pointer to the underlying buffer
+         * 
+         * @return Pointer to the beginning of the buffer
+         */
+        const char * get() const {
+            return ptr_->get();
+        }
+        
+        /**
+         * @brief Returns a raw pointer to the underlying buffer
+         * 
+         * @return Pointer to the beginning of the buffer
+         */
+        char * get() {
+            return const_cast<char *>( static_cast<const GenericByteStreamSmartReference&>(*this).get() );
+        }
+        
         /**
          * @brief Knows how to print the managed resource
          * 
@@ -207,6 +227,21 @@ namespace seismic {
             (*ptr_).print(cout);
         }
                 
+        /**
+         * @brief Knows how to invert the byte order of each field in the stream
+         */
+        void invertByteOrder() {
+            ptr_->invertByteOrder();
+        }
+        
+        /**
+         * @brief Check if the values of mandatory fields are set, and throws exceptions if
+         * a non-conformity is detected
+         */
+        void checkConsistencyOrThrow() const {
+            ptr_->checkConsistencyOrThrow();
+        }
+        
     private:
         std::shared_ptr< GenericByteStream<size> > ptr_;        
     };
