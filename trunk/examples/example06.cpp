@@ -36,30 +36,30 @@ int main() {
     //
     // Open input SEG Y file in read mode
     //
-    SegyFile segyFile( DATA_FOLDER "/mig_08gars1_6s.sgy" , "Rev1");
+    SegyFile segyFile( DATA_FOLDER "/l10f1.sgy" , "Rev1");
     
     //cout << segyFile.getTextualFileHeader() << endl;
     cout << segyFile.getBinaryFileHeader() << endl;
-    
+        
     //
     // Read all the samples and convert the traces to a more manageable format
     //
+    cout << "Number of traces : " << segyFile.ntraces() << endl;
     
-    vector< SegyFile::trace_type > segyTraces;
-//    vector< SeismicTrace >         seismicTraces( segyFile.ntraces() );
-//    SegyConverter                  segyConverter( segyFile.getBinaryFileHeader() );
-//    
-//    for(size_t ii = 0; ii < segyFile.ntraces(); ++ii) {      
-//        segyTraces.push_back( segyFile.read(ii) );
-//        segyConverter( segyTraces[ii],seismicTraces[ii] );
-//    }
+    vector< SegyFile::trace_type > segyTraces;    
+    for(size_t ii = 0; ii < segyFile.ntraces(); ++ii) {      
+        segyTraces.push_back( segyFile.readTrace(ii) );
+        if( ii%1000 == 0 ) {
+            cout << segyTraces[ii].first << endl;
+        }
+    }
     
     //
     // Modify a couple of traces
     //
     
-//    size_t traceIdx = 5;
-//    seismicTraces[traceIdx].resize( 10, 3.0f );
+    //size_t traceIdx = 5;
+    //ViewTraceDataAs<float> trace( segyTraces[traceIdx].second );
 //    
 //    traceIdx = 10;
 //    for( size_t ii = 0; ii < 10; ++ii) {    

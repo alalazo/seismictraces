@@ -95,13 +95,13 @@ string(
 ## Dependencies ##
 ##################
 
-FIND_PACKAGE( Boost 1.53 REQUIRED )
+FIND_PACKAGE( Boost 1.53 REQUIRED COMPONENTS filesystem system )
 
 ###################
 ## Import target ##
 ###################
 
-INCLUDE_DIRECTORIES( include )
+INCLUDE_DIRECTORIES( include ${Boost_INCLUDE_DIRS} )
 
 ADD_SUBDIRECTORY( include  )
 ADD_SUBDIRECTORY( src )
