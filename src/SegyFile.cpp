@@ -20,154 +20,101 @@
  */
 #include<SegyFile.h>
 
-#include<algorithm>
-#include<stdexcept>
-#include<sstream>
+#include<impl/SegyFileIndexer.h>
+#include<impl/rev0/SegyFile-BinaryFileHeader-Rev0.h>
+#include<impl/utilities-inl.h>
+
+/// @todo REMOVE THIS INCLUDE
+#include<impl/indexer/InMemoryIndexer.h>
 
 using namespace std;
+using namespace boost::filesystem;
 
 namespace seismic {
 
-    SegyFile::SegyFile(const char * filename, const std::string & revision_tag, std::ios_base::openmode mode)
-    : fstream_(filename, mode | ios_base::binary), // A SEG Y file is always opened in binary mode
-    tfh_( new TextualFileHeader ), bfh_( BinaryFileHeader::create(revision_tag) ) {   
-        fstream_.peek();
-        if ( fstream_.good() ) {
-            ////////////////////
-            // If eofbit, failbit and badbit are set to false, then 
-            // tfh and bfh must be read from an existing file
-            ////////////////////
-
-            // Move to the beginning of the file
-            fstream_.seekg(0,ios::beg);
-            // File header buffers
-            char * tfhBuffer( tfh_->get() );
-            char * bfhBuffer( bfh_->get() );
-            // Read Textual file header (3200 bytes)
-            fstream_.read(tfhBuffer, TextualFileHeader::line_length * TextualFileHeader::nlines);
-            // Read Binary file header  (400 bytes)
-            fstream_.read(bfhBuffer, BinaryFileHeader::buffer_size);
-#ifdef LITTLE_ENDIAN
-            // If the system is little endian, bytes must be swapped            
-            bfh_->invertByteOrder();
-#endif            
-            // Check binary file header for inconsistencies
-            // @todo CHECK FOR INCONSISTENCIES ON READ
-//            try {
-//                checkBinaryFileHeader( bfh_ );
-//            } catch( runtime_error & e ) {
-//                stringstream estream;
-//                estream << "FATAL ERROR: " << filename << " is a non-conforming SEG Y file" << endl << endl;
-//                estream << "Problem encountered in binary file header:" << endl;
-//                estream << e.what();
-//                throw runtime_error( estream.str() );
-//            }            
-            // Compute the correct size of a single data sample
-            sizeOfDataSample_ = constants::sizeOfDataSample( (*bfh_)[rev1::bfh::formatCode] );
-            // Check the presence of extended textual file header
-            nextendedTextualFileHeader_ = (*bfh_)[rev1::bfh::nextendedTextualFileHeader];
-            // Read Extended textual file headers
-            /// @todo Extended textual file header section to be implemented
-
-            //////////
-            // Construct the vector of strides to permit random access to traces
-            //////////            
-            //size_t segyFileSize = fstream_.seekg(0, ios::end).tellg();
-            // FIXME: change as soon as Extended textual file header is implemented
-            size_t currentStride = 
-                    TextualFileHeader::line_length * TextualFileHeader::nlines +
-                    BinaryFileHeader::buffer_size + 
-                    nextendedTextualFileHeader_ * 3200;
-            traceSeekStrides_.push_back( currentStride );
-/*
-            while ( true ) {
-
-                size_t nsamples(0);
-                // Compute the number of samples in the next trace to update the stride
-                if ( (*bfh_)[rev1::bfh::fixedLengthTraceFlag] == 0 ) {
-                    //
-                    // If the traces does not have fixed length, the file 
-                    // must be inspected sequentially
-                    //
-                    TraceHeader th;
-                    // Move to the start of the next trace header and read it
-                    fstream_.seekg ( currentStride );
-                    readTraceHeader( th );
-                    nsamples = th[TraceHeader::nsamplesTrace];
-                } else if ( (*bfh_)[rev1::bfh::fixedLengthTraceFlag] == 1 ) {
-                    //
-                    // If the traces have all fixed length the strides can be
-                    // computed without inspecting the file sequentially
-                    //
-                    nsamples = (*bfh_)[rev1::bfh::nsamplesDataTrace];
-                }
-                // Update the current stride in the file
-                currentStride += TraceHeader::buffer_size + sizeOfDataSample_ * nsamples;
-                // Check for end of file
-                if ( segyFileSize == currentStride) {
-                    // If the end of the file has been reached, then stop reading
-                    break;
-                } else if ( segyFileSize < currentStride) {
-                    // If the end of the file has been exceeded, the file is truncated
-                    stringstream estream;
-                    estream << "FATAL ERROR: " << filename << " is truncated after trace number " << traceSeekStrides_.size() << endl << endl;
-                    estream << "The total size of the file is " << segyFileSize << " while it should be " << currentStride;
-                    estream << " to contain " << (traceSeekStrides_.size() + 1) << "traces" << endl;
-                    throw runtime_error( estream.str() );
-                }
-                // Push back value into the vector used as buffer 
-                traceSeekStrides_.push_back( currentStride );
-            }
-*/
-        } else {
-            ////////////////////
-            // If file was opened for writing tfh and bfh 
-            // must be written to a newly created file
-            ////////////////////
-            fstream_.clear();
-            // Set number of traces to zero, as the file starts empty
-            fstream_.seekp(0,ios_base::beg);
-            // File header buffers
-            char * tfhBuffer( tfh_->get() );
-            // Write Textual file header (3200 bytes)
-            fstream_.write(tfhBuffer, TextualFileHeader::line_length * TextualFileHeader::nlines);
-
-            // Write Binary file header  (400 bytes)            
-            BinaryFileHeader& obfh(*bfh_);
-            char * bfhBuffer( obfh.get() );
-#ifdef LITTLE_ENDIAN
-            // If the system is little endian, bytes must be swapped
-            obfh.invertByteOrder();
-#endif
-            fstream_.write(bfhBuffer, BinaryFileHeader::buffer_size);            
-            // Compute the correct size of a single data sample
-            sizeOfDataSample_ = constants::sizeOfDataSample( (*bfh_)[rev1::bfh::formatCode] );
-            // Check the presence of extended textual file header
-            nextendedTextualFileHeader_ = (*bfh_)[rev1::bfh::nextendedTextualFileHeader];            
+    SegyFile::SegyFile(const char * filename, const std::string & revision_tag)
+    : filePath_(filename), tfh_(new TextualFileHeader)
+    , bfh_(BinaryFileHeader::create(revision_tag)), tag_(revision_tag) {
+        //////////
+        // If the file does not exist create it
+        // and add enough space for TFH and BFH
+        if (!exists(filePath_)) {
+            create_directories(filePath_.parent_path());
+            boost::filesystem::fstream tmp(filePath_, ios::binary | ios::out);
+            tmp.close();
+            resize_file(filePath_, BinaryFileHeader::buffer_size + TextualFileHeader::line_length * TextualFileHeader::nlines);
         }
+        //////////
+
+        //////////
+        // Open SEG Y file and read TFH and BFH
+        fstream_.open(filePath_, ios::binary | ios::out | ios::in);
+        fstream_.exceptions( ios::eofbit|ios::badbit|ios::failbit );
+        // Read Textual file header (3200 bytes)
+        fstream_.read(tfh_->get(), TextualFileHeader::line_length * TextualFileHeader::nlines);
+        // Read Binary file header  (400 bytes)
+        fstream_.read(bfh_->get(), BinaryFileHeader::buffer_size);
+#ifdef LITTLE_ENDIAN
+        // If the system is little endian, bytes must be swapped            
+        bfh_->invertByteOrder();
+#endif                
+        /// @todo TO BE CHANGED
+        indexer_.reset(new InMemoryIndexer(*this, fstream_));
+        indexer_->createIndex();
     }
-    /*
-    SegyFile::trace_type SegyFile::read(size_t n)  {    
-        SegyFile::trace_type value;
-        // Check for out of ranges
-        if ( n >=  traceSeekStrides_.size() ) {
-            stringstream estream;
-            estream << "ERROR: out-of-range trace access" << endl << endl; 
-            estream << "Trying to access trace number " << n << " in a file with only " << traceSeekStrides_.size();
-            estream << " traces" << endl;
-            throw runtime_error( estream.str() );
-        }        
-        // Move to the correct position in the file        
-        fstream_.seekg( traceSeekStrides_[n] );
+
+    TextualFileHeader& SegyFile::getTextualFileHeader() {
+        return const_cast<TextualFileHeader&> (static_cast<const SegyFile&> (*this).getTextualFileHeader());
+    }
+
+    const TextualFileHeader& SegyFile::getTextualFileHeader() const {
+        return *tfh_;
+    }
+
+    const BinaryFileHeader& SegyFile::getBinaryFileHeader() const {
+        return *bfh_;
+    }
+
+    BinaryFileHeader& SegyFile::getBinaryFileHeader() {
+        return const_cast<BinaryFileHeader&> (static_cast<const SegyFile&> (*this).getBinaryFileHeader());
+    }
+
+    const std::string& SegyFile::tag() const {
+        return tag_;
+    }
+
+    const boost::filesystem::path& SegyFile::path() const {
+        return filePath_;
+    }
+
+    size_t SegyFile::ntraces() const {
+        return indexer_->size();
+    }
+
+    SegyFile::trace_type SegyFile::readTrace(const size_t n) {
+        TraceHeader::smart_reference_type th(TraceHeader::create(tag_));
         // Read trace header
-        readTraceHeader( value.first );
+        auto fposition = indexer_->position(n);
+        fstream_.seekg( fposition );
+        fstream_.read(th.get(), TraceHeader::buffer_size);
+#ifdef LITTLE_ENDIAN
+        // If the system is little endian, bytes must be swapped
+        th.invertByteOrder();
+#endif    
         // Read trace data
-        readTraceData( value.first, value.second );        
-        // Return the trace
-        return value;
+        size_t sizeOfDataSample = constants::sizeOfDataSample(getBinaryFileHeader()[rev0::bfh::formatCode]);
+        auto nSamples = indexer_->nsamples(n);
+        trace_data_type td(nSamples * sizeOfDataSample);
+        fstream_.read(td.data(), nSamples * sizeOfDataSample);
+#ifdef LITTLE_ENDIAN
+        // If the system is little endian, bytes must be swapped
+        for (size_t ii = 0; ii < nSamples; ii++) {
+            invertByteOrder(&td[ii * sizeOfDataSample], sizeOfDataSample);
+        }
+#endif  
+        return make_pair(th, td);
     }
-    */
-    
+
     /*
     void SegyFile::append(const trace_type& trace) {
         // Move to the correct position in the file        
@@ -177,50 +124,50 @@ namespace seismic {
         // Write trace data
         writeTraceData  ( trace.second );        
     }
-    */
-    
+     */
+
     ////////////////////
     // Private functions
     ////////////////////
-/*
-    void SegyFile::readTraceHeader(TraceHeader& th) {
-        fstream_.read( th.get(), TraceHeader::buffer_size );
-#ifdef LITTLE_ENDIAN
-        // If the system is little endian, bytes must be swapped
-        invertFieldsByteOrder(th);
-#endif    
-    }
-
-    void SegyFile::readTraceData(const TraceHeader& th, trace_data_type& td) {
-        // Retrieve the raw data
-        const size_t nsamples = th[TraceHeader::nsamplesTrace];
-        td.resize( sizeOfDataSample_ * nsamples );
-        fstream_.read( &td[0] , sizeOfDataSample_ * nsamples );
-#ifdef LITTLE_ENDIAN
-        // If the system is little endian, bytes must be swapped
-        for ( size_t ii = 0 ; ii < nsamples; ii++) {
-            invertByteOrder(&td[ii * sizeOfDataSample_], sizeOfDataSample_);
+    /*
+        void SegyFile::readTraceHeader(TraceHeader& th) {
+            fstream_.read( th.get(), TraceHeader::buffer_size );
+    #ifdef LITTLE_ENDIAN
+            // If the system is little endian, bytes must be swapped
+            invertFieldsByteOrder(th);
+    #endif    
         }
-#endif    
-    }
+
+        void SegyFile::readTraceData(const TraceHeader& th, trace_data_type& td) {
+            // Retrieve the raw data
+            const size_t nsamples = th[TraceHeader::nsamplesTrace];
+            td.resize( sizeOfDataSample_ * nsamples );
+            fstream_.read( &td[0] , sizeOfDataSample_ * nsamples );
+    #ifdef LITTLE_ENDIAN
+            // If the system is little endian, bytes must be swapped
+            for ( size_t ii = 0 ; ii < nsamples; ii++) {
+                invertByteOrder(&td[ii * sizeOfDataSample_], sizeOfDataSample_);
+            }
+    #endif    
+        }
     
-    void SegyFile::writeTraceHeader(TraceHeader th) {        
-#ifdef LITTLE_ENDIAN
-        // If the system is little endian, bytes must be swapped
-        invertFieldsByteOrder(th);
-#endif    
-        fstream_.write( th.get(), TraceHeader::buffer_size );
-    }
-
-    void SegyFile::writeTraceData(trace_data_type td) {
-        const size_t nsamples = td.size() / sizeOfDataSample_;
-#ifdef LITTLE_ENDIAN
-        // If the system is little endian, bytes must be swapped
-        for ( size_t ii = 0 ; ii < nsamples; ii++) {
-            invertByteOrder(&td[ii * sizeOfDataSample_], sizeOfDataSample_);
+        void SegyFile::writeTraceHeader(TraceHeader th) {        
+    #ifdef LITTLE_ENDIAN
+            // If the system is little endian, bytes must be swapped
+            invertFieldsByteOrder(th);
+    #endif    
+            fstream_.write( th.get(), TraceHeader::buffer_size );
         }
-#endif    
-        fstream_.write( &td[0] , sizeOfDataSample_ * nsamples );
-    }
-  */
+
+        void SegyFile::writeTraceData(trace_data_type td) {
+            const size_t nsamples = td.size() / sizeOfDataSample_;
+    #ifdef LITTLE_ENDIAN
+            // If the system is little endian, bytes must be swapped
+            for ( size_t ii = 0 ; ii < nsamples; ii++) {
+                invertByteOrder(&td[ii * sizeOfDataSample_], sizeOfDataSample_);
+            }
+    #endif    
+            fstream_.write( &td[0] , sizeOfDataSample_ * nsamples );
+        }
+     */
 }

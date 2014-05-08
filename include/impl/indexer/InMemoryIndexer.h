@@ -20,25 +20,43 @@
  */
 
 /**
- * @file SegyFile-TraceHeaderInterface.h
- * @brief Generic interface to a trace header
+ * @file InMemoryIndexer.h
+ * @brief Indexer that keeps every information in memory
  */
-#ifndef SEGYFILE_TRACEHEADERINTERFACE_H
-#define	SEGYFILE_TRACEHEADERINTERFACE_H
+#ifndef INMEMORYINDEXER_H
+#define	INMEMORYINDEXER_H
 
-#include<impl/GenericByteStream-inl.h>
+#include<impl/SegyFileIndexer.h>
+
+#include<boost/filesystem/fstream.hpp>
+
+#include<vector>
 
 namespace seismic {
-    
-    typedef GenericByteStream<240> TraceHeader;
-            
-    /**
-     * @brief Master template to be specialized for different standards
-     */
-    template<class StdTag>
-    class ConcreteTraceHeader;
-        
+
+    class InMemoryIndexer : public SegyFileIndexer {
+    public:
+
+        InMemoryIndexer(SegyFile& segyFile, boost::filesystem::fstream& fileStream);
+
+        void createIndex() override;
+
+        boost::filesystem::fstream::pos_type position(const size_t n) const override;
+
+        void updateIndex() override;
+
+        size_t nsamples(const size_t n) const override;
+
+        size_t size() const override;
+
+    private:
+        SegyFile& segyFile_;
+        boost::filesystem::fstream& fileStream_;
+        std::vector<boost::filesystem::fstream::pos_type> traceStrides_;
+        std::vector<size_t> traceNsamples_;
+    };
+
 }
 
-#endif	/* SEGYFILE_TRACEHEADERINTERFACE_H */
+#endif	/* INMEMORYINDEXER_H */
 

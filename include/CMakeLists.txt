@@ -14,7 +14,14 @@ SET(
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-TextualFileHeader.h
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-BinaryFileHeader.h
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-TraceHeader.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFileIndexer.h
 )
+
+SET( 
+  SeismicTraces_indexer_includes
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/indexer/InMemoryIndexer.h
+)
+
 
 SET( 
   SeismicTraces_rev0_includes

@@ -27,7 +27,7 @@
 namespace seismic {
     
     template<>
-    class ConcreteTraceHeader<Rev0> : public TraceHeaderInterface {
+    class ConcreteTraceHeader<Rev0> : public TraceHeader {
     public:
         /* virtual */
         void print(std::ostream& cout) const;

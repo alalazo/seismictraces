@@ -33,21 +33,19 @@
 // Enumerations and constants related to SEG Y standard
 #include<impl/SegyFile-constants.h>
 
-#include<impl/rev0/SegyFile-Fields-Rev0.h>
-#include<impl/rev1/SegyFile-Fields-Rev1.h>
+#include<boost/filesystem.hpp>
+#include<boost/filesystem/fstream.hpp>
 
 #include<string>
-#include<vector>
-#include<fstream>
-#include<iostream>
-#include<ios>
-#include<utility>
 #include<memory>
+#include<utility>
 
-#include<cstdint>
+#include<cstddef>
 
 namespace seismic {
-        
+    
+    class SegyFileIndexer;
+    
     /**
      * @brief Models a file conforming to SEG Y rev 1 format
      * 
@@ -183,72 +181,66 @@ namespace seismic {
         /// Trace data (just the old stream of bytes)
         using trace_data_type = std::vector<char>;
         /// Trace header plus corresponding trace data
-        using trace_type = std::pair< TraceHeaderInterface::smart_reference_type, trace_data_type >;
+        using trace_type = std::pair< TraceHeader::smart_reference_type, trace_data_type >;
         
         /**
          * @brief Constructor of a SegyFile
          * 
          * @param[in] filename name of the SEG Y file to be read/written
          * @param[in] revision_tag type of SEG Y file to be created
-         * @param[in] mode open mode of the file
          * 
          */
-        SegyFile(
-                const char * filename, 
-                const std::string & revision_tag = "Rev0",
-                std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out
-                );
+        SegyFile(const char * filename, const std::string & revision_tag = "Rev0");
 
         /**
          * @brief Returns the textual file header
          * 
          * @return textual file header
          */
-        const TextualFileHeader& getTextualFileHeader() const {
-            return *tfh_;
-        }
+        const TextualFileHeader& getTextualFileHeader() const;
         
         /**
          * @brief Returns the textual file header
          * 
          * @return textual file header
          */
-        TextualFileHeader& getTextualFileHeader() {
-            return const_cast<TextualFileHeader&>( static_cast<const SegyFile&>(*this).getTextualFileHeader() );
-        }
+        TextualFileHeader& getTextualFileHeader();
         
         /**
          * @brief Returns the binary file header
          * 
          * @return binary file header
          */
-        const BinaryFileHeader& getBinaryFileHeader() const {
-            return *bfh_;
-        }
+        const BinaryFileHeader& getBinaryFileHeader() const;
         
         /**
          * @brief Returns the binary file header
          * 
          * @return binary file header
          */
-        BinaryFileHeader& getBinaryFileHeader() {
-            return const_cast<BinaryFileHeader&>( static_cast<const SegyFile&>(*this).getBinaryFileHeader() );
-        }        
+        BinaryFileHeader& getBinaryFileHeader();        
+        
+        /**
+         * @brief Commits in memory modifications to file
+         */
+        void commitModifications();
+        
+        /**
+         * @brief Constructs the index of the SEG Y file for random access
+         */
+        //void constructSegyFileIndex();
         
         /**
          * @brief Returns the number of traces that are currently stored in the SEG Y file
          * 
          * @return number of traces
          */
-//        size_t ntraces() const {
-//            return traceSeekStrides_.size();
-//        }
+        size_t ntraces() const;
         
         /**
          * @brief Reads a trace from file
          * 
-         * Indexes are zero-based. In case of out-of-range a runtime exception 
-         * is thrown.
+         * Indexes are zero-based
          * 
          * @param[in] n index of the trace to be read
          * @return trace header and trace data
@@ -262,23 +254,41 @@ namespace seismic {
          */
         void appendTrace(const trace_type& trace);
         
-    private:
+        /**
+         * @brief Overwrites a trace at position n
+         * 
+         * @param[in] trace trace to be overwritten
+         * @param[in] n index of the trace to be overwritten
+         */
+        void overwriteTrace(const trace_type& trace, const size_t n);
+        
+        /**
+         * @brief Returns the revision tag for the given SEG Y file
+         * 
+         * @return tag for the given SEG Y file
+         */
+        const std::string & tag() const;
+        
+        /**
+         * @brief Returns the path of the SEG Y file
+         * 
+         * @return path of the SEG Y file
+         */
+        const boost::filesystem::path& path() const;
+    private:        
         //////////
         // File related information
         //////////
-        std::fstream fstream_;                
+        boost::filesystem::path filePath_;
+        boost::filesystem::fstream fstream_;                
         std::shared_ptr<TextualFileHeader> tfh_;
         std::shared_ptr<BinaryFileHeader> bfh_;
+        const std::string tag_;
         //////////
-        // Bookkeeping variables to permit random access to traces
+        // Indexer
         //////////
-        size_t              sizeOfDataSample_;
-        std::vector<size_t> traceSeekStrides_;
-        //////////
-        // Extended textual file headers
-        //////////
-        int16_t nextendedTextualFileHeader_;
-        
+        std::shared_ptr<SegyFileIndexer> indexer_;
+
         //////////
         // Private helper functions
         //////////
