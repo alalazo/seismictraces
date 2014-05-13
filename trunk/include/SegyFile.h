@@ -45,6 +45,7 @@
 namespace seismic {
     
     class SegyFileIndexer;
+    class SegyFileLazyWriter;
     
     /**
      * @brief Models a file conforming to SEG Y rev 1 format
@@ -178,8 +179,6 @@ namespace seismic {
      */
     class SegyFile {
     public:
-        /// Trace data (just the old stream of bytes)
-        using trace_data_type = std::vector<char>;
         /// Trace header plus corresponding trace data
         using trace_type = std::pair< TraceHeader::smart_reference_type, trace_data_type >;
         
@@ -224,12 +223,7 @@ namespace seismic {
          * @brief Commits in memory modifications to file
          */
         void commitModifications();
-        
-        /**
-         * @brief Constructs the index of the SEG Y file for random access
-         */
-        //void constructSegyFileIndex();
-        
+                
         /**
          * @brief Returns the number of traces that are currently stored in the SEG Y file
          * 
@@ -288,11 +282,10 @@ namespace seismic {
         // Indexer
         //////////
         std::shared_ptr<SegyFileIndexer> indexer_;
-
         //////////
-        // Private helper functions
+        // Lazy writer
         //////////
-        
+        std::shared_ptr<SegyFileLazyWriter> writer_;
         /**
          * @brief Read a single trace header from the current position 
          * of the file stream

@@ -28,6 +28,8 @@
 
 #include<impl/ObjectFactory-inl.h>
 
+#include<boost/filesystem/fstream.hpp>
+
 #include<array>
 #include<memory>
 
@@ -144,10 +146,35 @@ namespace seismic {
     private:
         std::array<char,size> buffer_;
     };
- 
+     
     template<int size>
     GenericByteStream<size> * GenericByteStream<size>::create(std::string ID) {            
             return GenericByteStream<size>::factory_type::getFactory()->create(ID);
+    }
+ 
+    /**
+     * @brief Read a byte stream from a file stream
+     * 
+     * @param[in] fileStream file stream
+     * @param[in,out] byte_stream binary file header
+     */
+    template<int size>
+    inline void read(boost::filesystem::fstream& fileStream, std::shared_ptr< GenericByteStream<size> > byte_stream) {
+        // Read byte stream
+        fileStream.read(byte_stream->get(), GenericByteStream<size>::buffer_size);
+#ifdef LITTLE_ENDIAN
+        // If the system is little endian, bytes must be swapped            
+        byte_stream->invertByteOrder();
+#endif  
+    }
+    template<int size>
+    inline void write(boost::filesystem::fstream& fileStream, std::shared_ptr< GenericByteStream<size> > byte_stream) {
+#ifdef LITTLE_ENDIAN
+        // If the system is little endian, bytes must be swapped            
+        byte_stream->invertByteOrder();
+#endif  
+        // Write byte stream
+        fileStream.write(byte_stream->get(), GenericByteStream<size>::buffer_size);
     }
     
     /**
@@ -241,6 +268,16 @@ namespace seismic {
         void checkConsistencyOrThrow() const {
             ptr_->checkConsistencyOrThrow();
         }
+       
+        friend inline 
+        void read(boost::filesystem::fstream& fileStream, GenericByteStreamSmartReference byte_stream) {
+            read(fileStream,byte_stream.ptr_);
+        }
+        
+        friend inline 
+        void write(boost::filesystem::fstream& fileStream, GenericByteStreamSmartReference byte_stream) {
+            write(fileStream,byte_stream.ptr_);
+        }
         
     private:
         std::shared_ptr< GenericByteStream<size> > ptr_;        
@@ -259,7 +296,7 @@ namespace seismic {
     inline std::ostream& operator<<(std::ostream& cout, const GenericByteStreamSmartReference< size > & bstream) {
         bstream.print( cout );
         return cout;
-    }
+    }    
 }
 
 #endif	/* GENERICBYTESTREAM_INL_H */

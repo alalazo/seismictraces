@@ -24,8 +24,9 @@
 #include<impl/rev0/SegyFile-BinaryFileHeader-Rev0.h>
 #include<impl/utilities-inl.h>
 
-/// @todo REMOVE THIS INCLUDE
+/// @todo REMOVE THESE INCLUDES
 #include<impl/indexer/InMemoryIndexer.h>
+#include<impl/SegyFileLazyWriter.h>
 
 using namespace std;
 using namespace boost::filesystem;
@@ -53,14 +54,15 @@ namespace seismic {
         // Read Textual file header (3200 bytes)
         fstream_.read(tfh_->get(), TextualFileHeader::line_length * TextualFileHeader::nlines);
         // Read Binary file header  (400 bytes)
-        fstream_.read(bfh_->get(), BinaryFileHeader::buffer_size);
-#ifdef LITTLE_ENDIAN
-        // If the system is little endian, bytes must be swapped            
-        bfh_->invertByteOrder();
-#endif                
+        read(fstream_,bfh_);
+        //////////
+        
+        //////////
+        // Create index to have random access later
         /// @todo TO BE CHANGED
         indexer_.reset(new InMemoryIndexer(*this, fstream_));
         indexer_->createIndex();
+        //////////
     }
 
     TextualFileHeader& SegyFile::getTextualFileHeader() {
@@ -96,23 +98,25 @@ namespace seismic {
         // Read trace header
         auto fposition = indexer_->position(n);
         fstream_.seekg( fposition );
-        fstream_.read(th.get(), TraceHeader::buffer_size);
-#ifdef LITTLE_ENDIAN
-        // If the system is little endian, bytes must be swapped
-        th.invertByteOrder();
-#endif    
+        read(fstream_,th);
         // Read trace data
         size_t sizeOfDataSample = constants::sizeOfDataSample(getBinaryFileHeader()[rev0::bfh::formatCode]);
         auto nSamples = indexer_->nsamples(n);
-        trace_data_type td(nSamples * sizeOfDataSample);
-        fstream_.read(td.data(), nSamples * sizeOfDataSample);
-#ifdef LITTLE_ENDIAN
-        // If the system is little endian, bytes must be swapped
-        for (size_t ii = 0; ii < nSamples; ii++) {
-            invertByteOrder(&td[ii * sizeOfDataSample], sizeOfDataSample);
-        }
-#endif  
+        trace_data_type td;
+        read(fstream_,td,nSamples,sizeOfDataSample);
         return make_pair(th, td);
+    }
+
+    void SegyFile::overwriteTrace(const trace_type& trace, const size_t n) {        
+        
+    }
+
+    void SegyFile::appendTrace(const trace_type& trace) {
+
+    }
+
+    void SegyFile::commitModifications() {
+
     }
 
     /*
@@ -130,14 +134,6 @@ namespace seismic {
     // Private functions
     ////////////////////
     /*
-        void SegyFile::readTraceHeader(TraceHeader& th) {
-            fstream_.read( th.get(), TraceHeader::buffer_size );
-    #ifdef LITTLE_ENDIAN
-            // If the system is little endian, bytes must be swapped
-            invertFieldsByteOrder(th);
-    #endif    
-        }
-
         void SegyFile::readTraceData(const TraceHeader& th, trace_data_type& td) {
             // Retrieve the raw data
             const size_t nsamples = th[TraceHeader::nsamplesTrace];
