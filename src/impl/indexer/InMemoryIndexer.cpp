@@ -72,8 +72,7 @@ namespace seismic {
                 estream << " to contain " << (traceStrides_.size() + 1) << "traces" << endl;
                 throw runtime_error(estream.str());
             }
-            // Push back value into the vector used as buffer 
-            
+            // Push back value into the vector used as buffer             
         }
 
     }

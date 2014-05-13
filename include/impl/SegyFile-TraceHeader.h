@@ -27,6 +27,9 @@
 #define	SEGYFILE_TRACEHEADERINTERFACE_H
 
 #include<impl/GenericByteStream-inl.h>
+#include<impl/utilities-inl.h>
+
+#include<vector>
 
 namespace seismic {
     
@@ -38,6 +41,19 @@ namespace seismic {
     template<class StdTag>
     class ConcreteTraceHeader;
         
+    /// Trace data (just the old stream of bytes)
+    using trace_data_type = std::vector<char>;
+        
+    inline void read(boost::filesystem::fstream& fileStream, trace_data_type& td, size_t nSamples, size_t sizeOfDataSample) {
+        td.resize(nSamples * sizeOfDataSample);
+        fileStream.read(td.data(), nSamples * sizeOfDataSample);
+#ifdef LITTLE_ENDIAN
+        // If the system is little endian, bytes must be swapped
+        for (size_t ii = 0; ii < nSamples; ii++) {
+            invertByteOrder(&td[ii * sizeOfDataSample], sizeOfDataSample);
+        }
+#endif  
+    }
 }
 
 #endif	/* SEGYFILE_TRACEHEADERINTERFACE_H */

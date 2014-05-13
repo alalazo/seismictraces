@@ -18,8 +18,6 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with SeismicTraces.  If not, see <http://www.gnu.org/licenses/>.
  */
-/// @todo TO BE REMOVED AS SOON AS A FACTORY IS READY
-#include<impl/rev1/SegyFile-BinaryFileHeader-Rev1.h>
 
 #include<SegyFile.h>
 #include<example_macro.h>
@@ -76,7 +74,7 @@ int main() {
 //    otfh[1] = "EXAMPLE06";
 //    
 //    obfh[BinaryFileHeader::fixedLengthTraceFlag] = 0;
-//    SegyFile segyOutputFile( DATA_FOLDER "/C3NAflat.copy.segy",otfh,obfh, ios_base::out );
+//    SegyFile segyOutputFile( DATA_FOLDER "/dummy.segy","Rev1" );
 //    
 //    for(size_t ii = 0; ii < segyFile.ntraces(); ++ii) {
 //        segyConverter( seismicTraces[ii], segyTraces[ii] );
