@@ -39,11 +39,13 @@ namespace seismic {
         //////////
         // If the file does not exist create it
         // and add enough space for TFH and BFH
+        bool create_index = true;
         if (!exists(filePath_)) {
             create_directories(filePath_.parent_path());
             boost::filesystem::fstream tmp(filePath_, ios::binary | ios::out);
             tmp.close();
             resize_file(filePath_, BinaryFileHeader::buffer_size + TextualFileHeader::line_length * TextualFileHeader::nlines);
+            create_index = false;
         }
         //////////
 
@@ -54,17 +56,24 @@ namespace seismic {
         // Read Textual file header (3200 bytes)
         fstream_.read(tfh_->get(), TextualFileHeader::line_length * TextualFileHeader::nlines);
         // Read Binary file header  (400 bytes)
-        read(fstream_,bfh_);
+        read(fstream_,bfh_);        
         //////////
         
         //////////
         // Create index to have random access later
         /// @todo TO BE CHANGED
         indexer_.reset(new InMemoryIndexer(*this, fstream_));
-        indexer_->createIndex();
+        if( create_index ) indexer_->createIndex();
         //////////
     }
 
+    void SegyFile::commitFileHeaderModifications() {
+        fstream_.seekp( ios::beg );
+        fstream_.write( tfh_->get(), TextualFileHeader::line_length * TextualFileHeader::nlines );
+        write( fstream_, bfh_ );
+    }
+
+    
     TextualFileHeader& SegyFile::getTextualFileHeader() {
         return const_cast<TextualFileHeader&> (static_cast<const SegyFile&> (*this).getTextualFileHeader());
     }
@@ -108,14 +117,14 @@ namespace seismic {
     }
 
     void SegyFile::overwriteTrace(const trace_type& trace, const size_t n) {        
-        
+        writer_->addToOverwriteQueue(trace,n);
     }
 
     void SegyFile::appendTrace(const trace_type& trace) {
 
     }
 
-    void SegyFile::commitModifications() {
+    void SegyFile::commitTraceModifications() {
 
     }
 

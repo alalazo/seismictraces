@@ -30,6 +30,12 @@
 
 #include<boost/filesystem/fstream.hpp>
 
+#include<map>
+#include<sstream>
+#include<vector>
+
+#include "rev0/SegyFile-Fields-Rev0.h"
+
 namespace seismic {
     
     class SegyFileIndexer;
@@ -53,14 +59,20 @@ namespace seismic {
          * @param[in] trace trace to be written
          * @param[in] n id of the trace
          */
-        void addToOverwriteQueue(SegyFile::trace_type& trace, size_t n);
+        void addToOverwriteQueue(const SegyFile::trace_type& trace, size_t n) {
+            overwite_map_[n] = trace;
+        }
         
-        /**
+/**
          * @brief Add a trace to the append queue
          * 
          * @param[in] trace trace to be appended
          */
-        void addToAppendQueue(SegyFile::trace_type& trace);
+        void addToAppendQueue(SegyFile::trace_type& trace) {
+            std::stringstream byte_stream;
+            write(byte_stream,trace.first);
+            //write(byte_stream,trace.second,trace.first[rev0::th::nsamplesTrace],sizeOfDataSample_);
+        }
         
         /**
          * @brief Commit changes to file and update index
@@ -70,6 +82,9 @@ namespace seismic {
     private:
         SegyFileIndexer& indexer_;
         boost::filesystem::fstream& fileStream_;
+        
+        std::map<size_t, SegyFile::trace_type> overwite_map_;
+        std::vector<char> append_vector_;
     };
     
 }

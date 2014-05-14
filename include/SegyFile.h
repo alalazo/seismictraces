@@ -183,14 +183,14 @@ namespace seismic {
         using trace_type = std::pair< TraceHeader::smart_reference_type, trace_data_type >;
         
         /**
-         * @brief Constructor of a SegyFile
+         * @brief Opens an existing SEG Y file in r/w mode
          * 
          * @param[in] filename name of the SEG Y file to be read/written
          * @param[in] revision_tag type of SEG Y file to be created
          * 
          */
         SegyFile(const char * filename, const std::string & revision_tag = "Rev0");
-
+        
         /**
          * @brief Returns the textual file header
          * 
@@ -220,9 +220,14 @@ namespace seismic {
         BinaryFileHeader& getBinaryFileHeader();        
         
         /**
-         * @brief Commits in memory modifications to file
+         * @brief Commits in memory modifications to file headers
          */
-        void commitModifications();
+        void commitFileHeaderModifications(); 
+        
+        /**
+         * @brief Commits in memory modifications to the list of traces
+         */
+        void commitTraceModifications();
                 
         /**
          * @brief Returns the number of traces that are currently stored in the SEG Y file
