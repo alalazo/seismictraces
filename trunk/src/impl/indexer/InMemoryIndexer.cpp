@@ -46,6 +46,19 @@ namespace seismic {
         auto segyFileSize = file_size(segyFile_.path());
         size_t sizeOfDataSample_ = constants::sizeOfDataSample(segyFile_.getBinaryFileHeader()[rev1::bfh::formatCode]);
         while (true) {
+            // Check for end of file
+            if (segyFileSize == static_cast<size_t> (position)) {
+                // If the end of the file has been reached, then stop reading
+                break;
+            } else if (segyFileSize < static_cast<size_t> (position)) {
+                // If the end of the file has been exceeded, the file is truncated
+                stringstream estream;
+                estream << "FATAL ERROR: " << segyFile_.path() << " is truncated after trace number " << traceStrides_.size() << endl << endl;
+                estream << "The total size of the file is " << segyFileSize << " while it should be " << position;
+                estream << " to contain " << (traceStrides_.size() + 1) << "traces" << endl;
+                throw runtime_error(estream.str());
+            }
+            // Push back value into the vector used as buffer
             traceStrides_.push_back(position);            
             // Move to the start of the next trace header and read it
             fileStream_.seekg(position);
@@ -59,20 +72,7 @@ namespace seismic {
             size_t nsamples = th[rev0::th::nsamplesTrace];
             traceNsamples_.push_back(nsamples);
             // Update the current stride in the file
-            position += TraceHeader::buffer_size + sizeOfDataSample_ * nsamples;
-            // Check for end of file
-            if (segyFileSize == static_cast<size_t> (position)) {
-                // If the end of the file has been reached, then stop reading
-                break;
-            } else if (segyFileSize < static_cast<size_t> (position)) {
-                // If the end of the file has been exceeded, the file is truncated
-                stringstream estream;
-                estream << "FATAL ERROR: " << segyFile_.path() << " is truncated after trace number " << traceStrides_.size() << endl << endl;
-                estream << "The total size of the file is " << segyFileSize << " while it should be " << position;
-                estream << " to contain " << (traceStrides_.size() + 1) << "traces" << endl;
-                throw runtime_error(estream.str());
-            }
-            // Push back value into the vector used as buffer             
+            position += TraceHeader::buffer_size + sizeOfDataSample_ * nsamples;            
         }
 
     }

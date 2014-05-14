@@ -74,13 +74,15 @@ int main() {
 //    otfh[1] = "EXAMPLE06";
 //    
 //    obfh[BinaryFileHeader::fixedLengthTraceFlag] = 0;
-//    SegyFile segyOutputFile( DATA_FOLDER "/dummy.segy","Rev1" );
+    SegyFile segyOutputFile( DATA_FOLDER "/dummy.segy","Rev1" );
 //    
 //    for(size_t ii = 0; ii < segyFile.ntraces(); ++ii) {
 //        segyConverter( seismicTraces[ii], segyTraces[ii] );
 //        segyOutputFile.append( segyTraces[ii] );
 //    }
-//
+    segyOutputFile.getBinaryFileHeader() = segyFile.getBinaryFileHeader();
+    segyOutputFile.commitFileHeaderModifications();
+    //remove( DATA_FOLDER "/dummy.segy" );
     return 0;
 }
 

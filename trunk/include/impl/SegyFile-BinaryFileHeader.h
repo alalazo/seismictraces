@@ -44,23 +44,7 @@ namespace seismic {
      * @brief Master template to be specialized for different standards
      */
     template< class StdTag>
-    class ConcreteBinaryFileHeader;
-
-//    /**
-//     * @brief Read a binary file header from a file stream
-//     * 
-//     * @param[in] fileStream file stream
-//     * @param[in,out] bfh binary file header
-//     */
-//    inline void read(boost::filesystem::fstream& fileStream, std::shared_ptr<BinaryFileHeader> bfh) {
-//        // Read Binary file header  (400 bytes)
-//        fileStream.read(bfh->get(), BinaryFileHeader::buffer_size);
-//#ifdef LITTLE_ENDIAN
-//        // If the system is little endian, bytes must be swapped            
-//        bfh->invertByteOrder();
-//#endif  
-//    }
-    
+    class ConcreteBinaryFileHeader;    
 }
 
 #endif	/* SEGYFILE_BINARYFILEHEADER_H */

@@ -28,9 +28,8 @@
 
 #include<impl/ObjectFactory-inl.h>
 
-#include<boost/filesystem/fstream.hpp>
-
 #include<array>
+#include<iostream>
 #include<memory>
 
 namespace seismic {
@@ -159,22 +158,27 @@ namespace seismic {
      * @param[in,out] byte_stream binary file header
      */
     template<int size>
-    inline void read(boost::filesystem::fstream& fileStream, std::shared_ptr< GenericByteStream<size> > byte_stream) {
+    inline void read(std::istream& inputStream, std::shared_ptr< GenericByteStream<size> > byteStream) {
         // Read byte stream
-        fileStream.read(byte_stream->get(), GenericByteStream<size>::buffer_size);
+        inputStream.read(byteStream->get(), GenericByteStream<size>::buffer_size);
 #ifdef LITTLE_ENDIAN
         // If the system is little endian, bytes must be swapped            
-        byte_stream->invertByteOrder();
+        byteStream->invertByteOrder();
 #endif  
     }
+    
     template<int size>
-    inline void write(boost::filesystem::fstream& fileStream, std::shared_ptr< GenericByteStream<size> > byte_stream) {
+    inline void write(std::ostream& outputStream, std::shared_ptr< GenericByteStream<size> > byteStream) {
 #ifdef LITTLE_ENDIAN
         // If the system is little endian, bytes must be swapped            
-        byte_stream->invertByteOrder();
+        byteStream->invertByteOrder();
 #endif  
         // Write byte stream
-        fileStream.write(byte_stream->get(), GenericByteStream<size>::buffer_size);
+        outputStream.write(byteStream->get(), GenericByteStream<size>::buffer_size);
+#ifdef LITTLE_ENDIAN
+        // Return to the original order in memory          
+        byteStream->invertByteOrder();
+#endif  
     }
     
     /**
@@ -198,6 +202,8 @@ namespace seismic {
     template<int size>
     class GenericByteStreamSmartReference {
     public:
+        GenericByteStreamSmartReference(){}
+        
         GenericByteStreamSmartReference( GenericByteStream<size>* bfh ) : ptr_(bfh) {}
         
         /**
@@ -270,13 +276,13 @@ namespace seismic {
         }
        
         friend inline 
-        void read(boost::filesystem::fstream& fileStream, GenericByteStreamSmartReference byte_stream) {
-            read(fileStream,byte_stream.ptr_);
+        void read(std::istream& inputStream, GenericByteStreamSmartReference byteStream) {
+            read(inputStream,byteStream.ptr_);
         }
         
         friend inline 
-        void write(boost::filesystem::fstream& fileStream, GenericByteStreamSmartReference byte_stream) {
-            write(fileStream,byte_stream.ptr_);
+        void write(std::ostream& outputStream, GenericByteStreamSmartReference byteStream) {
+            write(outputStream,byteStream.ptr_);
         }
         
     private:
