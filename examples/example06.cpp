@@ -36,7 +36,6 @@ int main() {
     //
     SegyFile segyFile( DATA_FOLDER "/l10f1.sgy" , "Rev1");
     
-    //cout << segyFile.getTextualFileHeader() << endl;
     cout << segyFile.getBinaryFileHeader() << endl;
         
     //
@@ -51,38 +50,25 @@ int main() {
             cout << segyTraces[ii].first << endl;
         }
     }
-    
+
+    //
+    // Copying a SEG Y file
+    //
+    SegyFile segyOutputFile( DATA_FOLDER "/dummy.segy","Rev1" );
+
+    segyOutputFile.getTextualFileHeader() = segyFile.getTextualFileHeader();
+    segyOutputFile.getBinaryFileHeader()  = segyFile.getBinaryFileHeader();
+    segyOutputFile.commitFileHeaderModifications(); // Write to file
+    for(size_t ii = 0; ii < segyFile.ntraces(); ++ii) {      
+        // Each trace may be manipulated here
+        segyOutputFile.appendTrace( segyFile.readTrace(ii) );        
+    }
+    segyOutputFile.commitTraceModifications(); // Write to file 
+        
     //
     // Modify a couple of traces
     //
     
-    //size_t traceIdx = 5;
-    //ViewTraceDataAs<float> trace( segyTraces[traceIdx].second );
-//    
-//    traceIdx = 10;
-//    for( size_t ii = 0; ii < 10; ++ii) {    
-//        seismicTraces[traceIdx].push_back(ii);
-//    }
-    
-    //
-    // Write to a new SEG Y file
-    //
-//    
-//    TextualFileHeader otfh;
-//    BinaryFileHeaderInterface  obfh(bfh);
-//    
-//    otfh[1] = "EXAMPLE06";
-//    
-//    obfh[BinaryFileHeader::fixedLengthTraceFlag] = 0;
-    SegyFile segyOutputFile( DATA_FOLDER "/dummy.segy","Rev1" );
-//    
-//    for(size_t ii = 0; ii < segyFile.ntraces(); ++ii) {
-//        segyConverter( seismicTraces[ii], segyTraces[ii] );
-//        segyOutputFile.append( segyTraces[ii] );
-//    }
-    segyOutputFile.getBinaryFileHeader() = segyFile.getBinaryFileHeader();
-    segyOutputFile.commitFileHeaderModifications();
-    //remove( DATA_FOLDER "/dummy.segy" );
     return 0;
 }
 

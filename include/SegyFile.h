@@ -274,6 +274,9 @@ namespace seismic {
          * @return path of the SEG Y file
          */
         const boost::filesystem::path& path() const;
+        
+        ~SegyFile();
+
     private:        
         //////////
         // File related information
@@ -291,22 +294,6 @@ namespace seismic {
         // Lazy writer
         //////////
         std::shared_ptr<SegyFileLazyWriter> writer_;
-        /**
-         * @brief Read a single trace header from the current position 
-         * of the file stream
-         * 
-         * @param[out] th trace header
-         */
-        //void readTraceHeader(TraceHeaderInterface::smart_reference_type& th);        
-        
-        /**
-         * @brief Read trace data from the current position 
-         * of the file stream
-         * 
-         * @param[in]  th trace header
-         * @param[out] td trace data
-         */
-        //void readTraceData(const TraceHeader& th, trace_data_type& td);
         
         /**
          * @brief Write a single trace header to the current position 
