@@ -2,6 +2,7 @@ SET(
   SeismicTraces_sources
   SegyFile.cpp
   impl/SegyFile-TextualFileHeader.cpp
+  impl/SegyFileLazyWriter.cpp
   impl/indexer/InMemoryIndexer.cpp
   impl/rev0/SegyFile-BinaryFileHeader-Rev0.cpp
   impl/rev0/SegyFile-Fields-Rev0.cpp

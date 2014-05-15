@@ -44,7 +44,6 @@ namespace seismic {
         TraceHeader::smart_reference_type th(TraceHeader::create(segyFile_.tag()));
 
         auto segyFileSize = file_size(segyFile_.path());
-        size_t sizeOfDataSample_ = constants::sizeOfDataSample(segyFile_.getBinaryFileHeader()[rev1::bfh::formatCode]);
         while (true) {
             // Check for end of file
             if (segyFileSize == static_cast<size_t> (position)) {
@@ -58,6 +57,7 @@ namespace seismic {
                 estream << " to contain " << (traceStrides_.size() + 1) << "traces" << endl;
                 throw runtime_error(estream.str());
             }
+            size_t sizeOfDataSample_ = constants::sizeOfDataSample(segyFile_.getBinaryFileHeader()[rev1::bfh::formatCode]);        
             // Push back value into the vector used as buffer
             traceStrides_.push_back(position);            
             // Move to the start of the next trace header and read it

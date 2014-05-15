@@ -59,25 +59,19 @@ namespace seismic {
          * @param[in] trace trace to be written
          * @param[in] n id of the trace
          */
-        void addToOverwriteQueue(const SegyFile::trace_type& trace, size_t n) {
-            overwite_map_[n] = trace;
-        }
+        void addToOverwriteQueue(const SegyFile::trace_type& trace, size_t n);
         
-/**
+        /**
          * @brief Add a trace to the append queue
          * 
          * @param[in] trace trace to be appended
          */
-        void addToAppendQueue(SegyFile::trace_type& trace) {
-            std::stringstream byte_stream;
-            write(byte_stream,trace.first);
-            //write(byte_stream,trace.second,trace.first[rev0::th::nsamplesTrace],sizeOfDataSample_);
-        }
+        void addToAppendQueue(const SegyFile::trace_type& trace, size_t sizeOfDataSample);
         
         /**
          * @brief Commit changes to file and update index
          */
-        void commit() const;
+        void commit();
     
     private:
         SegyFileIndexer& indexer_;
