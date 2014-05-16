@@ -71,14 +71,14 @@ namespace seismic {
         /**
          * @brief Commit changes to file and update index
          */
-        void commit();
+        void commit(size_t sizeOfDataSample);
     
     private:
         SegyFileIndexer& indexer_;
         boost::filesystem::fstream& fileStream_;
         
-        std::map<size_t, SegyFile::trace_type> overwite_map_;
-        std::vector<char> append_vector_;
+        std::map<size_t, SegyFile::trace_type> overwriteMap_;
+        std::vector<char> appendVector_;
     };
     
 }

@@ -128,11 +128,11 @@ namespace seismic {
     }
     
     void SegyFile::commitTraceModifications() {
-        writer_->commit();
+        writer_->commit( constants::sizeOfDataSample((*bfh_)[rev0::bfh::formatCode]) );
     }
 
     SegyFile::~SegyFile() {     
-        writer_->commit();
+        writer_->commit( constants::sizeOfDataSample((*bfh_)[rev0::bfh::formatCode]) );
     }
     
     ////////////////////

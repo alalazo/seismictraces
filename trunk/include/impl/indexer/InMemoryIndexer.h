@@ -50,10 +50,13 @@ namespace seismic {
         size_t size() const override;
 
     private:
+        void scanFileAndUpdateIndexFromCurrentPosition();
+        
         SegyFile& segyFile_;
         boost::filesystem::fstream& fileStream_;
         std::vector<boost::filesystem::fstream::pos_type> traceStrides_;
         std::vector<size_t> traceNsamples_;
+        boost::filesystem::fstream::pos_type previousEndOfFile_;
     };
 
 }
