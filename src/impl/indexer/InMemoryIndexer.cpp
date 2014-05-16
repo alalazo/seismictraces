@@ -36,13 +36,40 @@ using namespace boost::filesystem;
 namespace seismic {
 
     InMemoryIndexer::InMemoryIndexer(SegyFile& segyFile, boost::filesystem::fstream& fileStream)
-    : SegyFileIndexer(segyFile, fileStream), segyFile_(segyFile), fileStream_(fileStream) {
+    : SegyFileIndexer(segyFile, fileStream), segyFile_(segyFile), fileStream_(fileStream)
+    , previousEndOfFile_(0) {
     }
 
     void InMemoryIndexer::createIndex() {
-        boost::filesystem::fstream::pos_type position(3600); /// @todo CHANGE HERE                
-        TraceHeader::smart_reference_type th(TraceHeader::create(segyFile_.tag()));
+        //boost::filesystem::fstream::pos_type position(3600); /// @todo CHANGE HERE
+        fileStream_.seekg(3600);
+        scanFileAndUpdateIndexFromCurrentPosition();
+    }
 
+    size_t InMemoryIndexer::nsamples(const size_t n) const {
+        return traceNsamples_[n];
+    }
+
+    size_t InMemoryIndexer::size() const {
+        return traceStrides_.size();
+    }
+
+    boost::filesystem::fstream::pos_type InMemoryIndexer::position(const size_t n) const {
+        return traceStrides_.at(n);
+    }
+
+    void InMemoryIndexer::updateIndex() {
+        fileStream_.seekg( previousEndOfFile_ );
+        scanFileAndUpdateIndexFromCurrentPosition();
+    }
+
+    /////////////////////
+    // PRIVATE METHODS //
+    /////////////////////
+
+    void InMemoryIndexer::scanFileAndUpdateIndexFromCurrentPosition() {
+        boost::filesystem::fstream::pos_type position = fileStream_.tellg();
+        TraceHeader::smart_reference_type th(TraceHeader::create(segyFile_.tag()));
         auto segyFileSize = file_size(segyFile_.path());
         while (true) {
             // Check for end of file
@@ -57,9 +84,9 @@ namespace seismic {
                 estream << " to contain " << (traceStrides_.size() + 1) << "traces" << endl;
                 throw runtime_error(estream.str());
             }
-            size_t sizeOfDataSample_ = constants::sizeOfDataSample(segyFile_.getBinaryFileHeader()[rev1::bfh::formatCode]);        
+            size_t sizeOfDataSample_ = constants::sizeOfDataSample(segyFile_.getBinaryFileHeader()[rev1::bfh::formatCode]);
             // Push back value into the vector used as buffer
-            traceStrides_.push_back(position);            
+            traceStrides_.push_back(position);
             // Move to the start of the next trace header and read it
             fileStream_.seekg(position);
             // Read trace header
@@ -72,26 +99,11 @@ namespace seismic {
             size_t nsamples = th[rev0::th::nsamplesTrace];
             traceNsamples_.push_back(nsamples);
             // Update the current stride in the file
-            position += TraceHeader::buffer_size + sizeOfDataSample_ * nsamples;            
+            position += TraceHeader::buffer_size + sizeOfDataSample_ * nsamples;
         }
-
-    }
-    
-    size_t InMemoryIndexer::nsamples(const size_t n) const {
-        return traceNsamples_[n];        
-    }
-
-    
-    size_t InMemoryIndexer::size() const {
-        return traceStrides_.size();
-    }
-
-    boost::filesystem::fstream::pos_type InMemoryIndexer::position(const size_t n) const {
-        return traceStrides_.at(n);
-    }
-
-    void InMemoryIndexer::updateIndex() {
-
+        // Register last position in the file
+        fileStream_.seekg(0,ios::end);        
+        previousEndOfFile_ = fileStream_.tellg();
     }
 
 }
