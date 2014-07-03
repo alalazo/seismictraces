@@ -55,21 +55,14 @@ namespace seismic {
 #endif  
     }
     
-    inline void write(std::ostream& outputStream, trace_data_type& td, size_t nSamples, size_t sizeOfDataSample) {
+    inline void write(std::ostream& outputStream, trace_data_type td, size_t nSamples, size_t sizeOfDataSample) {
 #ifdef LITTLE_ENDIAN
         // If the system is little endian, bytes must be swapped
         for (size_t ii = 0; ii < nSamples; ii++) {
             invertByteOrder(&td[ii * sizeOfDataSample], sizeOfDataSample);
         }
 #endif  
-        outputStream.write(td.data(),nSamples*sizeOfDataSample);
-#ifdef LITTLE_ENDIAN
-        // If the system is little endian, bytes must be swapped
-        for (size_t ii = 0; ii < nSamples; ii++) {
-            invertByteOrder(&td[ii * sizeOfDataSample], sizeOfDataSample);
-        }
-#endif  
-        
+        outputStream.write(td.data(),nSamples*sizeOfDataSample);        
     }
     
 }
