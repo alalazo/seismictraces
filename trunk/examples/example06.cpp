@@ -25,7 +25,7 @@
 #include<vector>
 #include<iostream>
 
-#include "impl/rev1/SegyFile-Fields-Rev1.h"
+#include<impl/rev1/SegyFile-Fields-Rev1.h>
 
 using namespace seismic;
 using namespace seismic::constants;

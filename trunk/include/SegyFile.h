@@ -293,23 +293,7 @@ namespace seismic {
         //////////
         // Lazy writer
         //////////
-        std::shared_ptr<SegyFileLazyWriter> writer_;
-        
-        /**
-         * @brief Write a single trace header to the current position 
-         * of the file stream
-         * 
-         * @param[in] th trace header
-         */
-        //void writeTraceHeader(TraceHeader th);        
-        
-        /**
-         * @brief Write trace data to the current position 
-         * of the file stream
-         * 
-         * @param[in] td trace data
-         */
-        //void writeTraceData(trace_data_type td);
+        std::shared_ptr<SegyFileLazyWriter> writer_;                
     };
         
 }

@@ -27,7 +27,6 @@
 /// @todo REMOVE THESE INCLUDES
 #include<impl/indexer/InMemoryIndexer.h>
 #include<impl/SegyFileLazyWriter.h>
-#include <bits/shared_ptr_base.h>
 
 using namespace std;
 using namespace boost::filesystem;
@@ -41,13 +40,11 @@ namespace seismic {
         //////////
         // If the file does not exist create it
         // and add enough space for TFH and BFH
-        //bool create_index = true;
         if (!exists(filePath_)) {
             create_directories(filePath_.parent_path());
             boost::filesystem::fstream tmp(filePath_, ios::binary | ios::out);
             vector<char> buffer(BinaryFileHeader::buffer_size + TextualFileHeader::line_length * TextualFileHeader::nlines,0);
             tmp.write( buffer.data(), buffer.size() );
-            //create_index = false;
         }
         //////////
 
@@ -131,8 +128,8 @@ namespace seismic {
         writer_->commit( constants::sizeOfDataSample((*bfh_)[rev0::bfh::formatCode]) );
     }
 
-    SegyFile::~SegyFile() {     
-        writer_->commit( constants::sizeOfDataSample((*bfh_)[rev0::bfh::formatCode]) );
+    SegyFile::~SegyFile() {  
+        commitTraceModifications();
     }
     
     ////////////////////

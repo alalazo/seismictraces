@@ -18,8 +18,6 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with SeismicTraces.  If not, see <http://www.gnu.org/licenses/>.
  */
-/// @todo TO BE REMOVED AS SOON AS A FACTORY IS READY
-#include<impl/rev1/SegyFile-BinaryFileHeader-Rev1.h>
 
 #include<SegyFile.h>
 #include<example_macro.h>
@@ -35,7 +33,7 @@ int main() {
     //
     // Open a SEG Y file in read mode
     //
-    SegyFile segyFile( DATA_FOLDER "/mig_08gars1_6s.sgy", "Rev1");
+    SegyFile segyFile( DATA_FOLDER "/mig_08gars1_6s.sgy", "Rev0");
     
     //
     // Output header information
@@ -46,13 +44,15 @@ int main() {
     // 
     // Read trace number 5 from file
     //
-    //SegyFile::trace_type trace = segyFile.read(5);
+    auto trace = segyFile.readTrace(5);
     
     //
     // Output trace header information
     //
-    //cout << trace.first << endl;
-        
+    cout << trace.first << endl;
+    
+    //auto trace_data_view = view_as<float>( trace );
+    
     //
     // Convert the trace to a more manageable format
     // 
