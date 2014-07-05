@@ -28,7 +28,7 @@
 
 #include<impl/SegyFile-TextualFileHeader.h>
 #include<impl/SegyFile-BinaryFileHeader.h>
-#include<impl/SegyFile-TraceHeader.h>
+#include<impl/SegyFile-Trace.h>
 
 // Enumerations and constants related to SEG Y standard
 #include<impl/SegyFile-constants.h>
@@ -179,8 +179,12 @@ namespace seismic {
      */
     class SegyFile {
     public:
+        template<class T>
+        using trace_template_type = std::pair< TraceHeader::smart_reference_type, std::vector<T> >;
+        
+        
         /// Trace header plus corresponding trace data
-        using trace_type = std::pair< TraceHeader::smart_reference_type, trace_data_type >;
+        using trace_type = trace_template_type<char>;
         
         /**
          * @brief Opens an existing SEG Y file in r/w mode
@@ -245,6 +249,17 @@ namespace seismic {
          * @return trace header and trace data
          */
         trace_type readTrace(const size_t n);
+        
+        /**
+         * @brief Reads a trace from file
+         * 
+         * Indexes are zero-based
+         * 
+         * @param[in] n index of the trace to be read
+         * @return seismic trace (header + data)
+         */
+        template<class T>
+        Trace<T> readTraceAs(const size_t n);
         
         /**
          * @brief Appends a trace to the end of the SEG Y file

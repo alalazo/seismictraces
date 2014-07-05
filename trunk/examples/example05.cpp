@@ -20,6 +20,7 @@
  */
 
 #include<SegyFile.h>
+#include<impl/SegyFile-Trace.h>
 #include<example_macro.h>
 
 #include<iostream>
@@ -50,6 +51,17 @@ int main() {
     // Output trace header information
     //
     cout << trace.first << endl;
+    
+    seismic::Trace<float> strace(trace.first);
+    cout << strace[rev0::th::nsamplesTrace] << endl;
+    strace.push_back(0);
+    cout << strace[rev0::th::nsamplesTrace] << endl;
+    
+    auto tt = segyFile.readTraceAs<float>(5);
+    
+    for( const auto& x : tt) {
+        cout << x << endl;
+    }
     
     //auto trace_data_view = view_as<float>( trace );
     

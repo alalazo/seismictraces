@@ -47,7 +47,7 @@ namespace seismic {
          * @param value stride in a byte stream
          */
         template< class T >
-        Field(T value) : value_(value){}
+        explicit Field(T value) : value_(value){}
         
         /// Stride in a byte-stream
         const long long int value_;
