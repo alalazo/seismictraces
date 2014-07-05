@@ -14,6 +14,7 @@ SET(
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-TextualFileHeader.h
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-BinaryFileHeader.h
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-TraceHeader.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFile-Trace.h
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFileIndexer.h
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/SegyFileLazyWriter.h
 )

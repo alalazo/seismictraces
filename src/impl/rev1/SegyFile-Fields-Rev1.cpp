@@ -25,30 +25,30 @@ namespace seismic {
         // Binary file header
         namespace bfh {
             // Fields that are mapped to int16_t
-            const Int16Field segyFormatRevisionNumber = 300;
-            const Int16Field fixedLengthTraceFlag = 302;
-            const Int16Field nextendedTextualFileHeader = 304;
+            const Int16Field segyFormatRevisionNumber(300);
+            const Int16Field fixedLengthTraceFlag(302);
+            const Int16Field nextendedTextualFileHeader(304);
         }
         // Trace header
         namespace th {
             // Fields that are mapped to int32_t
-            const Int32Field ensembleCoordinateX = 180;
-            const Int32Field ensembleCoordinateY = 184;
-            const Int32Field inlineNumber = 188;
-            const Int32Field crosslineNumber = 192;
-            const Int32Field shotpointNumber = 196;
-            const Int32Field transductionConstantMantissa = 204;
-            const Int32Field sourceMeasurementMantissa = 224;
+            const Int32Field ensembleCoordinateX(180);
+            const Int32Field ensembleCoordinateY(184);
+            const Int32Field inlineNumber(188);
+            const Int32Field crosslineNumber(192);
+            const Int32Field shotpointNumber(196);
+            const Int32Field transductionConstantMantissa(204);
+            const Int32Field sourceMeasurementMantissa(224);
             // Fields that are mapped to int16_t
-            const Int16Field scalarShotpointNumber = 200;
-            const Int16Field traceValueMeasurementUnit = 202;
-            const Int16Field transductionConstantExponent = 208;
-            const Int16Field transductionUnits = 210;
-            const Int16Field traceIdentifier = 212;
-            const Int16Field scalarTime = 214;
-            const Int16Field sourceOrientation = 216;
-            const Int16Field sourceMeasurementExponent = 228;
-            const Int16Field sourceMeasurementUnit = 230;
+            const Int16Field scalarShotpointNumber(200);
+            const Int16Field traceValueMeasurementUnit(202);
+            const Int16Field transductionConstantExponent(208);
+            const Int16Field transductionUnits(210);
+            const Int16Field traceIdentifier(212);
+            const Int16Field scalarTime(214);
+            const Int16Field sourceOrientation(216);
+            const Int16Field sourceMeasurementExponent(228);
+            const Int16Field sourceMeasurementUnit(230);
         }
     }
 }

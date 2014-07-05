@@ -28,6 +28,9 @@
 #include<impl/indexer/InMemoryIndexer.h>
 #include<impl/SegyFileLazyWriter.h>
 
+#include<type_traits>
+#include<typeinfo>
+
 using namespace std;
 using namespace boost::filesystem;
 
@@ -116,6 +119,82 @@ namespace seismic {
         return make_pair(th, td);
     }
 
+    // Define template function
+    template<class T>
+    Trace<T> SegyFile::readTraceAs(const size_t n) {
+        //////////
+        // Check consistency between type and format     
+        auto encoding_format = (*bfh_)[rev0::bfh::formatCode];
+        stringstream estream;            
+        if( encoding_format == constants::SegyFileFormatCode::Fixed32 ) { // Fixed 32 not supported
+            estream << "Data format error : format Fixed32 is deprecated and won't be supported by the library" << endl;
+            estream << "\tSEG-Y file : " << filePath_ << endl;
+        } else if ( // If the format is floating point, but the type is not throw
+                (encoding_format == constants::SegyFileFormatCode::IEEEfloat32 ||
+                 encoding_format == constants::SegyFileFormatCode::IBMfloat32) &&
+                !std::is_same<T,float>::value
+                ) {
+            estream << "Data format error : can't read a floating-point trace as " << typeid(T).name() << endl;
+            estream << "\tSEG-Y file : " << filePath_ << endl;         
+            throw runtime_error(estream.str());
+        } else if (
+                encoding_format == constants::SegyFileFormatCode::Int32 &&
+                !std::is_same<T,int32_t>::value
+                ) {
+            estream << "Data format error : can't read an int32_t trace as " << typeid(T).name() << endl;
+            estream << "\tSEG-Y file : " << filePath_ << endl;         
+            throw runtime_error(estream.str());
+        } else if (
+                encoding_format == constants::SegyFileFormatCode::Int16 &&
+                !std::is_same<T,int16_t>::value
+                ) {
+            estream << "Data format error : can't read an int16_t trace as " << typeid(T).name() << endl;
+            estream << "\tSEG-Y file : " << filePath_ << endl;         
+            throw runtime_error(estream.str());
+        } else if (
+                encoding_format == constants::SegyFileFormatCode::Int8 &&
+                !std::is_same<T,int8_t>::value
+                ) {
+            estream << "Data format error : can't read an int8_t trace as " << typeid(T).name() << endl;
+            estream << "\tSEG-Y file : " << filePath_ << endl;         
+            throw runtime_error(estream.str());
+        }        
+        size_t sizeOfDataSample = constants::sizeOfDataSample((*bfh_)[rev0::bfh::formatCode]);
+        if( sizeOfDataSample != sizeof(T) ) { // Check size consistency
+            estream << "Data format error : unexpected size mismatch " << endl;
+            estream << "\tSEG-Y file : " << filePath_ << endl;                     
+            estream << "\tdata value size : " << sizeOfDataSample << endl;
+            estream << "\t" << typeid(T).name() << " value size : " << sizeof(T) << endl;
+            throw runtime_error(estream.str());
+        }
+        //////////
+        
+        //////////
+        // Read trace (header)
+        TraceHeader::smart_reference_type th(TraceHeader::create(tag_));
+        auto fposition = indexer_->position(n);
+        fstream_.seekg( fposition );
+        read(fstream_,th);        
+        // Read trace (data)
+        Trace<T> trace(th);         
+        trace.resize(indexer_->nsamples(n));        
+        read(fstream_,trace);
+        // Convert IBMfloat32 to IEEE754
+        if( encoding_format == constants::SegyFileFormatCode::IBMfloat32 ) {
+            for( auto & x : trace) {
+                int32_t * pnt = reinterpret_cast<int32_t *>(&x);
+                ibm2ieee(*pnt);
+            }
+        }
+        return trace;
+        //////////
+    }
+    
+    template Trace<float>   SegyFile::readTraceAs<float>  (const size_t n);
+    template Trace<int32_t> SegyFile::readTraceAs<int32_t>(const size_t n);
+    template Trace<int16_t> SegyFile::readTraceAs<int16_t>(const size_t n);
+    template Trace<int8_t>  SegyFile::readTraceAs<int8_t> (const size_t n);
+    
     void SegyFile::overwriteTrace(const trace_type& trace, const size_t n) {        
         writer_->addToOverwriteQueue(trace,n);
     }
