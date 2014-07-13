@@ -32,7 +32,7 @@ namespace seismic {
     : indexer_(indexer), fileStream_(fileStream){
     }
     
-    void SegyFileLazyWriter::addToOverwriteQueue(const SegyFile::trace_type& trace, size_t n) {
+    void SegyFileLazyWriter::addToOverwriteQueue(const SegyFile::raw_trace_type& trace, size_t n) {
         overwriteMap_[n] = trace;
     }
 
@@ -72,7 +72,7 @@ namespace seismic {
         indexer_.updateIndex();
     }
     
-    void SegyFileLazyWriter::addToAppendQueue(const SegyFile::trace_type& trace, size_t sizeOfDataSample) {        
+    void SegyFileLazyWriter::addToAppendQueue(const SegyFile::raw_trace_type& trace, size_t sizeOfDataSample) {        
         using namespace std;
         // Declare a stream of byte
         stringstream byte_stream;

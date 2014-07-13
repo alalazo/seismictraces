@@ -47,9 +47,9 @@ int main() {
         //
         cout << "Number of traces : " << segyFile.ntraces() << endl;
 
-        vector< SegyFile::trace_type > segyTraces;
+        vector< SegyFile::raw_trace_type > segyTraces;
         for (size_t ii = 0; ii < segyFile.ntraces(); ++ii) {
-            segyTraces.push_back(segyFile.readTrace(ii));
+            segyTraces.push_back(segyFile.readRawTrace(ii));
             if (ii % 1000 == 0) {
                 cout << segyTraces[ii].first << endl;
             }
@@ -65,7 +65,7 @@ int main() {
         segyOutputFile.commitFileHeaderModifications(); // Write to file
         for (size_t ii = 0; ii < segyFile.ntraces(); ++ii) {
             // Each trace may be manipulated here
-            segyOutputFile.appendTrace(segyFile.readTrace(ii));
+            segyOutputFile.appendRawTrace(segyFile.readRawTrace(ii));
         }
         segyOutputFile.commitTraceModifications(); // Write to file 
 
@@ -75,17 +75,17 @@ int main() {
         // Modify a couple of traces
         //
 
-        auto trace = segyOutputFile.readTrace(5);
+        auto trace = segyOutputFile.readRawTrace(5);
         trace.first[rev1::th::sourceCoordinateX] = 10;
-        segyOutputFile.overwriteTrace(trace, 5);
+        segyOutputFile.overwriteRawTrace(trace, 5);
 
-        trace = segyOutputFile.readTrace(11);
+        trace = segyOutputFile.readRawTrace(11);
         trace.first[rev1::th::sourceCoordinateY] = 11;
-        segyOutputFile.overwriteTrace(trace, 11);
+        segyOutputFile.overwriteRawTrace(trace, 11);
 
         segyOutputFile.commitTraceModifications(); // Write to file 
 
-        trace = segyOutputFile.readTrace(5);
+        trace = segyOutputFile.readRawTrace(5);
         if (trace.first[rev1::th::sourceCoordinateX] != 10) {
             cout << "Something went wrong" << endl;
         }

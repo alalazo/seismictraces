@@ -45,41 +45,30 @@ int main() {
     // 
     // Read trace number 5 from file
     //
-    auto trace = segyFile.readTrace(5);
+    auto raw_trace = segyFile.readRawTrace(5);
     
     //
     // Output trace header information
     //
-    cout << trace.first << endl;
+    cout << raw_trace.first << endl;
     
-    seismic::Trace<float> strace(trace.first);
-    cout << strace[rev0::th::nsamplesTrace] << endl;
-    strace.push_back(0);
-    cout << strace[rev0::th::nsamplesTrace] << endl;
+    //
+    // Read the trace converting it to a more manageable format
+    //            
+    auto trace = segyFile.readTraceAs<float>(5);
     
-    auto tt = segyFile.readTraceAs<float>(5);
+    //
+    // Output trace header information as before
+    //    
+    cout << trace << endl;    
     
-    for( const auto& x : tt) {
+    //
+    // Data now is in floating point format, and can be handled like an std::vector
+    //
+
+    for( const auto & x : trace ) {
         cout << x << endl;
     }
-    
-    //auto trace_data_view = view_as<float>( trace );
-    
-    //
-    // Convert the trace to a more manageable format
-    // 
-    //SegyConverter segyConverter(segyFile.getBinaryFileHeader());
-    //SeismicTrace  seismicTrace;
-    
-    //segyConverter(trace,seismicTrace);
-    
-    //
-    // Print trace values 
-    //
-//    for(size_t ii = 0; ii < seismicTrace.size(); ii++) {
-//        cout << seismicTrace[ii] << endl;
-//    }
-//    
     return 0;
 }
 

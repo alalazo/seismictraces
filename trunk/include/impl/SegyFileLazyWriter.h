@@ -59,14 +59,14 @@ namespace seismic {
          * @param[in] trace trace to be written
          * @param[in] n id of the trace
          */
-        void addToOverwriteQueue(const SegyFile::trace_type& trace, size_t n);
+        void addToOverwriteQueue(const SegyFile::raw_trace_type& trace, size_t n);
         
         /**
          * @brief Add a trace to the append queue
          * 
          * @param[in] trace trace to be appended
          */
-        void addToAppendQueue(const SegyFile::trace_type& trace, size_t sizeOfDataSample);
+        void addToAppendQueue(const SegyFile::raw_trace_type& trace, size_t sizeOfDataSample);
         
         /**
          * @brief Commit changes to file and update index
@@ -77,7 +77,7 @@ namespace seismic {
         SegyFileIndexer& indexer_;
         boost::filesystem::fstream& fileStream_;
         
-        std::map<size_t, SegyFile::trace_type> overwriteMap_;
+        std::map<size_t, SegyFile::raw_trace_type> overwriteMap_;
         std::vector<char> appendVector_;
     };
     

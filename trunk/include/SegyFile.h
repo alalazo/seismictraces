@@ -179,12 +179,8 @@ namespace seismic {
      */
     class SegyFile {
     public:
-        template<class T>
-        using trace_template_type = std::pair< TraceHeader::smart_reference_type, std::vector<T> >;
-        
-        
         /// Trace header plus corresponding trace data
-        using trace_type = trace_template_type<char>;
+        using raw_trace_type = std::pair< TraceHeader::smart_reference_type, std::vector<char> >; 
         
         /**
          * @brief Opens an existing SEG Y file in r/w mode
@@ -248,7 +244,22 @@ namespace seismic {
          * @param[in] n index of the trace to be read
          * @return trace header and trace data
          */
-        trace_type readTrace(const size_t n);
+        raw_trace_type readRawTrace(const size_t n);
+        
+        /**
+         * @brief Appends a trace to the end of the SEG Y file
+         * 
+         * @param[in] trace trace to be appended
+         */
+        void appendRawTrace(const raw_trace_type& trace);
+        
+        /**
+         * @brief Overwrites a trace at position n
+         * 
+         * @param[in] trace trace to be overwritten
+         * @param[in] n index of the trace to be overwritten
+         */
+        void overwriteRawTrace(const raw_trace_type& trace, const size_t n);
         
         /**
          * @brief Reads a trace from file
@@ -266,7 +277,8 @@ namespace seismic {
          * 
          * @param[in] trace trace to be appended
          */
-        void appendTrace(const trace_type& trace);
+        template<class T>
+        void appendTrace(const Trace<T>& trace);        
         
         /**
          * @brief Overwrites a trace at position n
@@ -274,8 +286,9 @@ namespace seismic {
          * @param[in] trace trace to be overwritten
          * @param[in] n index of the trace to be overwritten
          */
-        void overwriteTrace(const trace_type& trace, const size_t n);
-        
+        template<class T>
+        void overwriteTrace(const Trace<T>& trace, const size_t n);
+                
         /**
          * @brief Returns the revision tag for the given SEG Y file
          * 
@@ -292,7 +305,17 @@ namespace seismic {
         
         ~SegyFile();
 
-    private:        
+    private:
+        //////////
+        // Helper methods
+        //////////
+        
+        template<class T>
+        void checkConsistencyWithType();
+        
+        template<class T>
+        raw_trace_type convertToRawType(const Trace<T>& trace);
+        
         //////////
         // File related information
         //////////
