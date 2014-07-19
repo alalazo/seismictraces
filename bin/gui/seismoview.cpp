@@ -24,18 +24,18 @@
  * @brief GUI application built on top of the SeismicTraces library
  */
 
+#include <mainwindow.h>
+
 #include <QApplication>
-#include <QLabel>
 
 int main(int argc, char *argv[]) {
     // initialize resources, if needed
     // Q_INIT_RESOURCE(resfile);
 
     QApplication app(argc, argv);
-
     // create and show your widgets here
-    QLabel *label = new QLabel("Hello Qt!"); 
-    label->show();
-    
+    MainWindow w;
+    w.show();
+
     return app.exec();
 }
