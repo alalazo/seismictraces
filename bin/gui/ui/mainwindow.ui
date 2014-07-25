@@ -24,9 +24,16 @@
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <widget class="QListWidget" name="listWidget"/>
+       <widget class="QListWidget" name="segyFileList">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+       </widget>
        <widget class="QWidget" name="widget" native="true"/>
-       <widget class="QTextBrowser" name="textBrowser"/>
+       <widget class="QTextBrowser" name="textualFileHeaderBrowser"/>
       </widget>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
@@ -36,8 +43,6 @@
         <attribute name="title">
          <string>Tab 1</string>
         </attribute>
-        <zorder>textBrowser</zorder>
-        <zorder>listWidget</zorder>
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
@@ -73,13 +78,24 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuAnalysis">
+    <property name="title">
+     <string>Analysis</string>
+    </property>
+    <addaction name="actionAmplitude_colormap"/>
+    <addaction name="actionTrace_inspection"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menuAnalysis"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionSave">
@@ -100,6 +116,16 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionAmplitude_colormap">
+   <property name="text">
+    <string>SEG-Y Colormap</string>
+   </property>
+  </action>
+  <action name="actionTrace_inspection">
+   <property name="text">
+    <string>Trace inspection</string>
    </property>
   </action>
  </widget>
