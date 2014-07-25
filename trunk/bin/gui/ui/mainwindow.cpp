@@ -23,31 +23,48 @@
 #include "ui_mainwindow.h"
 #include "about.h"
 
+#include <SegyFile.h>
+
 #include <QFileDialog>
+
+#include <sstream>
+#include <string>
+
+using namespace seismic;
+
+#include<impl/rev1/SegyFile-Fields-Rev1.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::MainWindow)
 {
-    m_ui->setupUi(this);
+    m_ui->setupUi(this);    
 }
 
 void MainWindow::on_actionOpen_triggered() {
 
   QString filename = QFileDialog::getOpenFileName(this,
                                                   "Select a SEG-Y file to be opened",
-                                                  ".","SEG-Y files (*.segy *.sgy)");
-  if( ! filename.size() ) {
-
+                                                  ".","SEG-Y files (*.segy *.sgy)");  
+  if( !filename.isEmpty() ) { // If a file has been selected
+      // Convert to const char * and insert into the vector of data
+      auto c_filename = filename.toLocal8Bit();
+      m_segy_file_list.push_back( std::shared_ptr<SegyFile>(new SegyFile(c_filename.data(),"Rev1")) );
+      auto & list = *m_ui->segyFileList;
+      list.addItem(filename);
   }
+}
+
+void MainWindow::on_segyFileList_currentRowChanged(int row) {
+    const auto & segy_handle = m_segy_file_list.at(row);
+
+    std::stringstream tfh_stream;
+    ebcdic2ascii(segy_handle->getTextualFileHeader());
+    tfh_stream << segy_handle->getTextualFileHeader() ;
+    m_ui->textualFileHeaderBrowser->setText(tfh_stream.str().c_str());
 }
 
 void MainWindow::on_actionAbout_triggered() {
     About aboutWindow(this);
     aboutWindow.exec();
-}
-
-MainWindow::~MainWindow()
-{
-    delete m_ui;
 }

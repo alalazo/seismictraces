@@ -95,6 +95,8 @@ string(
 ## Dependencies ##
 ##################
 
+SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake )
+
 FIND_PACKAGE( Boost 1.53 REQUIRED COMPONENTS filesystem system )
 
 ###################

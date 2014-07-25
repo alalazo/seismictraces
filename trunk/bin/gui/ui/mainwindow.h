@@ -24,8 +24,15 @@
 
 #include <QMainWindow>
 
+#include <memory>
+#include <vector>
+
 namespace Ui {
 class MainWindow;
+}
+
+namespace seismic {
+class SegyFile;
 }
 
 class MainWindow : public QMainWindow
@@ -34,7 +41,6 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
 
 private slots:
     void on_actionOpen_triggered();
@@ -45,8 +51,11 @@ private slots:
      */
     void on_actionAbout_triggered();
 
-private:
-    Ui::MainWindow * m_ui;
+    void on_segyFileList_currentRowChanged(int row);
+
+private:    
+    std::shared_ptr<Ui::MainWindow> m_ui;
+    std::vector< std::shared_ptr<seismic::SegyFile> > m_segy_file_list;
 };
 
 #endif // MAINWINDOW_H
