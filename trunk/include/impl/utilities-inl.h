@@ -106,6 +106,30 @@ namespace seismic {
         }
         value = fconv;
     }
+    
+    /// Mapping from EBCDIC format to ASCII format
+    extern const unsigned char e2a[256];
+    /// Mapping from ASCII format to EBCDIC format
+    extern const unsigned char a2e[256];
+    
+    /**
+     * @brief Converts an EBCDIC character to the corresponding ASCII character
+     * 
+     * @param[in,out] value character to be converted
+     */
+    inline void ebcdic2ascii(unsigned char& value) {
+        value = e2a[value];
+    }
+    
+    /**
+     * @brief Converts an ASCII character to the corresponding EBCDIC character
+     * 
+     * @param[in,out] value character to be converted
+     */
+    inline void ascii2ebcdic(unsigned char& value) {
+        value = a2e[value];
+    }
+    
 }
 
 #endif	/* UTILITIES_INL_H */

@@ -200,6 +200,20 @@ namespace seismic {
      */
     std::ostream& operator<<(std::ostream& cout, const TextualFileHeader& tfh);
     
+    /**
+     * @brief Converts the format from EBCDIC to ASCII 
+     * 
+     * @param[in,out] tfh textual fileheader
+     */
+    void ebcdic2ascii(TextualFileHeader& tfh);
+    
+    /**
+     * @brief Converts the format from ASCII to EBCDIC 
+     * 
+     * @param[in,out] tfh textual fileheader
+     */
+    void ascii2ebcdic(TextualFileHeader& tfh);
+    
 }
 
 #endif	/* SEGYFILE_TEXTUALFILEHEADER_H */

@@ -20,10 +20,13 @@
  */
 #include<impl/SegyFile-TextualFileHeader.h>
 
+#include<algorithm>
 #include<iostream>
 #include<iomanip>
 #include<stdexcept>
 #include<cstring>
+
+#include "impl/utilities-inl.h"
 
 using namespace std;
 
@@ -108,7 +111,6 @@ namespace seismic {
     //
     
     ostream & operator<<(ostream& cout, const TextualFileHeader& tfh) {
-        cout << "TEXTUAL FILE HEADER:" << endl << endl;        
         for( unsigned int ii = 0; ii < TextualFileHeader::nlines; ii++) {
             for( unsigned int jj = 0; jj < TextualFileHeader::line_length; jj++) {
                 cout << tfh[ii][jj];
@@ -116,6 +118,22 @@ namespace seismic {
             cout << endl;
         }
         return cout;
+    }
+    
+    void ebcdic2ascii(TextualFileHeader& tfh) {
+        for_each(tfh.get(),tfh.get() + tfh.nlines*tfh.line_length,
+            [](char& x){
+                unsigned char * y = reinterpret_cast<unsigned char *>(&x);
+                ebcdic2ascii(*y);
+            });
+    }
+    
+    void ascii2ebcdic(TextualFileHeader& tfh) {
+        for_each(tfh.get(),tfh.get() + tfh.nlines*tfh.line_length,
+            [](char& x){
+                unsigned char * y = reinterpret_cast<unsigned char *>(&x);
+                ascii2ebcdic(*y);
+            });        
     }
     
 }
