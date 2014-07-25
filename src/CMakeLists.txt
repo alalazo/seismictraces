@@ -3,6 +3,7 @@ SET(
   SegyFile.cpp
   impl/SegyFile-TextualFileHeader.cpp
   impl/SegyFileLazyWriter.cpp
+  impl/utilities-inl.cpp
   impl/indexer/InMemoryIndexer.cpp
   impl/rev0/SegyFile-BinaryFileHeader-Rev0.cpp
   impl/rev0/SegyFile-Fields-Rev0.cpp
@@ -12,7 +13,7 @@ SET(
   impl/rev1/SegyFile-TraceHeader-Rev1.cpp  
 )
 
-ADD_LIBRARY( SeismicTraces ${SeismicTraces_sources} )
+ADD_LIBRARY( SeismicTraces ${SeismicTraces_sources} ${Doxygen_DEPENDENCIES} )
 
 TARGET_LINK_LIBRARIES(
   SeismicTraces

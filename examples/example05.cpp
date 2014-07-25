@@ -39,6 +39,7 @@ int main() {
     //
     // Output header information
     //    
+    ebcdic2ascii(segyFile.getTextualFileHeader());
     cout << segyFile.getTextualFileHeader() << endl;
     cout << segyFile.getBinaryFileHeader() << endl;
 
