@@ -29,6 +29,7 @@ IF( BUILD_QT_BASED_GUI_APPLICATIONS )
     seismoview_CUSTOM_WIDGETS
     mainwindow
     about
+    segycolormap
   )
   PROCESS_CUSTOM_WIDGETS( seismoview_CUSTOM_WIDGETS )
 

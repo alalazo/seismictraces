@@ -22,37 +22,39 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "about.h"
+#include <segycolormap.h>
 
 #include <SegyFile.h>
 
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include <sstream>
 #include <string>
+#include <stdexcept>
 
 using namespace seismic;
 
-#include<impl/rev1/SegyFile-Fields-Rev1.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::MainWindow)
 {
-    m_ui->setupUi(this);    
+    m_ui->setupUi(this);
 }
 
 void MainWindow::on_actionOpen_triggered() {
 
-  QString filename = QFileDialog::getOpenFileName(this,
-                                                  "Select a SEG-Y file to be opened",
-                                                  ".","SEG-Y files (*.segy *.sgy)");  
-  if( !filename.isEmpty() ) { // If a file has been selected
-      // Convert to const char * and insert into the vector of data
-      auto c_filename = filename.toLocal8Bit();
-      m_segy_file_list.push_back( std::shared_ptr<SegyFile>(new SegyFile(c_filename.data(),"Rev1")) );
-      auto & list = *m_ui->segyFileList;
-      list.addItem(filename);
-  }
+    QString filename = QFileDialog::getOpenFileName(this,
+                                                    "Select a SEG-Y file to be opened",
+                                                    ".","SEG-Y files (*.segy *.sgy)");
+    if( !filename.isEmpty() ) { // If a file has been selected
+        // Convert to const char * and insert into the vector of data
+        auto c_filename = filename.toLocal8Bit();
+        m_segy_file_list.push_back( std::shared_ptr<SegyFile>(new SegyFile(c_filename.data(),"Rev1")) );
+        auto & list = *m_ui->segyFileList;
+        list.addItem(filename);
+    }
 }
 
 void MainWindow::on_segyFileList_currentRowChanged(int row) {
@@ -62,6 +64,19 @@ void MainWindow::on_segyFileList_currentRowChanged(int row) {
     ebcdic2ascii(segy_handle->getTextualFileHeader());
     tfh_stream << segy_handle->getTextualFileHeader() ;
     m_ui->textualFileHeaderBrowser->setText(tfh_stream.str().c_str());
+}
+
+void MainWindow::on_actionSEG_Y_Colormap_triggered() {
+    // Get current row from the active list
+    auto irow = m_ui->segyFileList->currentRow();
+    try {
+        // Construct the colormap
+        m_ui->tabWidget->addTab(new SegyColormap(m_segy_file_list.at(irow)),
+                                m_segy_file_list.at(irow)->path().filename().c_str());
+    } catch(std::exception& e) {
+        QMessageBox::warning(this,"No SEG-Y file selected",
+                             e.what());
+    }
 }
 
 void MainWindow::on_actionAbout_triggered() {

@@ -43,6 +43,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
 
 private slots:
+
+    /**
+     * @brief Prompts for the selection of a new file
+     */
     void on_actionOpen_triggered();
 
     /**
@@ -51,10 +55,21 @@ private slots:
      */
     void on_actionAbout_triggered();
 
+    /**
+     * @brief Set new content in the widgets, based on the current selection
+     * @param[in] row currently selected row
+     */
     void on_segyFileList_currentRowChanged(int row);
 
+    /**
+     * @brief Creates a new analysis tab
+     */
+    void on_actionSEG_Y_Colormap_triggered();
+
 private:    
+    /// Implementation generated from forms
     std::shared_ptr<Ui::MainWindow> m_ui;
+    /// List of handles to SEG-Y files that are currently open
     std::vector< std::shared_ptr<seismic::SegyFile> > m_segy_file_list;
 };
 

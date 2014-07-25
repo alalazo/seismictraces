@@ -37,18 +37,8 @@
       </widget>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>-1</number>
        </property>
-       <widget class="QWidget" name="tab">
-        <attribute name="title">
-         <string>Tab 1</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="tab_2">
-        <attribute name="title">
-         <string>Tab 2</string>
-        </attribute>
-       </widget>
       </widget>
      </widget>
     </item>
@@ -82,8 +72,8 @@
     <property name="title">
      <string>Analysis</string>
     </property>
-    <addaction name="actionAmplitude_colormap"/>
     <addaction name="actionTrace_inspection"/>
+    <addaction name="actionSEG_Y_Colormap"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuAnalysis"/>
@@ -118,14 +108,14 @@
     <string>About</string>
    </property>
   </action>
-  <action name="actionAmplitude_colormap">
-   <property name="text">
-    <string>SEG-Y Colormap</string>
-   </property>
-  </action>
   <action name="actionTrace_inspection">
    <property name="text">
     <string>Trace inspection</string>
+   </property>
+  </action>
+  <action name="actionSEG_Y_Colormap">
+   <property name="text">
+    <string>SEG-Y Colormap</string>
    </property>
   </action>
  </widget>
