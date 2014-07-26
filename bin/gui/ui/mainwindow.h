@@ -66,6 +66,12 @@ private slots:
      */
     void on_actionSEG_Y_Colormap_triggered();
 
+    /**
+     * @brief Close the tab for which the request was issued
+     * @param[in] idx tab index
+     */
+    void on_tabWidget_tabCloseRequested(int idx);
+
 private:    
     /// Implementation generated from forms
     std::shared_ptr<Ui::MainWindow> m_ui;

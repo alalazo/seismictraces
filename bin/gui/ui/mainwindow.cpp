@@ -59,10 +59,10 @@ void MainWindow::on_actionOpen_triggered() {
 
 void MainWindow::on_segyFileList_currentRowChanged(int row) {
     const auto & segy_handle = m_segy_file_list.at(row);
-
-    std::stringstream tfh_stream;
-    ebcdic2ascii(segy_handle->getTextualFileHeader());
-    tfh_stream << segy_handle->getTextualFileHeader() ;
+    std::stringstream tfh_stream;    
+    auto tfh = segy_handle->getTextualFileHeader();
+    ebcdic2ascii(tfh);
+    tfh_stream << tfh;
     m_ui->textualFileHeaderBrowser->setText(tfh_stream.str().c_str());
 }
 
@@ -82,4 +82,13 @@ void MainWindow::on_actionSEG_Y_Colormap_triggered() {
 void MainWindow::on_actionAbout_triggered() {
     About aboutWindow(this);
     aboutWindow.exec();
+}
+
+void MainWindow::on_tabWidget_tabCloseRequested(int idx) {
+    try {
+        m_ui->tabWidget->removeTab(idx);
+    } catch(std::exception& e) {
+        QMessageBox::warning(this,"Unexpected error",
+                             e.what());
+    }
 }
