@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include<memory>
+#include <memory>
 
 namespace Ui {
 class SegyColormap;
@@ -19,10 +19,13 @@ class SegyColormap : public QWidget
 
 public:
     explicit SegyColormap(std::shared_ptr<seismic::SegyFile> file, QWidget *parent = 0);
-    ~SegyColormap();
+
+private slots:
+    void on_traceIdxSpinBox_valueChanged(int value);
 
 private:
-    Ui::SegyColormap *ui;
+    std::shared_ptr<Ui::SegyColormap> m_ui;
+    std::shared_ptr<seismic::SegyFile> m_file;
 };
 
 #endif // SEGYCOLORMAP_H
