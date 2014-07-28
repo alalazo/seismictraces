@@ -33,7 +33,11 @@
         </property>
        </widget>
        <widget class="QWidget" name="widget" native="true"/>
-       <widget class="QTextBrowser" name="textualFileHeaderBrowser"/>
+       <widget class="QTextBrowser" name="textualFileHeaderBrowser">
+        <property name="documentTitle">
+         <string>Textual file header</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
