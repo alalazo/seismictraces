@@ -58,12 +58,16 @@ void MainWindow::on_actionOpen_triggered() {
 }
 
 void MainWindow::on_segyFileList_currentRowChanged(int row) {
-    const auto & segy_handle = m_segy_file_list.at(row);
-    std::stringstream tfh_stream;    
-    auto tfh = segy_handle->getTextualFileHeader();
-    ebcdic2ascii(tfh);
-    tfh_stream << tfh;
-    m_ui->textualFileHeaderBrowser->setText(tfh_stream.str().c_str());
+    if( row < 0) {
+        m_ui->textualFileHeaderBrowser->setText("");
+    } else {
+        const auto & segy_handle = m_segy_file_list.at(row);
+        std::stringstream tfh_stream;
+        auto tfh = segy_handle->getTextualFileHeader();
+        ebcdic2ascii(tfh);
+        tfh_stream << tfh;
+        m_ui->textualFileHeaderBrowser->setText(tfh_stream.str().c_str());
+    }
 }
 
 void MainWindow::on_actionSEG_Y_Colormap_triggered() {
@@ -91,4 +95,10 @@ void MainWindow::on_tabWidget_tabCloseRequested(int idx) {
         QMessageBox::warning(this,"Unexpected error",
                              e.what());
     }
+}
+
+void MainWindow::on_actionClose_triggered() {
+    auto row = m_ui->segyFileList->currentRow();
+    m_segy_file_list.erase( m_segy_file_list.begin() + row );
+    m_ui->segyFileList->removeItemWidget( m_ui->segyFileList->takeItem(row) );
 }
