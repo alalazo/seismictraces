@@ -72,6 +72,11 @@ private slots:
      */
     void on_tabWidget_tabCloseRequested(int idx);
 
+    /**
+     * @brief Closes an open SEG-Y file
+     */
+    void on_actionClose_triggered();
+
 private:    
     /// Implementation generated from forms
     std::shared_ptr<Ui::MainWindow> m_ui;

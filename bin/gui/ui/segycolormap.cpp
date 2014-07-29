@@ -5,10 +5,12 @@
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
+#include <qwt_plot_grid.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_color_map.h>
 #include <qwt_raster_data.h>
 #include <qwt_scale_widget.h>
+#include <qwt_symbol.h>
 
 #include <algorithm>
 #include <limits>
@@ -66,7 +68,7 @@ public:
      */
     const seismic::Trace<T>& trace(size_t traceIdx) const {
         updateBuffer(traceIdx);
-        return m_buffer.at(traceIdx - m_minimum_idx);
+        return m_buffer[traceIdx - m_minimum_idx];
     }
 
     /**
@@ -123,7 +125,7 @@ template<class T>
 class SegyTraceData: public QwtRasterData
 {
 public:
-    SegyTraceData(std::shared_ptr<seismic::SegyFile> file) :m_file(file)
+    SegyTraceData(std::shared_ptr<seismic::SegyFile> file) : m_file(file)
     {
         using namespace seismic;
 
@@ -153,8 +155,6 @@ public:
     }
 private:
     std::shared_ptr<seismic::SegyFile> m_file;
-    //std::vector< seismic::Trace<T> > m_traces;
-    //TraceBuffer<T> m_buffer;
 };
 
 /**
@@ -225,9 +225,12 @@ QwtPlotCurve * createTracePlot(std::shared_ptr<seismic::SegyFile> file, size_t i
     default:
         break;
     }
-
+    // Create plot curve
     auto plot = new QwtPlotCurve;
     plot->setSamples(x,y);
+    // Set style
+    plot->setPen(Qt::red);
+
     return plot;
 }
 
@@ -269,16 +272,24 @@ SegyColormap::SegyColormap(std::shared_ptr<seismic::SegyFile> file, QWidget *par
     //////////
     // Trace plot
     auto trace_plot = createTracePlot(m_file,0);
-    // Set title
+    // Set style for the plot
     m_ui->tracePlot->setTitle("Trace Plot");
     m_ui->tracePlot->setAxisTitle(QwtPlot::xBottom,"time");
     m_ui->tracePlot->setAxisTitle(QwtPlot::yLeft,"amplitude");
+    m_ui->tracePlot->setAxisScale(QwtPlot::yLeft,interval.minValue(),interval.maxValue());
+    // Attach data
     trace_plot->attach(m_ui->tracePlot);
+    auto grid = new QwtPlotGrid;
+    grid->attach(m_ui->tracePlot);
     m_ui->traceIdxSpinBox->setMaximum(m_file->ntraces());
     //////////
 }
 
 void SegyColormap::on_traceIdxSpinBox_valueChanged(int value) {
     auto trace_plot = createTracePlot(m_file,value);
+    m_ui->tracePlot->detachItems();
     trace_plot->attach(m_ui->tracePlot);
+    auto grid = new QwtPlotGrid;
+    grid->attach(m_ui->tracePlot);
+    m_ui->tracePlot->replot();
 }
