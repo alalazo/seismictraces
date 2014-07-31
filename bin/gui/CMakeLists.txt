@@ -22,7 +22,7 @@ IF( BUILD_QT_BASED_GUI_APPLICATIONS )
   FIND_PACKAGE( Qt5 REQUIRED COMPONENTS Widgets Core )
   FIND_PACKAGE( Qwt REQUIRED )
   ## Seismoview
-  INCLUDE_DIRECTORIES( ui ${QWT_INCLUDE_DIRS} )
+  INCLUDE_DIRECTORIES( ui include ${QWT_INCLUDE_DIRS} )
   SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
   SET(
@@ -32,6 +32,12 @@ IF( BUILD_QT_BASED_GUI_APPLICATIONS )
     segycolormap
   )
   PROCESS_CUSTOM_WIDGETS( seismoview_CUSTOM_WIDGETS )
+
+  SET(
+    seismoview_HEADERS
+    ${seismoview_HEADERS}
+    include/TraceBuffer.h
+  )
 
   QT5_WRAP_UI(UI ${seismoview_UI})
   QT5_WRAP_CPP(MOC ${seismoview_HEADERS})
