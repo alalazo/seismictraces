@@ -10,8 +10,7 @@ SET( SeismicTraces_VERSION "${SeismicTraces_VERSION_MAJOR}.${SeismicTraces_VERSI
 ## Build options ##
 ###################
 
-OPTION(BUILD_SHARED_LIBS "Create shared libraries instead of static ones (default OFF)" OFF)
-OPTION(BUILD_UTILITIES "Enable the build of the utilities bundled with the library. Require Boost" ON)
+OPTION(BUILD_SHARED_LIBS "Create shared libraries instead of static ones (default OFF)" ON)
 OPTION(LARGE_FILE_SUPPORT "Enable support for large files on 32-bit platforms" ON)
 IF( LARGE_FILE_SUPPORT )
   SET(LARGE_FILE_MACROS "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64")
@@ -31,7 +30,7 @@ ENDIF()
 ##################################
 
 #### Default build type
-IF (NOT CMAKE_BUILD_TYPE)
+IF( NOT CMAKE_BUILD_TYPE )
   SET (CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
       "Choose the type of build, RelWithDebInfo will be the default." FORCE)
 ENDIF()

@@ -1,4 +1,4 @@
-OPTION(ENABLE_TESTING "Enable the build of unit tests, add 'test' target to Makefile" ON)
+OPTION(ENABLE_TESTING "Enable the build of unit tests, add 'test' target to Makefile" OFF)
 
 IF( ENABLE_TESTING )
   enable_testing()

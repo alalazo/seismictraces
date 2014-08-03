@@ -28,10 +28,8 @@
 #define TRACEBUFFER_H
 
 #include <SegyFile.h>
-#include <impl/SegyFile-Trace.h>
 
 #include <vector>
-
 
 namespace seismic {
 
@@ -82,7 +80,7 @@ public:
      *
      * @return reference to the value
      */
-    const seismic::Trace<T>& trace(size_t traceIdx) const {
+    const seismic::SegyFile::trace_type<T>& trace(size_t traceIdx) const {
         updateBuffer(traceIdx);
         return m_buffer[traceIdx - m_minimum_idx];
     }
@@ -94,7 +92,7 @@ public:
      * @param[in] sampleIdx sample index
      * @return reference to the value
      */
-    seismic::Trace<T>& trace(size_t traceIdx) {
+    seismic::SegyFile::trace_type<T>& trace(size_t traceIdx) {
         return const_cast< seismic::Trace<T>& >( static_cast<const TraceBuffer&>(*this).trace(traceIdx) );
     }
 
@@ -125,7 +123,7 @@ private:
     /// Handle to the currently buffered SEG-Y file
     std::shared_ptr<seismic::SegyFile> m_file;
     /// Buffer holdinga certain number of traces
-    mutable std::vector< seismic::Trace<T> > m_buffer;
+    mutable std::vector< seismic::SegyFile::trace_type<T> > m_buffer;
 
     /// Maximum size that can be held in byte
     size_t m_max_size_in_byte = 1024 * 1024 * 1024;
