@@ -93,50 +93,8 @@ QwtRasterData * createSegyTraceData(std::shared_ptr<seismic::SegyFile> file) {
     return nullptr;
 }
 
-QwtPlotCurve * createTracePlot(std::shared_ptr<seismic::SegyFile> file, size_t ii) {
-    using namespace seismic;
-
-    QVector<double> x;
-    QVector<double> y;
-
-    auto& bfh = file->getBinaryFileHeader();
-    auto format = bfh[rev0::bfh::formatCode];
-    switch( format ) {
-    case (constants::SegyFileFormatCode::IBMfloat32):
-    case (constants::SegyFileFormatCode::IEEEfloat32):
-    {
-        auto buffer = TraceBuffer<float>::get();
-        auto ctrace = buffer->trace(ii);
-        for(size_t ii = 0; ii < ctrace.size(); ++ii) {
-            x.push_back(ii);
-            y.push_back(ctrace[ii]);
-        }
-    }
-    case (constants::SegyFileFormatCode::Int32):
-    {
-
-    }
-    case (constants::SegyFileFormatCode::Int16):
-    {
-
-    }
-    case (constants::SegyFileFormatCode::Int8):
-    {
-
-    }
-    default:
-        break;
-    }
-    // Create plot curve
-    auto plot = new QwtPlotCurve;
-    plot->setSamples(x,y);
-    // Set style
-    plot->setPen(Qt::red);
-
-    return plot;
 }
 
-}
 SegyColormap::SegyColormap(std::shared_ptr<seismic::SegyFile> file, QWidget *parent) :
     QWidget(parent), m_ui(new Ui::SegyColormap), m_file(file)
 {
@@ -174,26 +132,7 @@ SegyColormap::SegyColormap(std::shared_ptr<seismic::SegyFile> file, QWidget *par
 
     //////////
     // Trace plot
-    auto trace_plot = createTracePlot(m_file,0);
-    // Set style for the plot
-    m_ui->tracePlot->setTitle("Trace Plot");
-    m_ui->tracePlot->setAxisTitle(QwtPlot::xBottom,"time");
-    m_ui->tracePlot->setAxisTitle(QwtPlot::yLeft,"amplitude");
+    m_ui->tracePlot->setSegyFile(file);
     m_ui->tracePlot->setAxisScale(QwtPlot::yLeft,interval.minValue(),interval.maxValue());
-    m_ui->tracePlot->axisScaleEngine(QwtPlot::xBottom)->setAttribute(QwtScaleEngine::Floating,true);
-    // Attach data
-    trace_plot->attach(m_ui->tracePlot);
-    auto grid = new QwtPlotGrid;
-    grid->attach(m_ui->tracePlot);
-    m_ui->traceIdxSpinBox->setMaximum(m_file->ntraces());
     //////////
-}
-
-void SegyColormap::on_traceIdxSpinBox_valueChanged(int value) {
-    auto trace_plot = createTracePlot(m_file,value);
-    m_ui->tracePlot->detachItems();
-    trace_plot->attach(m_ui->tracePlot);
-    auto grid = new QwtPlotGrid;
-    grid->attach(m_ui->tracePlot);
-    m_ui->tracePlot->replot();
 }

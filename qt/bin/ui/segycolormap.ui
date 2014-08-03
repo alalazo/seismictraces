@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>572</width>
-    <height>671</height>
+    <height>690</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,32 +30,13 @@
        <enum>QFrame::NoFrame</enum>
       </property>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <property name="topMargin">
-        <number>20</number>
-       </property>
-       <item>
-        <widget class="QwtPlot" name="tracePlot">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Plain</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="traceIdxSpinBox">
-         <property name="specialValueText">
-          <string/>
-         </property>
-         <property name="prefix">
-          <string>Trace # </string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+     <widget class="trace_plot" name="tracePlot">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
      </widget>
     </widget>
    </item>
@@ -66,6 +47,12 @@
    <class>QwtPlot</class>
    <extends>QFrame</extends>
    <header>qwt_plot.h</header>
+  </customwidget>
+  <customwidget>
+   <class>trace_plot</class>
+   <extends>QFrame</extends>
+   <header>trace_plot.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

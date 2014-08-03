@@ -20,9 +20,6 @@ class SegyColormap : public QWidget
 public:
     explicit SegyColormap(std::shared_ptr<seismic::SegyFile> file, QWidget *parent = 0);
 
-private slots:
-    void on_traceIdxSpinBox_valueChanged(int value);
-
 private:
     std::shared_ptr<Ui::SegyColormap> m_ui;
     std::shared_ptr<seismic::SegyFile> m_file;
