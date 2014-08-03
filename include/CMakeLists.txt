@@ -1,6 +1,5 @@
 SET( 
   SeismicTraces_includes
-  ${CMAKE_CURRENT_SOURCE_DIR}/SeismicTrace-inl.h
   ${CMAKE_CURRENT_SOURCE_DIR}/SegyFile.h
 )
 

@@ -179,9 +179,13 @@ namespace seismic {
      */
     class SegyFile {
     public:
-        /// Trace header plus corresponding trace data
+        /// Trace header plus corresponding raw (stream of bytes) trace data
         using raw_trace_type = std::pair< TraceHeader::smart_reference_type, std::vector<char> >; 
         
+        /// Trace header plus corresponding trace data of type T
+        template <class T>
+        using trace_type = Trace<T>;
+
         /**
          * @brief Opens an existing SEG Y file in r/w mode
          * 
