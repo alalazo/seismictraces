@@ -19,18 +19,7 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QwtPlot" name="colormap">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>213</height>
-       </size>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-     </widget>
-     <widget class="trace_plot" name="tracePlot">
+     <widget class="SegySpectrogram" name="segyColormap">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -38,20 +27,30 @@
        <enum>QFrame::Raised</enum>
       </property>
      </widget>
+     <widget class="TracePlot" name="tracePlot">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <zorder>frame</zorder>
+     </widget>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QwtPlot</class>
+   <class>TracePlot</class>
    <extends>QFrame</extends>
-   <header>qwt_plot.h</header>
+   <header>TracePlot.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
-   <class>trace_plot</class>
+   <class>SegySpectrogram</class>
    <extends>QFrame</extends>
-   <header>trace_plot.h</header>
+   <header>SegySpectrogram.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

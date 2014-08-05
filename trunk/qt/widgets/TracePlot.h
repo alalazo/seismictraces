@@ -6,7 +6,7 @@
 #include <memory>
 
 namespace Ui {
-class trace_plot;
+class TracePlot;
 }
 
 namespace seismic {
@@ -16,7 +16,7 @@ class SegyFile;
 /**
  * @brief Two dimensional plot of a seismic trace
  */
-class trace_plot : public QFrame
+class TracePlot : public QFrame
 {
     Q_OBJECT
 
@@ -24,10 +24,9 @@ public:
     /**
      * @brief Constructor
      *
-     * @param[in] file SEG-Y file to be managed
      * @param[in] parent parent widget
      */
-    explicit trace_plot(QWidget *parent = 0);
+    explicit TracePlot(QWidget *parent = 0);
 
     /**
      * @brief Sets the underlying SEG-Y file
@@ -56,7 +55,7 @@ private slots:
 
 private:
     /// The underlying form
-    std::shared_ptr<Ui::trace_plot> m_ui;
+    std::shared_ptr<Ui::TracePlot> m_ui;
     /// The SEG-Y file managed by the class
     std::shared_ptr<seismic::SegyFile> m_file;
 };

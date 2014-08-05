@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>trace_plot</class>
- <widget class="QFrame" name="trace_plot">
+ <class>TracePlot</class>
+ <widget class="QFrame" name="TracePlot">
   <property name="geometry">
    <rect>
     <x>0</x>

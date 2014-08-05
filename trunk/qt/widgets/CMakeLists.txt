@@ -4,7 +4,8 @@ INCLUDE_DIRECTORIES( ${QWT_INCLUDE_DIRS} )
 
 SET(
     seismic_widgets_CUSTOM_WIDGETS
-    trace_plot
+    TracePlot
+    SegySpectrogram
 )
 
 PROCESS_CUSTOM_WIDGETS( seismic_widgets_CUSTOM_WIDGETS seismic_widgets . )
