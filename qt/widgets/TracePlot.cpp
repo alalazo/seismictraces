@@ -1,4 +1,4 @@
-#include <trace_plot.h>
+#include <TracePlot.h>
 #include <ui_trace_plot.h>
 #include <TraceBuffer.h>
 
@@ -56,20 +56,19 @@ QwtPlotCurve * createTracePlot(std::shared_ptr<seismic::SegyFile> file, size_t i
 
 }
 
-trace_plot::trace_plot(QWidget *parent) : QFrame(parent), m_ui(new Ui::trace_plot){
+TracePlot::TracePlot(QWidget *parent) : QFrame(parent), m_ui(new Ui::TracePlot){
     // Initialize the form
     m_ui->setupUi(this);
-}
-
-void trace_plot::setSegyFile(std::shared_ptr<SegyFile> file)
-{    
-    m_file = file;
     // Set style
     m_ui->plot->setTitle("Trace Plot");
     m_ui->plot->setAxisTitle(QwtPlot::xBottom,"time");
     m_ui->plot->setAxisTitle(QwtPlot::yLeft,"amplitude");
-    //m_ui->plot->setAxisScale(QwtPlot::yLeft,interval.minValue(),interval.maxValue());
     m_ui->plot->axisScaleEngine(QwtPlot::xBottom)->setAttribute(QwtScaleEngine::Floating,true);
+}
+
+void TracePlot::setSegyFile(std::shared_ptr<SegyFile> file)
+{    
+    m_file = file;
     // Add a grid
     auto grid = new QwtPlotGrid;
     grid->attach(m_ui->plot);
@@ -81,11 +80,11 @@ void trace_plot::setSegyFile(std::shared_ptr<SegyFile> file)
     m_ui->plot->replot();
 }
 
-void trace_plot::setAxisScale(int axisID, double min, double max, double step) {
+void TracePlot::setAxisScale(int axisID, double min, double max, double step) {
     m_ui->plot->setAxisScale(axisID,min,max,step);
 }
 
-void trace_plot::on_idxSpinBox_valueChanged(int value) {
+void TracePlot::on_idxSpinBox_valueChanged(int value) {
     auto trace_plot = createTracePlot(m_file,value);
     m_ui->plot->detachItems();
     trace_plot->attach( m_ui->plot );
