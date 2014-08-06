@@ -8,6 +8,7 @@
 #include <qwt_plot_spectrogram.h>
 #include <qwt_color_map.h>
 #include <qwt_scale_widget.h>
+#include <qwt_scale_engine.h>
 
 using namespace seismic;
 
@@ -113,15 +114,15 @@ void SegySpectrogram::setSegyFile(std::shared_ptr<SegyFile> file) {
     spectrogram_colormap->addColorStop( zero_in_colormap*0.5,Qt::cyan);
     spectrogram_colormap->addColorStop( zero_in_colormap ,Qt::gray);
     spectrogram_colormap->addColorStop( (1 + zero_in_colormap)*0.5,Qt::yellow);
-    spectrogram->setColorMap( spectrogram_colormap );
-    auto interval = spectrogram->data()->interval( Qt::ZAxis );
-    m_maximum = interval.maxValue();
-    m_minimum = interval.minValue();
+    spectrogram->setColorMap( spectrogram_colormap );    
+    m_maximum = zinterval.maxValue();
+    m_minimum = zinterval.minValue();
     // Colorbar on the right
     auto axisWidget = m_ui->spectrogram->axisWidget(QwtPlot::yRight);
-    axisWidget->setColorMap( interval, spectrogram_colormap );
+    axisWidget->setColorMap( zinterval, spectrogram_colormap );
     axisWidget->setColorBarEnabled( true );
     // Plot
+    m_ui->spectrogram->setAxisScale(QwtPlot::yRight,m_minimum,m_maximum);
+    m_ui->spectrogram->axisScaleEngine(QwtPlot::xBottom)->setAttribute(QwtScaleEngine::Floating,true);
     spectrogram->attach( m_ui->spectrogram );
-    //m_ui->spectrogram->replot();
 }
