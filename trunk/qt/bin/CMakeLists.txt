@@ -25,7 +25,6 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
   SET(
     seismoview_HEADERS
     ${seismoview_HEADERS}
-    include/TraceBuffer.h
   )
 
   ADD_EXECUTABLE(
