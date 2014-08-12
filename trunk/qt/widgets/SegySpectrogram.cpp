@@ -28,7 +28,6 @@ public:
         T min_value = std::numeric_limits<T>::max();
         T max_value = std::numeric_limits<T>::lowest();
         for( size_t ii = 0; ii < m_file->ntraces(); ++ii) {
-            //m_traces.push_back( std::move(file->readTraceAs<T>(ii) ) );
             auto current_trace = buffer->trace(ii);
             max_nsamples = std::max(max_nsamples,current_trace.size());
             auto minmax_value = std::minmax_element(current_trace.begin(),current_trace.end());
@@ -65,18 +64,22 @@ QwtRasterData * createSegyTraceData(std::shared_ptr<seismic::SegyFile> file) {
     case (constants::SegyFileFormatCode::IEEEfloat32):
     {
         return new SegyTraceData<float>(file);
+        break;
     }
     case (constants::SegyFileFormatCode::Int32):
     {
         return new SegyTraceData<int32_t>(file);
+        break;
     }
     case (constants::SegyFileFormatCode::Int16):
     {
         return new SegyTraceData<int16_t>(file);
+        break;
     }
     case (constants::SegyFileFormatCode::Int8):
     {
         return new SegyTraceData<int8_t>(file);
+        break;
     }
     default:
         break;
@@ -124,5 +127,6 @@ void SegySpectrogram::setSegyFile(std::shared_ptr<SegyFile> file) {
     // Plot
     m_ui->spectrogram->setAxisScale(QwtPlot::yRight,m_minimum,m_maximum);
     m_ui->spectrogram->axisScaleEngine(QwtPlot::xBottom)->setAttribute(QwtScaleEngine::Floating,true);
+    m_ui->spectrogram->axisScaleEngine(QwtPlot::yLeft)->setAttribute(QwtScaleEngine::Floating,true);
     spectrogram->attach( m_ui->spectrogram );
 }

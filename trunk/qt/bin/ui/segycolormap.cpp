@@ -15,7 +15,7 @@ SegyColormap::SegyColormap(std::shared_ptr<SegyFile> file, QWidget *parent) :
     // Spectrogram
     m_ui->segyColormap->setSegyFile(m_file);
     // Trace plot
-    m_ui->tracePlot->setSegyFile(file);
+    m_ui->tracePlot->setSegyFile(m_file);
     m_ui->tracePlot->setAxisScale(QwtPlot::yLeft,m_ui->segyColormap->min(),m_ui->segyColormap->max());
     //////////
 }

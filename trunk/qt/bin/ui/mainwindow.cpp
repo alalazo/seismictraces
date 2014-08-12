@@ -47,7 +47,7 @@ void MainWindow::on_actionOpen_triggered() {
 
     QString filename = QFileDialog::getOpenFileName(this,
                                                     "Select a SEG-Y file to be opened",
-                                                    ".","SEG-Y files (*.segy *.sgy)");
+                                                    ".","SEG-Y files (*.segy *.sgy *.tra)");
     if( !filename.isEmpty() ) { // If a file has been selected
         // Convert to const char * and insert into the vector of data
         auto c_filename = filename.toLocal8Bit();
