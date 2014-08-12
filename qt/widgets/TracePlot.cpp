@@ -1,5 +1,5 @@
 #include <TracePlot.h>
-#include <ui_trace_plot.h>
+#include <ui_TracePlot.h>
 #include <TraceBuffer.h>
 
 #include <SegyFile.h>
@@ -24,23 +24,46 @@ QwtPlotCurve * createTracePlot(std::shared_ptr<seismic::SegyFile> file, size_t i
     case (constants::SegyFileFormatCode::IEEEfloat32):
     {
         auto buffer = TraceBuffer<float>::get();
+        buffer->setCurrentFile(file);
         auto ctrace = buffer->trace(ii);
         for(size_t ii = 0; ii < ctrace.size(); ++ii) {
             x.push_back(ii);
             y.push_back(ctrace[ii]);
         }
+        break;
     }
     case (constants::SegyFileFormatCode::Int32):
     {
-
+        auto buffer = TraceBuffer<int32_t>::get();
+        buffer->setCurrentFile(file);
+        auto ctrace = buffer->trace(ii);
+        for(size_t ii = 0; ii < ctrace.size(); ++ii) {
+            x.push_back(ii);
+            y.push_back(ctrace[ii]);
+        }
+        break;
     }
     case (constants::SegyFileFormatCode::Int16):
     {
-
+        auto buffer = TraceBuffer<int16_t>::get();
+        buffer->setCurrentFile(file);
+        auto ctrace = buffer->trace(ii);
+        for(size_t ii = 0; ii < ctrace.size(); ++ii) {
+            x.push_back(ii);
+            y.push_back(ctrace[ii]);
+        }
+        break;
     }
     case (constants::SegyFileFormatCode::Int8):
     {
-
+        auto buffer = TraceBuffer<int8_t>::get();
+        buffer->setCurrentFile(file);
+        auto ctrace = buffer->trace(ii);
+        for(size_t ii = 0; ii < ctrace.size(); ++ii) {
+            x.push_back(ii);
+            y.push_back(ctrace[ii]);
+        }
+        break;
     }
     default:
         break;
