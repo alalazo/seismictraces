@@ -77,6 +77,8 @@ namespace seismic {
             updateNumberOfSamples();
         }
         
+        /// @todo HIDE ALL THE OTHER FUNCTIONS THAT ADD REMOVE ELEMENTS
+        
         /**
          * @brief Disallows explicit conversion to the underlying trace data
          */

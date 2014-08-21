@@ -74,7 +74,7 @@ namespace seismic {
 	    int16List.push_back(rev0::bfh::impulseSignalPolarity         );	   
 	    int16List.push_back(rev0::bfh::vibratoryPolarityCode         );	   
             return int16List;
-        }
+        }                
     }
     ////////////////////
     // Static vectors
@@ -90,8 +90,6 @@ namespace seismic {
         return list;
     }
 
-    
-    
     void ConcreteBinaryFileHeader<Rev0>::print(std::ostream& cout) const {
         cout << "|------------------|" << endl;
         cout << "|BINARY FILE HEADER|" << endl;

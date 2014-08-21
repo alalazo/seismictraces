@@ -152,10 +152,10 @@ namespace seismic {
     }
  
     /**
-     * @brief Read a byte stream from a file stream
+     * @brief Read a byte stream from an input stream
      * 
-     * @param[in] fileStream file stream
-     * @param[in,out] byte_stream binary file header
+     * @param[in] inputStream input stream
+     * @param[in,out] byteStream byte stream
      */
     template<int size>
     inline void read(std::istream& inputStream, std::shared_ptr< GenericByteStream<size> > byteStream) {
@@ -167,6 +167,12 @@ namespace seismic {
 #endif  
     }
     
+    /**
+     * @brief Write a byte stream to an output stream 
+     * 
+     * @param[in,out] outputStream output stream
+     * @param[in] byteStream byte stream
+     */
     template<int size>
     inline void write(std::ostream& outputStream, std::shared_ptr< GenericByteStream<size> > byteStream) {
 #ifdef LITTLE_ENDIAN
@@ -204,7 +210,7 @@ namespace seismic {
     public:
         GenericByteStreamSmartReference(){}
         
-        GenericByteStreamSmartReference( GenericByteStream<size>* bfh ) : ptr_(bfh) {}
+        GenericByteStreamSmartReference( GenericByteStream<size>* ptr ) : ptr_(ptr) {}
         
         /**
          * @brief Returns a reference to the underlying bytes interpreted as the correct type
