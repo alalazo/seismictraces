@@ -96,7 +96,7 @@ void TracePlot::setSegyFile(std::shared_ptr<SegyFile> file)
     auto grid = new QwtPlotGrid;
     grid->attach(m_ui->plot);
     // Set limit for spin box
-    m_ui->idxSpinBox->setMaximum(m_file->ntraces());
+    m_ui->idxSpinBox->setMaximum(m_file->ntraces()-1);
     // Set plot to trace 0
     auto trace_plot = createTracePlot(m_file,0);
     trace_plot->attach( m_ui->plot );
