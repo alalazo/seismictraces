@@ -64,9 +64,9 @@ namespace seismic {
         //////////
         // Create index to have random access later
         /// @todo TO BE CHANGED
-        indexer_.reset(new InMemoryIndexer(*this, fstream_));
+        indexer_ = make_shared<InMemoryIndexer>(*this, fstream_);
         indexer_->createIndex();
-        writer_.reset(new SegyFileLazyWriter(*indexer_, fstream_));
+        writer_ = make_shared<SegyFileLazyWriter>(*indexer_, fstream_);
         //////////
     }
 

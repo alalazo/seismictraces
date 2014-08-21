@@ -42,7 +42,7 @@ namespace seismic {
      * 
      * @tparam T type of the object 
      * 
-     * @param obj object whose byte order is to be inverted
+     * @param[in,out] obj object whose byte order is to be inverted
      */
     template< class T >
     inline void invertByteOrder(T& obj) {
@@ -53,8 +53,8 @@ namespace seismic {
     /**
      * @brief Invert in place the byte order of a stream of bytes
      * 
-     * @param stream pointer to the beginning of the stream
-     * @param size size of the stream
+     * @param[in,out] stream pointer to the beginning of the stream
+     * @param[in] size size of the stream
      */
     inline void invertByteOrder( char * stream, const size_t size) {        
         std::reverse(stream,stream+size);

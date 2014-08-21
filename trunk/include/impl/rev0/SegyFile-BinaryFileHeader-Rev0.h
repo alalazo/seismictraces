@@ -32,13 +32,13 @@ namespace seismic {
     class ConcreteBinaryFileHeader<Rev0> : public BinaryFileHeader {
     public:
         /* virtual */
-        void print(std::ostream& cout) const;
+        void print(std::ostream& cout) const override;
         /* virtual */
         void invertByteOrder();
         /* virtual */
-        void checkConsistencyOrThrow() const;
+        void checkConsistencyOrThrow() const override;
         /* virtual */
-        ConcreteBinaryFileHeader<Rev0> * create() const {
+        ConcreteBinaryFileHeader<Rev0> * create() const override {
             return new ConcreteBinaryFileHeader<Rev0>;
         }
         
