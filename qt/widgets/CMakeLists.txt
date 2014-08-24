@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES( ${QWT_INCLUDE_DIRS} )
 
 SET(
     seismic_widgets_CUSTOM_WIDGETS
+    BinaryFileHeaderViewer
     TracePlot
     SegySpectrogram
 )

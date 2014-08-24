@@ -16,11 +16,11 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QSplitter" name="splitter_2">
+     <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QSplitter" name="splitter">
+      <widget class="QSplitter" name="selectionSplitter">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -32,11 +32,16 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QWidget" name="widget" native="true"/>
-       <widget class="QTextBrowser" name="textualFileHeaderBrowser">
-        <property name="documentTitle">
-         <string>Textual file header</string>
+       <widget class="QSplitter" name="fileHeaderSplitter">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
+        <widget class="BinaryFileHeaderViewer" name="binaryFileHeaderViewer" native="true"/>
+        <widget class="QTextBrowser" name="textualFileHeaderBrowser">
+         <property name="documentTitle">
+          <string>Textual file header</string>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QTabWidget" name="tabWidget">
@@ -114,6 +119,14 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BinaryFileHeaderViewer</class>
+   <extends>QWidget</extends>
+   <header>BinaryFileHeaderViewer.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
