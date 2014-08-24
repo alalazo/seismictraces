@@ -49,16 +49,14 @@ namespace seismic {
     template<>
     class ConcreteBinaryFileHeader<Rev1> : public ConcreteBinaryFileHeader<Rev0> {
     public:
+        FACTORY_ADD_CREATE(ConcreteBinaryFileHeader<Rev1>)
+                
         /* virtual */
         void print(std::ostream& cout) const;
         /* virtual */
         void invertByteOrder();
         /* virtual */
         void checkConsistencyOrThrow() const;
-        /* virtual */
-        ConcreteBinaryFileHeader<Rev1> * create() const {
-            return new ConcreteBinaryFileHeader<Rev1>;
-        }
                 
     private:
         /**

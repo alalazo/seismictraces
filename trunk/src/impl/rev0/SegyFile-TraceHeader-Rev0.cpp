@@ -21,6 +21,8 @@
 #include<impl/rev0/SegyFile-TraceHeader-Rev0.h>
 #include<impl/utilities-inl.h>
 
+#include<memory>
+
 using namespace std;
 
 namespace seismic {
@@ -234,6 +236,6 @@ namespace seismic {
     }
     
     const bool ConcreteTraceHeader<Rev0>::isRegistered(
-            TraceHeader::factory_type::getFactory()->registerType("Rev0",new ConcreteTraceHeader<Rev0>)
+            TraceHeader::factory_type::getFactory()->registerType("Rev0", std::make_shared<ConcreteTraceHeader<Rev0>>())
             );
 }

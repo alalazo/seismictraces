@@ -18,6 +18,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with SeismicTraces.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * @file ObjectFactory-inl.h
  * @brief Template implementation of a simple object factory
@@ -48,7 +49,9 @@ namespace seismic {
   template< class InterfaceType, class IdentifierType >
   class CloneObjectFactory {
   public:
-
+    /// Type of the handles that are returned by the factory
+    using handle_type = std::shared_ptr<InterfaceType>;
+            
     /**
      * @brief Static method that provides access to the unique factory.
      * 
@@ -61,7 +64,7 @@ namespace seismic {
       // As a singleton, this class owns itself through a RAII smart-pointer
       // providing exclusive access.
       //
-      static std::shared_ptr< CloneObjectFactory > pnt_(0);
+      static std::unique_ptr< CloneObjectFactory > pnt_(nullptr);
       if ( !pnt_.get() ) {
         pnt_.reset( new CloneObjectFactory );
       }
@@ -100,82 +103,81 @@ namespace seismic {
     ///////////////////////////////////////////////
     // METHODS TO CREATE NEW OBJECTS : START
     //
-    // TODO: Creation methods are a place where the use of variadic templates is natural (whenever C++11 will be allowed)
-    // For the time being creation function accepting up to two parameters are implemented. Can be extended if needs arise.
-    //
-    /**
-     * @brief Creates a new object with a default constructor
-     * 
-     * @param[in] id ID of the type to be created 
-     * @return pointer to the newly created object
-     */
-    InterfaceType * create(const IdentifierType& id) const {
-      typename CallbackMap::const_iterator ii = map_.find(id);
-      if (ii == map_.end()) {
-        throw std::runtime_error("FATAL ERROR: factory cannot create an unregistered object type");
-      }
-      return ii->second->create();
-    }
 
     /**
-     * @brief Creates a new object with a constructor taking 1 parameter
+     * @brief Creates a new object
+     * 
+     * @tparam ArgsType types of the parameters
      * 
      * @param[in] id ID of the type to be created 
-     * @param[in] t1 constructor parameter
+     * @param[in] args arguments to be passed to the create method
+     * 
      * @return pointer to the newly created object
      */
-    template< class T1 >
-    InterfaceType * create(const IdentifierType& id, T1 t1) const {
+    template< class... ArgsType >
+    handle_type create(const IdentifierType& id, ArgsType... args) const {
       typename CallbackMap::const_iterator ii = map_.find(id);
       if (ii == map_.end()) {
         throw std::runtime_error("FATAL ERROR: factory cannot create an unregistered object type");
       }
-      return ii->second->create(t1);
+      return ii->second->create(args...);
     }
-    
-    /**
-     * @brief Creates a new object with a constructor taking 2 parameters
-     * 
-     * @param[in] id ID of the type to be created 
-     * @param[in] t1 constructor parameter
-     * @param[in] t2 constructor parameter
-     * @return pointer to the newly created object
-     */
-    template< class T1, class T2 >
-    InterfaceType * create(const IdentifierType& id, T1 t1, T2 t2) const {
-      typename CallbackMap::const_iterator ii = map_.find(id);
-      if (ii == map_.end()) {
-        throw std::runtime_error("FATAL ERROR: factory cannot create an unregistered object type");
-      }
-      return ii->second->create(t1, t2);
-    }        
-    //
+
     // METHODS TO CREATE NEW OBJECTS: END
-    ///////////////////////////////////////////////
-    
-    /**
-     * @brief Factory destructor must delete sample objects
-     */
-    ~CloneObjectFactory() {
-      for (typename CallbackMap::iterator ii = map_.begin(); ii != map_.end(); ++ii) {
-        delete ( ii->second );
-      }
-    }
+    ///////////////////////////////////////////////        
   private:
 
     //
     // This class must be the only entity able to build itself
     //
-    CloneObjectFactory() {
-    }
+    CloneObjectFactory() = default;
 
-    CloneObjectFactory(const CloneObjectFactory&) {
-    }
+    CloneObjectFactory(const CloneObjectFactory&) = delete;
 
-    typedef std::map< IdentifierType, InterfaceType* > CallbackMap;
+    using CallbackMap = std::map< IdentifierType, std::shared_ptr<InterfaceType> >;
     CallbackMap map_;
   };
+
+/**
+ * @brief Defines factory_type and handle_type. Requires an implementation to 
+ * define a create method stemming from the default constructor.
+ * Add a static create method as a proxy to the factory.
+ */  
+#define INTERFACE_USE_FACTORY(T,KEY) using handle_type = std::shared_ptr<T>; \
+        using factory_type = CloneObjectFactory< T, KEY >; \
+        virtual handle_type create() const = 0;  \
+        inline static handle_type create(const KEY & ID) { \
+                return T::factory_type::getFactory()->create(ID); \
+        }
+
+/**
+ * @brief Defines factory_type and handle_type. Requires an implementation to 
+ * define a create method stemming from a user-defined constructor.
+ * Add a static create method as a proxy to the factory.
+ */  
+#define INTERFACE_USE_FACTORY_ARGS(T,KEY,...) using handle_type = std::shared_ptr<T>; \
+        using factory_type = CloneObjectFactory< T, KEY >; \
+        virtual handle_type create() const = 0;  \
+        inline static handle_type create(const KEY & ID) { \
+                return T::factory_type::getFactory()->create(ID,__VA_ARGS__); \
+        }
   
+/**
+ * @brief Adds a concrete create method stemming from default constructor
+ */
+#define FACTORY_ADD_CREATE(T) using concrete_type = T; \
+        handle_type create() const override { \
+            return std::make_shared<concrete_type>(); \
+        }
+
+/**
+ * @brief Adds a concrete create method stemming from a user-defined constructor
+ */  
+#define FACTORY_ADD_CREATE_ARGS(T,...) using concrete_type = T; \
+        handle_type create() const override { \
+            return std::make_shared<concrete_type>(__VA_ARGS__); \
+        }
+        
 }
 
 #endif	/* OBJECTFACTORY_INL_H */

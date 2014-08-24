@@ -42,6 +42,8 @@ namespace seismic {
     
     /**
      * @brief Manages lazy writing of traces to a SEG Y file
+     * 
+     * @todo Write a broader documentation
      */
     class SegyFileLazyWriter {
     public:

@@ -22,6 +22,7 @@
 #include<impl/SegyFile-constants.h>
 #include<impl/utilities-inl.h>
 
+#include<memory>
 #include<sstream>
 #include<stdexcept>
 
@@ -189,7 +190,7 @@ namespace seismic {
     }
     
     const bool ConcreteBinaryFileHeader<Rev0>::isRegistered(
-            BinaryFileHeader::factory_type::getFactory()->registerType( "Rev0", new ConcreteBinaryFileHeader<Rev0> )            
+            BinaryFileHeader::factory_type::getFactory()->registerType( "Rev0", std::make_shared<ConcreteBinaryFileHeader<Rev0> >() )            
             );
     
     

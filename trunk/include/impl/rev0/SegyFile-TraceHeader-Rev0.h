@@ -29,16 +29,14 @@ namespace seismic {
     template<>
     class ConcreteTraceHeader<Rev0> : public TraceHeader {
     public:
+        FACTORY_ADD_CREATE(ConcreteTraceHeader<Rev0>)
+        
         /* virtual */
         void print(std::ostream& cout) const;
         /* virtual */
         void invertByteOrder();
         /* virtual */
         void checkConsistencyOrThrow() const;
-        /* virtual */
-        ConcreteTraceHeader<Rev0> * create() const {
-            return new ConcreteTraceHeader<Rev0>;
-        }
         
     private:
         /**

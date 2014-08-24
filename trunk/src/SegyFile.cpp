@@ -37,7 +37,7 @@ using namespace boost::filesystem;
 namespace seismic {
 
     SegyFile::SegyFile(const char * filename, const std::string & revision_tag)
-    : filePath_(filename), tfh_(new TextualFileHeader)
+    : filePath_(filename), tfh_( make_shared<TextualFileHeader>() )
     , bfh_(BinaryFileHeader::create(revision_tag))
     , tag_(revision_tag) {
         //////////

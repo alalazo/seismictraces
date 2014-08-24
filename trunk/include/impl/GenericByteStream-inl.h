@@ -51,12 +51,9 @@ namespace seismic {
         /// Number of bytes in the Binary file header
         static const int buffer_size = size;
          
-        /// Factory type for the GenericByteStream
-        using factory_type = CloneObjectFactory< GenericByteStream, std::string >;
+        INTERFACE_USE_FACTORY(GenericByteStream,std::string)
         /// SmartReferenceType for the GenericByteStream
         using smart_reference_type = GenericByteStreamSmartReference< size >;
-        // Handle type for a the GenericByteStream object
-        using handle_type = std::shared_ptr<GenericByteStream>;
         
         /**
          * @brief Returns a reference to the underlying bytes interpreted as the correct type
@@ -121,36 +118,16 @@ namespace seismic {
          * a non-conformity is detected
          */
         virtual void checkConsistencyOrThrow() const = 0;
-        
-        /**
-         * @brief Create a GenericByteStream of the same polymorphic type
-         * 
-         * @return pointer to the newly created object
-         */
-        virtual GenericByteStream * create() const = 0;
                 
         /**
          * @brief Virtual destructor of the base class
          */
         virtual ~GenericByteStream(){}
-
-        /**
-         * @brief Static factory method of the GenericByteStream class
-         * 
-         * @param ID object ID
-         * @return pointer to a newly created object
-         */        
-        inline static GenericByteStream * create(std::string ID); 
-                
+        
     private:
         std::array<char,size> buffer_;
     };
-     
-    template<int size>
-    GenericByteStream<size> * GenericByteStream<size>::create(std::string ID) {            
-            return GenericByteStream<size>::factory_type::getFactory()->create(ID);
-    }
- 
+         
     /**
      * @brief Read a byte stream from an input stream
      * 
@@ -210,7 +187,8 @@ namespace seismic {
     public:
         GenericByteStreamSmartReference(){}
         
-        GenericByteStreamSmartReference( GenericByteStream<size>* ptr ) : ptr_(ptr) {}
+        template<class T>
+        explicit GenericByteStreamSmartReference( T ptr ) : ptr_(ptr) {}
         
         /**
          * @brief Returns a reference to the underlying bytes interpreted as the correct type
