@@ -34,6 +34,12 @@
 
 namespace seismic {
 
+    /**
+     * @brief Implementation of the SegyFileIndexer interface that maintains
+     * information in memory
+     * 
+     * @todo Write a broader documentation
+     */
     class InMemoryIndexer : public SegyFileIndexer {
     public:
 

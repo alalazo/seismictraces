@@ -35,6 +35,23 @@ namespace seismic {
     
     /**
      * @brief Interface to a generic indexer
+     * 
+     * The concept behind the interface
+     * -----
+     * 
+     * The format of a SEG-Y file is __inherently serial__.
+     * 
+     * To avoid losing performance at each access the concept of an indexer is 
+     * introduced in the implementation of the SegyFile class. The basic idea is
+     * to _scan the SEG-Y file only once_ and store index information for later access. 
+     * 
+     * It is left to implementation to decide:
+     *   - how to scan a SEG-Y file
+     *   - where to store the index information
+     * 
+     * The SegyFile class is implemented in terms of this interface, and can be
+     * customized with different indexing strategies.
+     * 
      */
     class SegyFileIndexer {
     public:

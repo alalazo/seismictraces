@@ -18,6 +18,11 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with SeismicTraces.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * @file SegyFile-BinaryFileHeader-Rev0.h
+ * @brief Binary file header revision 0
+ */
 #ifndef SEGYFILE_BINARYFILEHEADER_REV0_H
 #define	SEGYFILE_BINARYFILEHEADER_REV0_H
 
@@ -28,19 +33,35 @@
 
 namespace seismic {
 
+    /**
+     * @brief Models the Binary file header of a REV 0 SEGY file
+     * 
+     * According to SEGY rev 1 standard (May 2002):
+     * 
+     * > The 400-byte Binary File Header record contains binary values that 
+     * > affect the whole SEG Y file.  The values in the Binary File Header 
+     * > are defined as two-byte or four-byte, two's complement integers.  
+     * > Certain values in this header are crucial for the processing of the 
+     * > data in the file, particularly the sampling interval, trace length and
+     * > format code.  This revision defines a few additional fields in the 
+     * > optional portion, as well as providing some clarification on the use 
+     * > of some existing entries.
+     * 
+     * The following is a small example of the basic use of the class:
+     * @include example03.cpp
+     */
     template<>
     class ConcreteBinaryFileHeader<Rev0> : public BinaryFileHeader {
     public:
+        /// Add a create method that 
+        FACTORY_ADD_CREATE(ConcreteBinaryFileHeader<Rev0>)
+        
         /* virtual */
         void print(std::ostream& cout) const override;
         /* virtual */
         void invertByteOrder();
         /* virtual */
-        void checkConsistencyOrThrow() const override;
-        /* virtual */
-        ConcreteBinaryFileHeader<Rev0> * create() const override {
-            return new ConcreteBinaryFileHeader<Rev0>;
-        }
+        void checkConsistencyOrThrow() const override;        
         
     private:
         /**

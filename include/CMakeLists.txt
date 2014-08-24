@@ -64,5 +64,6 @@ SET(
   ${SeismicTraces_impl_includes} 
   ${SeismicTraces_rev0_includes}
   ${SeismicTraces_rev1_includes} 
+  ${SeismicTraces_indexer_includes}  
   PARENT_SCOPE
 )
