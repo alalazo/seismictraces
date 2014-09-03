@@ -5,6 +5,7 @@ SET(
   impl/SegyFileLazyWriter.cpp
   impl/utilities-inl.cpp
   impl/indexer/InMemoryIndexer.cpp
+  impl/indexer/InFileIndexer.cpp
   impl/rev0/SegyFile-BinaryFileHeader-Rev0.cpp
   impl/rev0/SegyFile-Fields-Rev0.cpp
   impl/rev0/SegyFile-TraceHeader-Rev0.cpp
@@ -14,6 +15,18 @@ SET(
 )
 
 ADD_LIBRARY( SeismicTraces ${SeismicTraces_sources} ${Doxygen_DEPENDENCIES} )
+
+TARGET_INCLUDE_DIRECTORIES(
+  SeismicTraces
+  PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+TARGET_INCLUDE_DIRECTORIES(
+  SeismicTraces SYSTEM
+  PUBLIC ${Boost_INCLUDE_DIRS}
+)
 
 TARGET_LINK_LIBRARIES(
   SeismicTraces
