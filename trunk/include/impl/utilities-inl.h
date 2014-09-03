@@ -73,7 +73,7 @@ namespace seismic {
         int32_t fconv = value;
         if (fconv) {
             int32_t fmant = (0x007fffff & fconv) | 0x00800000;
-            int32_t t = (int32_t) ((0x7f800000 & fconv) >> 23) - 126;
+            int32_t t = static_cast<int32_t>( ((0x7f800000 & fconv) >> 23) - 126 );
             while (t & 0x3) {
                 ++t;
                 fmant >>= 1;
@@ -95,7 +95,7 @@ namespace seismic {
         if (!fmant)
             fconv = 0;
         else {
-            int32_t t = (int32_t) ((0x7f000000 & fconv) >> 22) - 130;
+            int32_t t = static_cast<int32_t>( ((0x7f000000 & fconv) >> 22) - 130 );
             while (!(fmant & 0x00800000)) {
                 --t;
                 fmant <<= 1;

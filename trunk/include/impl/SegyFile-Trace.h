@@ -88,20 +88,7 @@ namespace seismic {
          * @brief Disallows explicit conversion to the underlying trace data
          */
         explicit operator const std::vector<T>&() const = delete;
-
-        /**
-         * @brief Allows explicit conversion to the underlying trace header
-         */
-        explicit operator TraceHeader::smart_reference_type&() {
-            return static_cast<TraceHeader::smart_reference_type&>(*this);
-        }
-
-        /**
-         * @brief Allows explicit conversion to the underlying trace header
-         */
-        explicit operator const TraceHeader::smart_reference_type&() const {
-            return static_cast<const TraceHeader::smart_reference_type&>(*this);         
-        }
+        
     private:
 
         /**

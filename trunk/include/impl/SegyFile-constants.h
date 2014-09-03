@@ -62,9 +62,9 @@ namespace seismic {
          * 
          * @relates SegyFileFormatCode
          */
-        inline size_t sizeOfDataSample(const int16_t obj) {
+        inline size_t sizeOfDataSample(const int16_t format) {
             size_t value(0);
-            switch ( obj ) {
+            switch ( format ) {
                 case ( SegyFileFormatCode::IBMfloat32 ):
                 case ( SegyFileFormatCode::Int32      ):
                 case ( SegyFileFormatCode::Fixed32    ):

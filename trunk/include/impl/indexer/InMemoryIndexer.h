@@ -26,6 +26,8 @@
 #ifndef INMEMORYINDEXER_H
 #define	INMEMORYINDEXER_H
 
+#include<impl/indexer/FullScanIndexer-inl.h>
+#include<impl/indexer/IndexItem-inl.h>
 #include<impl/SegyFileIndexer.h>
 
 #include<boost/filesystem/fstream.hpp>
@@ -34,36 +36,63 @@
 
 namespace seismic {
 
+    class InMemoryStorage {
+    public:
+            
+        explicit InMemoryStorage(SegyFile& file) {
+        }
+        
+        template<class T, class U>        
+        void push_back(T&& position,U&& nsamples) {
+            index_.emplace_back(position,nsamples);
+        }
+        
+        size_t size() const {
+            return index_.size();
+        }
+        
+        IndexItem load(size_t n) const {
+            /// @todo Check performance issues related to range-checked access
+            return index_.at(n);
+        }
+        
+    private:
+        std::vector<IndexItem> index_;
+    };
+    
+    
     /**
      * @brief Implementation of the SegyFileIndexer interface that maintains
      * information in memory
      * 
      * @todo Write a broader documentation
      */
-    class InMemoryIndexer : public SegyFileIndexer {
-    public:
-
-        InMemoryIndexer(SegyFile& segyFile, boost::filesystem::fstream& fileStream);
-
-        void createIndex() override;
-
-        boost::filesystem::fstream::pos_type position(const size_t n) const override;
-
-        void updateIndex() override;
-
-        size_t nsamples(const size_t n) const override;
-
-        size_t size() const override;
-
-    private:
-        void scanFileAndUpdateIndexFromCurrentPosition();
-        
-        SegyFile& segyFile_;
-        boost::filesystem::fstream& fileStream_;
-        std::vector<boost::filesystem::fstream::pos_type> traceStrides_;
-        std::vector<size_t> traceNsamples_;
-        boost::filesystem::fstream::pos_type previousEndOfFile_;
-    };
+    using InMemoryIndexer = FullScanIndexer<InMemoryStorage>;
+//    
+//    : public SegyFileIndexer {
+//    public:
+//
+//        InMemoryIndexer(SegyFile& segyFile, boost::filesystem::fstream& fileStream);
+//
+//        void createIndex() override;
+//
+//        boost::filesystem::fstream::pos_type position(const size_t n) const override;
+//
+//        void updateIndex() override;
+//
+//        size_t nsamples(const size_t n) const override;
+//
+//        size_t size() const override;
+//
+//    private:
+//        void scanFileAndUpdateIndexFromCurrentPosition();
+//        
+//        SegyFile& segyFile_;
+//        boost::filesystem::fstream& fileStream_;
+//        std::vector<boost::filesystem::fstream::pos_type> traceStrides_;
+//        std::vector<size_t> traceNsamples_;
+//        boost::filesystem::fstream::pos_type previousEndOfFile_;
+//    };
 
 }
 

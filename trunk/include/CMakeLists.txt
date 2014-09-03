@@ -20,7 +20,10 @@ SET(
 
 SET( 
   SeismicTraces_indexer_includes
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/indexer/IndexItem-inl.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/indexer/FullScanIndexer-inl.h
   ${CMAKE_CURRENT_SOURCE_DIR}/impl/indexer/InMemoryIndexer.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/impl/indexer/InFileIndexer.h
 )
 
 
