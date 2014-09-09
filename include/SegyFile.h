@@ -176,6 +176,7 @@ namespace seismic {
      * In the following it is shown how to __read a SEGY file, modify the traces and write them back to another file__:
      * @include example06.cpp
      * 
+     * @todo Add the possibility to choose indexer
      */
     class SegyFile {
     public:
@@ -306,6 +307,13 @@ namespace seismic {
          * @return path of the SEG Y file
          */
         const boost::filesystem::path& path() const;
+        
+        /**
+         * @brief Returns the underlying file stream
+         * 
+         * @return file stream
+         */
+        boost::filesystem::fstream& fstream();
         
         ~SegyFile();
 

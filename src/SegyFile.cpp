@@ -25,7 +25,6 @@
 #include<impl/utilities-inl.h>
 
 /// @todo REMOVE THESE INCLUDES
-#include<impl/indexer/InMemoryIndexer.h>
 #include<impl/SegyFileLazyWriter.h>
 
 #include<type_traits>
@@ -63,9 +62,9 @@ namespace seismic {
 
         //////////
         // Create index to have random access later
-        /// @todo TO BE CHANGED
-        indexer_ = make_shared<InMemoryIndexer>(*this, fstream_);
-        indexer_->createIndex();
+        indexer_ = SegyFileIndexer::create("InMemory");
+        indexer_->reset_segy_file(*this);
+        indexer_->create_index();
         writer_ = make_shared<SegyFileLazyWriter>(*indexer_, fstream_);
         //////////
     }
@@ -264,6 +263,11 @@ namespace seismic {
             );
         }
         return make_pair(static_cast<const TraceHeader::smart_reference_type&> (trace), std::move(raw_stream));
+    }
+
+    boost::filesystem::fstream& SegyFile::fstream()
+    {
+      return fstream_;
     }
 
 }

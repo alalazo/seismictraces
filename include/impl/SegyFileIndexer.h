@@ -27,7 +27,11 @@
 #ifndef SEGYFILEINDEXER_H
 #define	SEGYFILEINDEXER_H
 
+#include<impl/ObjectFactory-inl.h>
+
 #include<boost/filesystem/fstream.hpp>
+
+#include<string>
 
 namespace seismic {
     
@@ -56,17 +60,21 @@ namespace seismic {
     class SegyFileIndexer {
     public:
         /**
-         * @brief Constructor taking the path to the file
+         * @brief Resets the SEG-Y file to be indexed
          * 
          * @param[in] segyFile SEG Y file to be indexed
-         * @param[in] fileStream stream attached to the SEG Y file
          */
-        SegyFileIndexer(SegyFile& segyFile, boost::filesystem::fstream& fileStream){}
+        virtual void reset_segy_file(SegyFile& segyFile) = 0;
         
         /**
          * @brief Creates the index of the SEG Y file
          */
-        virtual void createIndex() = 0;
+        virtual void create_index() = 0;
+        
+        /**
+         * @brief Clears the current index
+         */
+        virtual void clear_index() = 0;
         
         /**
          * @brief Returns the absolute position of a trace in a file
@@ -104,8 +112,9 @@ namespace seismic {
         virtual ~SegyFileIndexer() {
         }
         
+        INTERFACE_USE_FACTORY(SegyFileIndexer,std::string)
     };
-    
+        
 }
 
 #endif	/* SEGYFILEINDEXER_H */

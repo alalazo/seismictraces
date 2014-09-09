@@ -21,17 +21,14 @@
 
 #include<impl/indexer/InMemoryIndexer.h>
 
-#include<SegyFile.h>
-#include<impl/SegyFile-TraceHeader.h>
-#include<impl/rev1/SegyFile-BinaryFileHeader-Rev1.h>
-
-#include<boost/filesystem.hpp>
-
-#include<stdexcept>
-#include<sstream>
-
 using namespace std;
-using namespace boost::filesystem;
+
+namespace seismic {
+    template<>
+    bool InMemoryIndexer::m_is_registered(      
+    InMemoryIndexer::factory_type::getFactory()->registerType("InMemory",make_shared<InMemoryIndexer>())
+    );
+}
 
 //namespace seismic {
 //
