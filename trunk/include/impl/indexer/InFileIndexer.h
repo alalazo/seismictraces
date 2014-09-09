@@ -39,55 +39,49 @@ namespace seismic {
     class InFileStorage {
     public:
 
-        explicit InFileStorage(SegyFile& file)
-        : file_(file), size_(0),
-        stream_( file_.path().filename().replace_extension("index"), std::ios::binary ) {            
-        }
+//        explicit InFileStorage(SegyFile& file)
+//        : file_(file), m_size(0),
+//        m_stream( file_.path().filename().replace_extension("index"), std::ios::binary ) {            
+//        }
 
         template<class T, class U>        
         void push_back(T&& position,U&& nsamples) {
             IndexItem item(position,nsamples);
-            stream_.write(reinterpret_cast<char*>(&item),sizeof(IndexItem));
-            size_++;
+            m_stream.seekp(0,std::ios::end);
+            m_stream.write(reinterpret_cast<char*>(&item),sizeof(IndexItem));
+            m_size++;
         }
         
         size_t size() const {
-            return size_;
+            return m_size;
         }        
         
         IndexItem load(size_t n) const {
             IndexItem item;
-            stream_.seekg( n * sizeof(IndexItem) );
-            stream_.read(reinterpret_cast<char*>(&item),sizeof(IndexItem));
+            m_stream.seekg( n * sizeof(IndexItem), std::ios::beg );
+            m_stream.read(reinterpret_cast<char*>(&item),sizeof(IndexItem));
             return item;
         }
         
+        void reset(SegyFile * file) {            
+            /// @todo check if this is the right open mode
+            m_index_filename = file->path().filename().replace_extension("index");
+            clear();
+        }
+        
+        void clear() {
+            m_stream.close();
+            remove(m_index_filename);
+            m_stream.open(m_index_filename,std::ios::binary);
+        }
+        
     private:
-        SegyFile& file_;
-        size_t size_;
-        mutable boost::filesystem::fstream stream_;
+        boost::filesystem::path m_index_filename;
+        size_t m_size;
+        mutable boost::filesystem::fstream m_stream;
     };
 
-    using InFileIndexer = FullScanIndexer<InFileStorage>;
-    //    class InFileIndexer : public SegyFileIndexer {
-    //    public:
-    //
-    //        InFileIndexer(SegyFile& segyFile, boost::filesystem::fstream& fileStream);
-    //
-    //        void createIndex() override;
-    //
-    //        size_t nsamples(const size_t n) const override;
-    //
-    //        boost::filesystem::fstream::pos_type position(const size_t n) const override;
-    //
-    //        size_t size() const override;
-    //
-    //        void updateIndex() override;
-    //
-    //    private:        
-    //        SegyFile& segyFile_;
-    //        boost::filesystem::fstream& fileStream_;        
-    //    };    
+    using InFileIndexer = FullScanIndexer<InFileStorage>;    
 }
 
 #endif	/* INFILEINDEXER_H_20140826 */

@@ -1,0 +1,18 @@
+---
+Language:        Cpp
+BasedOnStyle:  Google
+AccessModifierOffset: -2
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: false
+BinPackParameters: false
+ColumnLimit:     120
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+NamespaceIndentation: None
+Standard:        Cpp11
+BreakBeforeBraces: Stroustrup
+SpacesInParentheses: true
+SpacesInAngles:  true
+SpaceInEmptyParentheses: false
+SpaceBeforeParens: ControlStatements

@@ -35,29 +35,34 @@
 #include<vector>
 
 namespace seismic {
-
+        
     class InMemoryStorage {
     public:
-            
-        explicit InMemoryStorage(SegyFile& file) {
-        }
         
         template<class T, class U>        
         void push_back(T&& position,U&& nsamples) {
-            index_.emplace_back(position,nsamples);
+            m_index.emplace_back(position,nsamples);
         }
         
         size_t size() const {
-            return index_.size();
+            return m_index.size();
         }
         
         IndexItem load(size_t n) const {
             /// @todo Check performance issues related to range-checked access
-            return index_.at(n);
+            return m_index.at(n);
+        }
+        
+        void reset(SegyFile* file) {
+            clear();
+        }
+        
+        void clear() {
+          m_index.clear();
         }
         
     private:
-        std::vector<IndexItem> index_;
+        std::vector<IndexItem> m_index;
     };
     
     
@@ -68,31 +73,6 @@ namespace seismic {
      * @todo Write a broader documentation
      */
     using InMemoryIndexer = FullScanIndexer<InMemoryStorage>;
-//    
-//    : public SegyFileIndexer {
-//    public:
-//
-//        InMemoryIndexer(SegyFile& segyFile, boost::filesystem::fstream& fileStream);
-//
-//        void createIndex() override;
-//
-//        boost::filesystem::fstream::pos_type position(const size_t n) const override;
-//
-//        void updateIndex() override;
-//
-//        size_t nsamples(const size_t n) const override;
-//
-//        size_t size() const override;
-//
-//    private:
-//        void scanFileAndUpdateIndexFromCurrentPosition();
-//        
-//        SegyFile& segyFile_;
-//        boost::filesystem::fstream& fileStream_;
-//        std::vector<boost::filesystem::fstream::pos_type> traceStrides_;
-//        std::vector<size_t> traceNsamples_;
-//        boost::filesystem::fstream::pos_type previousEndOfFile_;
-//    };
 
 }
 

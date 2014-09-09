@@ -115,7 +115,7 @@ namespace seismic {
      * @return pointer to the newly created object
      */
     template< class... ArgsType >
-    handle_type create(const IdentifierType& id, ArgsType... args) const {
+    handle_type create(const IdentifierType& id, ArgsType&... args) const {
       typename CallbackMap::const_iterator ii = map_.find(id);
       if (ii == map_.end()) {
         throw std::runtime_error("FATAL ERROR: factory cannot create an unregistered object type");
@@ -151,33 +151,12 @@ namespace seismic {
         }
 
 /**
- * @brief Defines factory_type and handle_type. Requires an implementation to 
- * define a create method stemming from a user-defined constructor.
- * Add a static create method as a proxy to the factory.
- */  
-#define INTERFACE_USE_FACTORY_ARGS(T,KEY,...) using handle_type = std::shared_ptr<T>; \
-        using factory_type = CloneObjectFactory< T, KEY >; \
-        virtual handle_type create() const = 0;  \
-        inline static handle_type create(const KEY & ID) { \
-                return T::factory_type::getFactory()->create(ID,__VA_ARGS__); \
-        }
-  
-/**
  * @brief Adds a concrete create method stemming from default constructor
  */
 #define FACTORY_ADD_CREATE(T) using concrete_type = T; \
         handle_type create() const override { \
             return std::make_shared<concrete_type>(); \
         }
-
-/**
- * @brief Adds a concrete create method stemming from a user-defined constructor
- */  
-#define FACTORY_ADD_CREATE_ARGS(T,...) using concrete_type = T; \
-        handle_type create() const override { \
-            return std::make_shared<concrete_type>(__VA_ARGS__); \
-        }
-        
 }
 
 #endif	/* OBJECTFACTORY_INL_H */

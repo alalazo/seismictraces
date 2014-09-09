@@ -34,7 +34,7 @@
 namespace seismic {
     
     /**
-     * @brief DEfines the information needed to index a trace in a SEG-Y file
+     * @brief Defines the information needed to index a trace in a SEG-Y file
      * for a later random access
      */
     class IndexItem {
