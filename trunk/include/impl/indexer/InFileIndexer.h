@@ -27,12 +27,11 @@
 #ifndef INFILEINDEXER_H_20140826
 #define	INFILEINDEXER_H_20140826
 
-#include<SegyFile.h>
+#include<impl/indexer/FullScanIndexer-inl.h>
+
 #include<impl/indexer/IndexItem-inl.h>
 
 #include<boost/filesystem/fstream.hpp>
-
-#include "FullScanIndexer-inl.h"
 
 namespace seismic {
 

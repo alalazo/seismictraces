@@ -35,5 +35,6 @@ TARGET_LINK_LIBRARIES(
 
 INSTALL(
   TARGETS SeismicTraces
+  EXPORT Seismic
   DESTINATION lib
 )
