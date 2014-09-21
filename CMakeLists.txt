@@ -1,5 +1,4 @@
 CMAKE_MINIMUM_REQUIRED( VERSION 3.0.0 )
-CMAKE_POLICY( VERSION 2.8.11 )
 
 PROJECT( SeismicTraces C CXX )
 SET( SeismicTraces_VERSION_MAJOR 1 )
@@ -95,3 +94,22 @@ ADD_SUBDIRECTORY( qt )
 ADD_SUBDIRECTORY( test )
 ADD_SUBDIRECTORY( examples )
 ADD_SUBDIRECTORY( doc )
+
+#####################
+## Exports targets ##
+#####################
+
+INSTALL(EXPORT Seismic DESTINATION lib)
+
+#####################
+## CPack variables ##
+#####################
+
+SET(CPACK_GENERATOR "TGZ;DEB")
+SET(CPACK_PACKAGE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/packages)
+SET(CPACK_PACKAGE_VERSION_MAJOR "${SeismicTraces_VERSION_MAJOR}")
+SET(CPACK_PACKAGE_VERSION_MINOR "${SeismicTraces_VERSION_MINOR}")
+SET(CPACK_SOURCE_IGNORE_FILES "/CVS/;/.svn/;.#;/#;.*~;cscope.*;/nbproject/;/build*/")
+
+SET(CPACK_PACKAGE_CONTACT "Massimiliano Culpo")
+INCLUDE( CPack )
