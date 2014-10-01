@@ -19,6 +19,12 @@ IF( BUILD_DOCUMENTATION )
   SET( doxy_examples        ${PROJECT_SOURCE_DIR}/examples              ) # Pasted into Doxyfile.in
   SET( doxy_extra_files     ${CMAKE_CURRENT_SOURCE_DIR}/mainpage.dox    ) # Pasted into Doxyfile.in
   
+  ## Needed to use Twitter bootstrap for the documentation
+  SET( doxy_boot_script_in ${CMAKE_CURRENT_SOURCE_DIR}/doxy-boot.js     )
+  SET( doxy_boot_script    ${CMAKE_CURRENT_BINARY_DIR}/html/doxy-boot.js)
+  SET( header_html         ${CMAKE_CURRENT_SOURCE_DIR}/header.html      )
+  SET( footer_html         ${CMAKE_CURRENT_SOURCE_DIR}/footer.html      )
+
   ## If any header or source is modified, then rebuild the documentation
   FOREACH( dir ${doxy_input} ${doxy_examples} )
     FILE( GLOB_RECURSE tmp_headers ${dir}/*.h   )
@@ -27,15 +33,18 @@ IF( BUILD_DOCUMENTATION )
   ENDFOREACH()
   # Fix value lists before substitution...
   JOIN("${doxy_input}" " " doxy_input)
-  CONFIGURE_FILE( ${doxyfile_in} ${doxyfile} @ONLY )
- 
+  CONFIGURE_FILE( ${doxy_boot_script_in} ${doxy_boot_script} @ONLY )
+  CONFIGURE_FILE( ${doxyfile_in} ${doxyfile} @ONLY )    
+
   ADD_CUSTOM_COMMAND( OUTPUT ${doxy_html_index_file}
                       COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
                       # The following should be ${doxyfile} only but it will break the dependency.
                       # The optimal solution would be creating a custom_command for ${doxyfile}
                       # generation but I still have to figure out how...
                       MAIN_DEPENDENCY ${doxyfile} ${doxyfile_in}
-                      DEPENDS ${doxy_extra_files} ${Doxygen_DEPENDENCIES}
+                      DEPENDS 
+                      ${doxy_extra_files} ${Doxygen_DEPENDENCIES} ${doxy_boot_script_in}
+                      ${header_html} ${footer_html}
                       COMMENT "Generating HTML documentation")
   
   ADD_CUSTOM_TARGET( doc ALL DEPENDS ${doxy_html_index_file} )
