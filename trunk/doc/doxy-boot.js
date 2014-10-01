@@ -56,7 +56,7 @@ var setUpNavigationBars = function () {
 //        </div>
 };
 
-var setUpContent = function () {
+var setUpTables = function () {
     //////////
     // Set up a generic page title 
     var title = $('div.header > div.headertitle div.title').text();
@@ -72,7 +72,7 @@ var setUpContent = function () {
     // Set up page content    
     var content = $('div.contents').html();
     $('div.contents').replaceWith(
-            '<div class="container">'
+            '<div class="container-fluid">'
             + '<div id="maincontent" class="jumbotron">'
             + '<h2>' + title + '</h2>'
             + content
@@ -91,22 +91,46 @@ var setUpContent = function () {
     $('#maincontent span.icona').remove();
     // Tables     
     $('table').addClass('table table-hover').removeClass('directory');
-    //$('td.entry').wrapInner('<button type="button" class="btn btn-primary"> </button>');
-    //$('td.entry span.arrow').remove();
     $('td.entry span.arrow').replaceWith(
             '<button type="button" class="folder-button btn btn-primary" style="margin : 1em">'
             + '<span class="glyphicon glyphicon-chevron-down" style="font-size : 0.8em;"></span>'
             + '</button>');
     $('td.entry>span').remove();
-    $('td.entry a.el').wrapInner('<strong style="font-size : 1.5em;"> </strong>');    
+    $('td.entry a.el').wrapInner('<strong style="font-size : 1.5em;"> </strong>');
     $('td.desc').addClass('vert-align').wrapInner('<p class="lead"> </p>');
-    //////////        
+    //////////
+
+    //////////
+    // Indent row hierarchies
+    var singleMatch = '\\d+_';
+    for (var ii = 0; ii < 10; ++ii)
+    {
+        var regexString = '^row_' + singleMatch;
+        for (var jj = 0; jj < ii; jj++)
+        {
+            regexString += singleMatch;
+        }
+        regexString += '$';
+        var re = new RegExp(regexString, "i");
+        var rowsAtCurrentDepth = $('tr').filter(function () {
+            if (this.id.match(re)) {
+                return true;
+            }
+            return false;
+        });
+        // Rows with button
+        rowsAtCurrentDepth.children('td.entry').css('padding-left', 2 * ii + 'em');
+        // Leaf rows without button
+        var extraPadding = 4;
+        var tdWithExtraPadding = rowsAtCurrentDepth.children('td.entry').filter(':not(:has(button.folder-button))');
+        tdWithExtraPadding.css('padding-left', (1.5 * ii + extraPadding) + 'em');
+    }       
 };
 
 var bootstrapDoxygen = function () {
     // Static look
     setUpNavigationBars();
-    setUpContent();
+    setUpTables();
 
     // Expand and collapse namespaces 
     $('button.folder-button').click(function () {
@@ -115,38 +139,24 @@ var bootstrapDoxygen = function () {
         var currentRow = $('#' + id);
         // all rows after the clicked row
         var rows = currentRow.nextAll("tr");
-        var re = new RegExp('^' + id + '\\d+_$', "i"); //only one sub
+        var re = new RegExp('^' + id + '\\d+_$', 'i'); //only one sub
         // only match elements AFTER this one (can't hide elements before)
         var childRows = rows.filter(function () {
             return this.id.match(re);
         });
         // first row is visible we are HIDING
         if (childRows.filter(':first').is(':visible') === true) {
-            rows.filter("[id^=" + id + "]").hide(); // hide all children
+            rows.filter('[id^=' + id + "]").hide(); // hide all children
             $(this).find('span.glyphicon').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
         } else { // we are SHOWING
             childRows.show(); //show all children
             $(this).find('span.glyphicon').addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-right');
-            childRows.find('span.glyphicon').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');            
+            childRows.find('span.glyphicon').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
         }
-        updateStripes();        
+        updateStripes();
     });
 
-//	$('li > a[href="index.html"] > span').before("<i class='fa fa-cog'></i> ");
-//	$('li > a[href="index.html"] > span').text("CoActionOS");
-//	$('li > a[href="modules.html"] > span').before("<i class='fa fa-square'></i> ");
-//	$('li > a[href="namespaces.html"] > span').before("<i class='fa fa-bars'></i> ");
-//	$('li > a[href="annotated.html"] > span').before("<i class='fa fa-list-ul'></i> ");
-//	$('li > a[href="classes.html"] > span').before("<i class='fa fa-book'></i> ");
-//	$('li > a[href="inherits.html"] > span').before("<i class='fa fa-sitemap'></i> ");
-//	$('li > a[href="functions.html"] > span').before("<i class='fa fa-list'></i> ");
-//	$('li > a[href="functions_func.html"] > span').before("<i class='fa fa-list'></i> ");
-//	$('li > a[href="functions_vars.html"] > span').before("<i class='fa fa-list'></i> ");
-//	$('li > a[href="functions_enum.html"] > span').before("<i class='fa fa-list'></i> ");
-//	$('li > a[href="functions_eval.html"] > span').before("<i class='fa fa-list'></i> ");
-//	$('img[src="ftv2ns.png"]').replaceWith('<span class="label label-danger">N</span> ');
-//	$('img[src="ftv2cl.png"]').replaceWith('<span class="label label-danger">C</span> ');
-//	
+
 //	$("ul.tablist").addClass("nav nav-pills nav-justified");
 //	$("ul.tablist").css("margin-top", "0.5em");
 //	$("ul.tablist").css("margin-bottom", "0.5em");
