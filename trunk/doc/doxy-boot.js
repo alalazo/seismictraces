@@ -72,7 +72,7 @@ var setUpTables = function () {
     // Set up page content    
     var content = $('div.contents').html();
     $('div.contents').replaceWith(
-            '<div class="container-fluid">'
+            '<div class="container">'
             + '<div id="maincontent" class="jumbotron">'
             + '<h2>' + title + '</h2>'
             + content
@@ -127,11 +127,43 @@ var setUpTables = function () {
     }       
 };
 
+var setUpRelatedPages = function() {
+    $('dl').wrapInner('<table class="table table-hover"><tbody> </tbody></table>');
+    $('table').unwrap('dl');
+    $('a.anchor').remove();    
+    var description =$('dd').text();
+    $('dd').remove();
+    $('dt').wrapInner('<tr><td class="entry"> </td></tr>');
+    $('tr').unwrap('dt');
+    $('tr').append(
+            '<td class="description">'            
+            + description
+            + '</td>'
+            );
+};
+
+var setUpCode = function() {  
+    // Headings
+    $('h2').addClass('text-center');
+    $('tr.heading').addClass('text-center');
+    // Code fragments
+    var code = $('div.fragment').html();
+    $('div.fragment').replaceWith(
+            '<pre class="prettyprint lang-cpp linenums">'
+            + code
+            +'</pre>');
+    $('span.lineno').remove();
+    $('code').addClass('prettyprint lang-cpp');
+    
+};
+
 var bootstrapDoxygen = function () {
     // Static look
     setUpNavigationBars();
     setUpTables();
-
+    setUpRelatedPages();
+    setUpCode();
+    
     // Expand and collapse namespaces 
     $('button.folder-button').click(function () {
         var id = $(this).parents('tr').attr('id');
