@@ -24,6 +24,7 @@ IF( BUILD_DOCUMENTATION )
   SET( doxy_boot_script    ${CMAKE_CURRENT_BINARY_DIR}/html/doxy-boot.js)
   SET( header_html         ${CMAKE_CURRENT_SOURCE_DIR}/header.html      )
   SET( footer_html         ${CMAKE_CURRENT_SOURCE_DIR}/footer.html      )
+  SET( stylesheet_html     ${CMAKE_CURRENT_SOURCE_DIR}/stylesheet.css   )
 
   ## If any header or source is modified, then rebuild the documentation
   FOREACH( dir ${doxy_input} ${doxy_examples} )
@@ -44,7 +45,7 @@ IF( BUILD_DOCUMENTATION )
                       MAIN_DEPENDENCY ${doxyfile} ${doxyfile_in}
                       DEPENDS 
                       ${doxy_extra_files} ${Doxygen_DEPENDENCIES} ${doxy_boot_script_in}
-                      ${header_html} ${footer_html}
+                      ${header_html} ${footer_html} ${stylesheet_html}
                       COMMENT "Generating HTML documentation")
   
   ADD_CUSTOM_TARGET( doc ALL DEPENDS ${doxy_html_index_file} )
