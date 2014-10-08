@@ -1,21 +1,31 @@
-OPTION(ENABLE_TESTING "Enable the build of unit tests, add 'test' target to Makefile" OFF)
+FIND_PACKAGE( Boost 1.53 REQUIRED COMPONENTS unit_test_framework )
 
-IF( ENABLE_TESTING )
-  enable_testing()
-  ## The Google testing framework is used for unit tests
-  FIND_PACKAGE( Threads )
-  FIND_PACKAGE( GTest )
-  SET(
-    SeismicTraces_available_tests_sources
-    SeismicTrace-tests.cpp
-    TextualFileHeader-tests.cpp
-  )
+SET(
+  SeismicTraces_available_tests_sources
+  TextualFileHeader-tests.cpp
+)
 
-  FOREACH( test_source ${SeismicTraces_available_tests_sources} )
-    GET_FILENAME_COMPONENT( test_name ${test_source} NAME_WE )
-    ADD_EXECUTABLE( ${test_name} ${test_source} )
-    TARGET_LINK_LIBRARIES( ${test_name} SeismicTraces ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} )
-    ADD_TEST( "${test_name}-target"  ${test_name})
-  ENDFOREACH()
-ENDIF()
+##########
+## Dynamic library : collection of tests
+ADD_LIBRARY( seismic_traces_test ${SeismicTraces_available_tests_sources})
+TARGET_COMPILE_DEFINITIONS(
+  seismic_traces_test
+  PUBLIC BOOST_TEST_DYN_LINK
+)
+TARGET_LINK_LIBRARIES(
+  seismic_traces_test
+  PUBLIC
+  SeismicTraces
+  ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+)
+##########
 
+##########
+## Executable : dumb runner that triggers the tests that are dynamically linked
+ADD_EXECUTABLE( test_seismic_traces.x test_main.cpp )
+TARGET_LINK_LIBRARIES(
+  test_seismic_traces.x
+  seismic_traces_test
+)
+##########
+ADD_TEST(run_unit_test test_seismic_traces.x )

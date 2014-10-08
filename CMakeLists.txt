@@ -10,7 +10,7 @@ SET(CMAKE_WARN_DEPRECATED TRUE)
 ## Build options ##
 ###################
 
-OPTION(BUILD_SHARED_LIBS "Create shared libraries instead of static ones (default OFF)" ON)
+OPTION(BUILD_SHARED_LIBS "Create shared libraries instead of static ones" ON)
 OPTION(LARGE_FILE_SUPPORT "Enable support for large files on 32-bit platforms" ON)
 IF( LARGE_FILE_SUPPORT )
   SET(LARGE_FILE_MACROS "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64")
@@ -91,7 +91,16 @@ FIND_PACKAGE( Boost 1.53 REQUIRED COMPONENTS filesystem system )
 ADD_SUBDIRECTORY( include  )
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( qt )
-ADD_SUBDIRECTORY( test )
+
+OPTION(ENABLE_TESTING "Enable the build of unit tests, add 'test' target to Makefile" OFF)
+IF( ENABLE_TESTING )
+  ENABLE_TESTING()
+  IF( NOT BUILD_SHARED_LIBS )
+    MESSAGE(SEND_ERROR "Unit tests requires shared libraries : turn BUILD_SHARED_LIBRARY on")
+  ENDIF()
+  ADD_SUBDIRECTORY( test )
+ENDIF()
+
 ADD_SUBDIRECTORY( examples )
 ADD_SUBDIRECTORY( doc )
 
