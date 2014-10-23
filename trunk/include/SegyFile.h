@@ -194,7 +194,7 @@ namespace seismic {
          * @param[in] revision_tag type of SEG Y file to be created
          * 
          */
-        SegyFile(const char * filename, const std::string & revision_tag = "Rev0");
+        SegyFile(const char * filename, const std::string & revision_tag = "Rev0", const std::string & indexer_tag = "InMemory");
         
         /**
          * @brief Returns the textual file header

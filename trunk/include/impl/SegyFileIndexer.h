@@ -104,7 +104,7 @@ namespace seismic {
         /**
          * @brief Updates the index of the SEG Y file
          */
-        virtual void updateIndex() = 0;
+        virtual void update_index() = 0;
         
         /**
          * @brief The infamous virtual destructor
