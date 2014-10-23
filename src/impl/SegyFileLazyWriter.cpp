@@ -74,7 +74,7 @@ void SegyFileLazyWriter::commit(size_t sizeOfDataSample)
   fileStream_.write(appendVector_.data(), appendVector_.size());
   appendVector_.clear();
   // Update index
-  indexer_.updateIndex();
+  indexer_.update_index();
 }
 
 void SegyFileLazyWriter::addToAppendQueue(const SegyFile::raw_trace_type& trace, size_t sizeOfDataSample)

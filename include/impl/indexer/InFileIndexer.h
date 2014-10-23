@@ -38,11 +38,6 @@ namespace seismic {
     class InFileStorage {
     public:
 
-//        explicit InFileStorage(SegyFile& file)
-//        : file_(file), m_size(0),
-//        m_stream( file_.path().filename().replace_extension("index"), std::ios::binary ) {            
-//        }
-
         template<class T, class U>        
         void push_back(T&& position,U&& nsamples) {
             IndexItem item(position,nsamples);
@@ -64,19 +59,25 @@ namespace seismic {
         
         void reset(SegyFile * file) {            
             /// @todo check if this is the right open mode
-            m_index_filename = file->path().filename().replace_extension("index");
+            m_index_filename = file->path();
+            m_index_filename.replace_extension("index");
             clear();
         }
         
         void clear() {
             m_stream.close();
-            remove(m_index_filename);
-            m_stream.open(m_index_filename,std::ios::binary);
+            { // For some reason these two lines create an empty index file
+              // while just closing, removing and reopening does not
+              remove(m_index_filename);
+              boost::filesystem::fstream tmp(m_index_filename, std::ios::binary | std::ios::out);
+            }
+            m_stream.open(m_index_filename,std::ios::binary|std::ios::in|std::ios::out);
+            m_size = 0;
         }
         
     private:
         boost::filesystem::path m_index_filename;
-        size_t m_size;
+        size_t m_size{0};
         mutable boost::filesystem::fstream m_stream;
     };
 

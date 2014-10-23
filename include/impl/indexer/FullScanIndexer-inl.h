@@ -61,7 +61,7 @@ namespace seismic {
 
         size_t size() const override;
         
-        void updateIndex() override;
+        void update_index() override;
 
         void reset_segy_file(SegyFile& segyFile) override;
 
@@ -114,7 +114,7 @@ namespace seismic {
     }
     
     template< class StorageType >
-    void FullScanIndexer<StorageType>::updateIndex() {
+    void FullScanIndexer<StorageType>::update_index() {
         m_segy_file->fstream().seekg( m_previous_end_of_file );
         scanFileAndUpdateIndexFromCurrentPosition();
     }

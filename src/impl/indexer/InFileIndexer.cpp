@@ -3,15 +3,9 @@
 using namespace std;
 using namespace boost::filesystem;
 
-//namespace seismic {
-//
-//    InFileIndexer::InFileIndexer(SegyFile& segyFile, boost::filesystem::fstream& fileStream) 
-//    : SegyFileIndexer(segyFile, fileStream), segyFile_(segyFile), fileStream_(fileStream) {
-//    }
-//
-//    void InFileIndexer::createIndex() {
-//        fileStream_.seekg(3600);
-//        
-//    }
-//    
-//}
+namespace seismic {
+    template<>
+    bool InFileIndexer::m_is_registered(      
+    InFileIndexer::factory_type::getFactory()->registerType("InFile",make_shared<InFileIndexer>())
+    );
+}

@@ -35,7 +35,7 @@ using namespace boost::filesystem;
 
 namespace seismic {
 
-    SegyFile::SegyFile(const char * filename, const std::string & revision_tag)
+    SegyFile::SegyFile(const char * filename, const std::string & revision_tag, const std::string & indexer_tag)
     : filePath_(filename), tfh_( make_shared<TextualFileHeader>() )
     , bfh_(BinaryFileHeader::create(revision_tag))
     , tag_(revision_tag) {
@@ -62,7 +62,7 @@ namespace seismic {
 
         //////////
         // Create index to have random access later
-        indexer_ = SegyFileIndexer::create("InMemory");
+        indexer_ = SegyFileIndexer::create(indexer_tag);
         indexer_->reset_segy_file(*this);
         indexer_->create_index();
         writer_ = make_shared<SegyFileLazyWriter>(*indexer_, fstream_);

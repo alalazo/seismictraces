@@ -58,7 +58,7 @@ int main() {
         //
         // Copying a SEG Y file
         //
-        SegyFile segyOutputFile(DATA_FOLDER "/dummy.segy", "Rev1");
+        SegyFile segyOutputFile(DATA_FOLDER "/dummy.segy", "Rev1","InFile");
 
         segyOutputFile.getTextualFileHeader() = segyFile.getTextualFileHeader();
         segyOutputFile.getBinaryFileHeader() = segyFile.getBinaryFileHeader();
